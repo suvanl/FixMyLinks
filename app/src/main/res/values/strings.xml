@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">FixMyLinks</string>
+    <string name="title_activity_share">Share to…</string>
+    <string name="open_share_sheet">Open share sheet</string>
+</resources>
