@@ -4,7 +4,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Rule
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -18,7 +17,6 @@ import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
 @Composable
 fun BottomNavigationBar(modifier: Modifier = Modifier) {
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         modifier = modifier
     ) {
         NavigationBarItem(
