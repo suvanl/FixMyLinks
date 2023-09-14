@@ -1,8 +1,8 @@
-package com.suvanl.fixmylinks.domain.intercept
+package com.suvanl.fixmylinks.domain.mutation
 
 import java.net.URI
 
-class InterceptAndMutateUriUseCase {
+class MutateUriUseCase {
     operator fun invoke(uri: URI, stripUrlParams: Boolean = true): URI {
         val mutation = SupportedMutation.values().find {
             uri.host == it.info.from

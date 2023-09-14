@@ -1,4 +1,4 @@
-package com.suvanl.fixmylinks.domain.intercept
+package com.suvanl.fixmylinks.domain.mutation
 
 data class MutationInfo(
     val from: String,

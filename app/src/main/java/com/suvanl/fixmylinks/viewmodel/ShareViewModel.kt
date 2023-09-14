@@ -6,11 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.suvanl.fixmylinks.domain.intercept.InterceptAndMutateUriUseCase
+import com.suvanl.fixmylinks.domain.mutation.MutateUriUseCase
 import java.net.URI
 
 class ShareViewModel(
-    private val interceptAndMutateUriUseCase: InterceptAndMutateUriUseCase
+    private val mutateUriUseCase: MutateUriUseCase
 ) : ViewModel() {
     private var _receivedContent: String? by mutableStateOf(null)
     val receivedContent: String?
@@ -33,7 +33,7 @@ class ShareViewModel(
             return
         }
 
-        _mutatedUri = interceptAndMutateUriUseCase(URI(content)).toString()
+        _mutatedUri = mutateUriUseCase(URI(content)).toString()
     }
 
     companion object {
@@ -41,7 +41,7 @@ class ShareViewModel(
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
                 return ShareViewModel(
-                    interceptAndMutateUriUseCase = InterceptAndMutateUriUseCase()
+                    mutateUriUseCase = MutateUriUseCase()
                 ) as T
             }
         }
