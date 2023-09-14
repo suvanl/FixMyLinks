@@ -1,6 +1,8 @@
 package com.suvanl.fixmylinks.ui.screens
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -11,7 +13,8 @@ import com.suvanl.fixmylinks.ui.components.BottomNavigationBar
 @Composable
 fun FixMyLinksAppPortrait() {
     Scaffold(
-        bottomBar = { BottomNavigationBar() }
+        bottomBar = { BottomNavigationBar() },
+        contentWindowInsets = WindowInsets.safeDrawing
     ) { padding ->
         HomeScreen(modifier = Modifier.padding(padding))
     }
