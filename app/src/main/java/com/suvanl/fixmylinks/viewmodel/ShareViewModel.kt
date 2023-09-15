@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.suvanl.fixmylinks.domain.mutation.MutateUriUseCase
 import java.net.URI
 
@@ -37,12 +39,9 @@ class ShareViewModel(
     }
 
     companion object {
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                @Suppress("UNCHECKED_CAST")
-                return ShareViewModel(
-                    mutateUriUseCase = MutateUriUseCase()
-                ) as T
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                ShareViewModel(mutateUriUseCase = MutateUriUseCase())
             }
         }
     }
