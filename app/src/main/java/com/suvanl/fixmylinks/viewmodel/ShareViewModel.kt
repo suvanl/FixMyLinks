@@ -9,7 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.suvanl.fixmylinks.domain.mutation.MutateUriUseCase
+import com.suvanl.fixmylinks.domain.mutation.MutationMap
+import com.suvanl.fixmylinks.domain.mutation.MutationType
 import java.net.URI
+import java.util.regex.Pattern
 
 class ShareViewModel(
     private val mutateUriUseCase: MutateUriUseCase
@@ -35,7 +38,44 @@ class ShareViewModel(
             return
         }
 
-        _mutatedUri = mutateUriUseCase(URI(content)).toString()
+        _mutatedUri = mutateUriUseCase(URI(content), determineMutationType(content)).toString()
+    }
+
+    /**
+     * Returns the first [URI] in the given content string if one exists. Otherwise returns null.
+     */
+    private fun extractUrl(content: String?): URI? {
+        if (content == null) return null
+
+        val urlPattern = Pattern.compile("https?://[A-Za-z0-9-_.~:/?#\\[\\]@!$&'()*+,;=%]+")
+        val matcher = urlPattern.matcher(content)
+
+        // Check if a URL is found
+        if (matcher.find()) {
+            // Extract the first URL found in the content string
+            val url = matcher.group()
+
+            // Remove trailing non-URL characters (i.e., punctuation)
+            val cleanUrl = url.trimEnd{ !it.isLetterOrDigit() }
+
+            // Return the extracted URL as a URI object
+            return URI(cleanUrl)
+        }
+
+        // Return null if a URL cannot be found in the content string
+        return null
+    }
+
+    private fun determineMutationType(content: String?): MutationType {
+        if (content == null) return MutationType.FALLBACK
+
+        // Extract the first URL in the content string
+        val extractedUrl = extractUrl(content) ?: return MutationType.FALLBACK
+
+        return MutationMap.UriToMutationType.getOrDefault(
+            key = extractedUrl.host,
+            defaultValue = MutationType.FALLBACK
+        )
     }
 
     companion object {
