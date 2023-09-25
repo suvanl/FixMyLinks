@@ -26,7 +26,7 @@ class LinkMutationTests {
     fun `remove ONLY 'igshid' parameter from Instagram link with multiple parameters (reversed param order)`() {
         val mutateUriUseCase = MutateUriUseCase()
         val actual = mutateUriUseCase(
-            URI("https://instagram.com/reel/CxdeuhUrrE6/?hl=en&igshid=MTc4MmM1YmI2Ng=="),
+            URI("https://www.instagram.com/reel/CxdeuhUrrE6/?hl=en&igshid=MTc4MmM1YmI2Ng=="),
             MutationType.URL_PARAMS_SPECIFIC
         )
         val expected = URI("https://instagram.com/reel/CxdeuhUrrE6/?hl=en")
@@ -38,7 +38,7 @@ class LinkMutationTests {
     fun `remove lone 'igshid' parameter from Instagram link using URL_PARAMS_SPECIFIC MutationType`() {
         val mutateUriUseCase = MutateUriUseCase()
         val actual = mutateUriUseCase(
-            URI("https://instagram.com/reel/CxdeuhUrrE6/?igshid=MTc4MmM1YmI2Ng=="),
+            URI("https://www.instagram.com/reel/CxdeuhUrrE6/?igshid=MTc4MmM1YmI2Ng=="),
             MutationType.URL_PARAMS_SPECIFIC
         )
         val expected = URI("https://instagram.com/reel/CxdeuhUrrE6/")
@@ -50,7 +50,7 @@ class LinkMutationTests {
     fun `remove lone 'igshid' parameter from Instagram link with urlencoded chars using URL_PARAMS_SPECIFIC MutationType`() {
         val mutateUriUseCase = MutateUriUseCase()
         val actual = mutateUriUseCase(
-            URI("https://instagram.com/reel/CxdeuhUrrE6/?igshid=MTc4MmM1YmI2Ng%3D%3D"),
+            URI("https://www.instagram.com/reel/CxdeuhUrrE6/?igshid=MTc4MmM1YmI2Ng%3D%3D"),
             MutationType.URL_PARAMS_SPECIFIC
         )
         val expected = URI("https://instagram.com/reel/CxdeuhUrrE6/")
