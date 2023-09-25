@@ -10,7 +10,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.suvanl.fixmylinks.domain.mutation.MutateUriUseCase
 import com.suvanl.fixmylinks.domain.mutation.util.MutationUtils
-import java.net.URI
+import com.suvanl.fixmylinks.domain.util.StringUtils
 
 class ShareViewModel(
     private val mutateUriUseCase: MutateUriUseCase
@@ -29,20 +29,35 @@ class ShareViewModel(
     }
 
     fun updateMutatedContent(content: String?) {
-        // Check if the received content is a valid URL. If it isn't, set mutatedUri to the original
+        if (content == null) {
+            _mutatedUri = null
+            return
+        }
+
+        // Extract the first URL found in the received content
+        val extractedUrl = StringUtils.extractUrl(content)
+        if (extractedUrl == null) {
+            _mutatedUri = content
+            return
+        }
+
+        // Check if the extracted URL is a valid URL. If it isn't, set mutatedUri to the original
         // content that was provided - it will not be modified.
-        if (!URLUtil.isValidUrl(content)) {
+        if (!URLUtil.isValidUrl(extractedUrl.toString())) {
             _mutatedUri = content
             return
         }
 
         _mutatedUri = mutateUriUseCase(
-            uri = URI(content),
+            uri = extractedUrl,
             mutationType = MutationUtils.determineMutationType(content)
         ).toString()
     }
 
     companion object {
+        @Suppress("Unused")
+        private const val TAG = "ShareViewModel"
+
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 ShareViewModel(mutateUriUseCase = MutateUriUseCase())

@@ -16,7 +16,6 @@ enum class MutationType {
     /**
      * Strip any number of specific URL parameters from the link
      */
-    @Unsupported
     URL_PARAMS_SPECIFIC,
 
     /**

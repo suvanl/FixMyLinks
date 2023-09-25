@@ -15,7 +15,12 @@ internal object MutationUtils {
         val extractedUrl = StringUtils.extractUrl(content) ?: return MutationType.FALLBACK
 
         return MutationMap.UriToMutationType.getOrDefault(
-            key = extractedUrl.host,
+            // Remove "www." from the start of the link if it contains it
+            key = if (extractedUrl.host.startsWith("www.")) {
+                extractedUrl.host.removePrefix("www.")
+            } else {
+                extractedUrl.host
+            },
             defaultValue = MutationType.FALLBACK
         )
     }
