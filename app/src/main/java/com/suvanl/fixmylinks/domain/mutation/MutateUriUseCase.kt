@@ -140,10 +140,17 @@ class MutateUriUseCase {
     }
 
     private fun mutateDomainName(uri: URI, useWwwSubdomain: Boolean): URI {
+        val originalUri = MutatedUri(
+            scheme = uri.scheme,
+            host = if (useWwwSubdomain) "www.${uri.host}" else uri.host,
+            path = uri.path,
+            rawQuery = uri.rawQuery
+        ).build()
+
         // Find the domain name mutation
         val mutation = DomainNameMutation.values().find {
             uri.host == it.info.from
-        } ?: return uri
+        } ?: return originalUri
 
         uri.apply {
             return MutatedUri(
