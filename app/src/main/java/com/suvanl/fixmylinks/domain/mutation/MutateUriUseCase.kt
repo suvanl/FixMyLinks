@@ -6,9 +6,10 @@ import java.net.URI
 
 class MutateUriUseCase {
     operator fun invoke(uri: URI, mutationType: MutationType): URI {
-
         // TODO: if the link originally contained "www", ensure it gets restored in the mutated link
-        val uriToMutate = if (uri.host.startsWith("www.")) {
+
+        val uriUsesWwwSubdomain = uri.host.startsWith("www.")
+        val uriToMutate = if (uriUsesWwwSubdomain) {
             uri.removeSubdomain("www")
         } else uri
 
@@ -94,8 +95,15 @@ class MutateUriUseCase {
             "$key=$value"
         }
 
-        // rebuild the URI, appending the newly mutated query string
-        return URI("${uri.scheme}://${uri.host}${uri.path}?$mutatedQueryString")
+        uri.apply {
+            // Rebuild the URI with the newly mutated query string
+            return MutatedUri(
+                scheme = scheme,
+                host = host,
+                path = path,
+                rawQuery = mutatedQueryString
+            ).build()
+        }
     }
 
     private fun mutateDomainName(uri: URI): URI {
