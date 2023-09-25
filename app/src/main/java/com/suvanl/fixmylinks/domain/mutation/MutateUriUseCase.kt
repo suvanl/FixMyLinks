@@ -6,8 +6,6 @@ import java.net.URI
 
 class MutateUriUseCase {
     operator fun invoke(uri: URI, mutationType: MutationType): URI {
-        // TODO: if the link originally contained "www", ensure it gets restored in the mutated link
-
         val uriUsesWwwSubdomain = uri.host.startsWith("www.")
         val uriToMutate = if (uriUsesWwwSubdomain) {
             uri.removeSubdomain("www")
@@ -15,7 +13,10 @@ class MutateUriUseCase {
 
         when (mutationType) {
             DOMAIN_NAME -> {
-                return mutateDomainName(uriToMutate)
+                return mutateDomainName(
+                    uri = uriToMutate,
+                    useWwwSubdomain = uriUsesWwwSubdomain
+                )
             }
 
             URL_PARAMS_ALL -> {
@@ -24,13 +25,23 @@ class MutateUriUseCase {
 
             URL_PARAMS_SPECIFIC -> {
                 val paramsToRemove =
-                    MutationMap.UriToRemovableParametersList.getOrDefault(uriToMutate.host, listOf())
+                    MutationMap.UriToRemovableParametersList.getOrDefault(
+                        uriToMutate.host,
+                        listOf()
+                    )
 
-                return removeSpecificUrlParams(uriToMutate, paramsToRemove)
+                return removeSpecificUrlParams(
+                    uri = uriToMutate,
+                    paramsToRemove = paramsToRemove,
+                    useWwwSubdomain = uriUsesWwwSubdomain
+                )
             }
 
             DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
-                val uriWithMutatedDomainName = mutateDomainName(uriToMutate)
+                val uriWithMutatedDomainName = mutateDomainName(
+                    uri = uriToMutate,
+                    useWwwSubdomain = uriUsesWwwSubdomain
+                )
                 return URI(removeAllUrlParams(uriWithMutatedDomainName.toString()))
             }
 
@@ -46,7 +57,11 @@ class MutateUriUseCase {
 
     private fun removeAllUrlParams(link: String) = link.split("?")[0]
 
-    private fun removeSpecificUrlParams(uri: URI, paramsToRemove: List<String>): URI {
+    private fun removeSpecificUrlParams(
+        uri: URI,
+        paramsToRemove: List<String>,
+        useWwwSubdomain: Boolean
+    ): URI {
         if (paramsToRemove.isEmpty()) return uri
 
         val queryString = uri.rawQuery
@@ -57,12 +72,30 @@ class MutateUriUseCase {
             // set `limit` to 2 to ensure the resultant List contains 2 elements at most
             val paramName = queryString.split("=", limit = 2)[0]
 
-            if (!paramsToRemove.contains(paramName)) return uri
+            if (!paramsToRemove.contains(paramName)) {
+                return MutatedUri(
+                    scheme = uri.scheme,
+                    host = if (useWwwSubdomain) "www.${uri.host}" else uri.host,
+                    path = uri.path,
+                    rawQuery = uri.rawQuery
+                ).build()
+            }
+
+            println("about to remove all URL params")
 
             // if `paramsToRemove` does contain the name of this param, we'll remove the entire
             // query string (since it only had one parameter, and a parameter with this name exists
             // within the `paramsToRemove` List, meaning it should be removed).
-            return URI(removeAllUrlParams(uri.toString()))
+            return URI(
+                removeAllUrlParams(
+                    link = MutatedUri(
+                        scheme = uri.scheme,
+                        host = if (useWwwSubdomain) "www.${uri.host}" else uri.host,
+                        path = uri.path,
+                        rawQuery = uri.rawQuery
+                    ).build().toString()
+                )
+            )
         }
 
         // Create a List of `Pair`s of URL params
@@ -99,23 +132,26 @@ class MutateUriUseCase {
             // Rebuild the URI with the newly mutated query string
             return MutatedUri(
                 scheme = scheme,
-                host = host,
+                host = if (useWwwSubdomain) "www.$host" else host,
                 path = path,
                 rawQuery = mutatedQueryString
             ).build()
         }
     }
 
-    private fun mutateDomainName(uri: URI): URI {
+    private fun mutateDomainName(uri: URI, useWwwSubdomain: Boolean): URI {
         // Find the domain name mutation
         val mutation = DomainNameMutation.values().find {
             uri.host == it.info.from
         } ?: return uri
 
-        // Use `String.replace` to mutate the link
-        val mutatedLink = uri.toString().replace(uri.host, mutation.info.to)
-
-        // Convert the mutated link back to a URI and return it
-        return URI(mutatedLink)
+        uri.apply {
+            return MutatedUri(
+                scheme = scheme,
+                host = if (useWwwSubdomain) "www.${mutation.info.to}" else mutation.info.to,
+                path = path,
+                rawQuery = rawQuery
+            ).build()
+        }
     }
 }
