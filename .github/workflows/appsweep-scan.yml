@@ -7,6 +7,9 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: Upload app to AppSweep with Gradle
         env:
           APPSWEEP_API_KEY: ${{ secrets.APPSWEEP_API_KEY }}
