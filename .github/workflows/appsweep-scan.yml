@@ -1,5 +1,8 @@
 name: AppSweep security scan
-on: [pull_request]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
 jobs:
   upload-app-to-appsweep:
     runs-on: ubuntu-latest
