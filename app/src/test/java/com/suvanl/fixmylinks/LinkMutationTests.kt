@@ -23,7 +23,7 @@ class LinkMutationTests {
     }
 
     @Test
-    fun `remove ONLY 'igshid' parameter from Instagram link with multiple parameters (reversed)`() {
+    fun `remove ONLY 'igshid' parameter from Instagram link with multiple parameters (reversed param order)`() {
         val mutateUriUseCase = MutateUriUseCase()
         val actual = mutateUriUseCase(
             URI("https://instagram.com/reel/CxdeuhUrrE6/?hl=en&igshid=MTc4MmM1YmI2Ng=="),
