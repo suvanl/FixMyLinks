@@ -31,7 +31,7 @@ jobs:
           name: lint-results-debug.html
           path: app/build/reports/lint-results-debug.html
 
-  unit_test:
+  unit-test:
     needs: [lint]
     runs-on: ubuntu-latest
     steps:
