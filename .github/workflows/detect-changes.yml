@@ -1,0 +1,39 @@
+##############################################################
+# Reusable workflow for detecting changes in source code files
+##############################################################
+
+name: "Detect changes"
+on:
+  workflow_call:
+    # Map workflow outputs to job outputs
+    outputs:
+      androidTest:
+        description: "Android instrumentation tests module"
+        value: ${{ jobs.detect_changes.outputs.androidTest }}
+      main:
+        description: "Main module"
+        value: ${{ jobs.detect_changes.outputs.main }}
+      test:
+        description: "Test (unit tests) module"
+        value: ${{ jobs.detect_changes.outputs.test }}
+
+jobs:
+  detect_changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      androidTest: ${{ steps.filter.outputs.androidTest }}
+      main: ${{ steps.filter.outputs.main }}
+      test: ${{ steps.filter.outputs.test }}
+    steps:
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            androidTest:
+              - 'app/src/androidTest/**'
+            main:
+              - 'app/src/main/**'
+            test:
+              - 'app/src/test/**'

@@ -8,24 +8,7 @@ on:
 jobs:
   # Detect changes in source files
   changes:
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: read
-    outputs:
-      androidTest: ${{ steps.filter.outputs.androidTest }}
-      main: ${{ steps.filter.outputs.main }}
-      test: ${{ steps.filter.outputs.test }}
-    steps:
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: |
-            androidTest:
-              - 'app/src/androidTest/**'
-            main:
-              - 'app/src/main/**'
-            test:
-              - 'app/src/test/**'
+    uses: ./.github/workflows/detect-changes.yml
 
   lint:
     needs: [changes]
