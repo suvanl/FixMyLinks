@@ -27,7 +27,7 @@ jobs:
       main: ${{ steps.filter.outputs.main }}
       test: ${{ steps.filter.outputs.test }}
     steps:
-      - run: echo "${{ github.event_name }}"
+      - run: echo "${{ github.event_name }}; ${{ github.event.action }}"
 
       - uses: dorny/paths-filter@v2
         id: filter
