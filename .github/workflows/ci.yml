@@ -59,6 +59,10 @@ jobs:
 
   unit-test:
     needs: [lint]
+    if: |
+      needs.changes.outputs.androidTest == 'true' ||
+      needs.changes.outputs.main == 'true' ||
+      needs.changes.outputs.test == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
