@@ -18,7 +18,15 @@ on:
         value: ${{ jobs.detect_changes.outputs.test }}
 
 jobs:
+  checkout_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        if: github.event_name == 'push'
+
   detect_changes:
+    needs: checkout_job
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
