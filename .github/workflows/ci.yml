@@ -95,6 +95,10 @@ jobs:
 
   instrumentation-test:
     needs: [unit-test]
+    if: |
+      needs.changes.outputs.androidTest == 'true' ||
+      needs.changes.outputs.main == 'true' ||
+      needs.changes.outputs.test == 'true'
     runs-on: macos-latest
     strategy:
       matrix:
