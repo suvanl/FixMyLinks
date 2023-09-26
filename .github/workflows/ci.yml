@@ -51,8 +51,14 @@ jobs:
       - name: Run unit tests
         run: ./gradlew test
 
-      - name: Upload unit test summary report
+      - name: Upload unit test summary report (debug)
         uses: actions/upload-artifact@v3
         with:
           name: unit-test-report-debug
           path: app/build/reports/tests/testDebugUnitTest/
+
+      - name: Upload unit test summary report (release)
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit-test-report-release
+          path: app/build/reports/tests/testReleaseUnitTest/
