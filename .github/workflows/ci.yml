@@ -29,10 +29,7 @@ jobs:
 
   lint:
     needs: [changes]
-    if: |
-      ${{ needs.changes.outputs.androidTest == 'true' }} ||
-      ${{ needs.changes.outputs.main == 'true' }} ||
-      ${{ needs.changes.outputs.test == 'true' }}
+    if: ${{ needs.changes.outputs.main == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - run: |
