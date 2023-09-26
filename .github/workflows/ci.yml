@@ -8,6 +8,8 @@ on:
 jobs:
   # Detect changes in source files
   changes:
+    permissions:
+      pull-requests: read
     uses: ./.github/workflows/detect-changes.yml
 
   lint:
