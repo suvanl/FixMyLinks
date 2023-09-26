@@ -19,7 +19,6 @@ on:
 
 jobs:
   detect_changes:
-    needs: checkout_job
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
