@@ -35,9 +35,6 @@ jobs:
       needs.changes.outputs.test == 'true'
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "CHANGES => main: ${{ needs.changes.outputs.main == 'true' }}; test: ${{ needs.changes.outputs.test == 'true' }}; androidTest: ${{ needs.changes.outputs.androidTest == 'true' }}"
-
       - name: Check out repository code
         uses: actions/checkout@v3
 
