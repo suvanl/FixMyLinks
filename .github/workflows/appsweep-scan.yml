@@ -8,6 +8,7 @@ jobs:
   changes:
     permissions:
       pull-requests: read
+      contents: read
     uses: ./.github/workflows/detect-changes.yml
 
   upload-app-to-appsweep:
