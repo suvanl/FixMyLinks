@@ -68,7 +68,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        api-level: [29, 30, 32, 33, 34]
+        api-level: [29, 34]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -98,7 +98,6 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: google_apis
-          arch: x86_64
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
@@ -112,7 +111,6 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: google_apis
-          arch: x86_64
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
