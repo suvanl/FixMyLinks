@@ -29,7 +29,10 @@ jobs:
 
   lint:
     needs: [changes]
-    if: ${{ needs.changes.outputs.main == 'true' }}
+    if: |
+      needs.changes.outputs.androidTest == 'true' ||
+      needs.changes.outputs.main == 'true' ||
+      needs.changes.outputs.test == 'true'
     runs-on: ubuntu-latest
     steps:
       - run: |
@@ -58,11 +61,7 @@ jobs:
           path: app/build/reports/lint-results-debug.html
 
   unit-test:
-    needs: [changes, lint]
-    if: |
-      ${{ needs.changes.outputs.androidTest == 'true' }} ||
-      ${{ needs.changes.outputs.main == 'true' }} ||
-      ${{ needs.changes.outputs.test == 'true' }}
+    needs: [lint]
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -94,11 +93,7 @@ jobs:
           path: app/build/reports/tests/testReleaseUnitTest/
 
   instrumentation-test:
-    needs: [changes, unit-test]
-    if: |
-      ${{ needs.changes.outputs.androidTest == 'true' }} ||
-      ${{ needs.changes.outputs.main == 'true' }} ||
-      ${{ needs.changes.outputs.test == 'true' }}
+    needs: [unit-test]
     runs-on: macos-latest
     strategy:
       matrix:
