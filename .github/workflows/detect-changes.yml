@@ -34,7 +34,6 @@ jobs:
 
       - uses: dorny/paths-filter@v2
         if: ${{ always() }}
-        needs: []
         id: filter
         with:
           filters: |
