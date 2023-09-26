@@ -18,26 +18,24 @@ on:
         value: ${{ jobs.detect_changes.outputs.test }}
 
 jobs:
-  checkout_job:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v3
-        if: github.event_name == 'push'
-
   detect_changes:
     needs: checkout_job
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
+      contents: read
     outputs:
       androidTest: ${{ steps.filter.outputs.androidTest }}
       main: ${{ steps.filter.outputs.main }}
       test: ${{ steps.filter.outputs.test }}
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        if: github.event_name == 'push'
+
       - uses: dorny/paths-filter@v2
+        if: ${{ always() }}
+        needs: []
         id: filter
         with:
           filters: |
