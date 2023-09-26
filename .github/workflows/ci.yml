@@ -6,7 +6,37 @@ on:
     branches: [ main ]
 
 jobs:
+  # Detect changes in source files
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      androidTest: ${{ steps.filter.outputs.androidTest }}
+      main: ${{ steps.filter.outputs.main }}
+      test: ${{ steps.filter.outputs.test }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Filter paths
+        uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            androidTest:
+              - 'app/src/androidTest/**'
+            main:
+              - 'app/src/main/**'
+            test:
+              - 'app/src/test/**'
+
   lint:
+    needs: [changes]
+    if: |
+      ${{ needs.changes.outputs.androidTest == 'true' }} ||
+      ${{ needs.changes.outputs.main == 'true' }} ||
+      ${{ needs.changes.outputs.test == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -32,7 +62,11 @@ jobs:
           path: app/build/reports/lint-results-debug.html
 
   unit-test:
-    needs: [lint]
+    needs: [changes, lint]
+    if: |
+      ${{ needs.changes.outputs.androidTest == 'true' }} ||
+      ${{ needs.changes.outputs.main == 'true' }} ||
+      ${{ needs.changes.outputs.test == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -64,7 +98,11 @@ jobs:
           path: app/build/reports/tests/testReleaseUnitTest/
 
   instrumentation-test:
-    needs: [unit-test]
+    needs: [changes, unit-test]
+    if: |
+      ${{ needs.changes.outputs.androidTest == 'true' }} ||
+      ${{ needs.changes.outputs.main == 'true' }} ||
+      ${{ needs.changes.outputs.test == 'true' }}
     runs-on: macos-latest
     strategy:
       matrix:
