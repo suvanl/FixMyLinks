@@ -6,7 +6,18 @@ on:
     branches: [ main ]
 
 jobs:
+  # Detect changes in source files
+  changes:
+    permissions:
+      pull-requests: read
+    uses: ./.github/workflows/detect-changes.yml
+
   lint:
+    needs: [changes]
+    if: |
+      needs.changes.outputs.androidTest == 'true' ||
+      needs.changes.outputs.main == 'true' ||
+      needs.changes.outputs.test == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -33,6 +44,10 @@ jobs:
 
   unit-test:
     needs: [lint]
+    if: |
+      needs.changes.outputs.androidTest == 'true' ||
+      needs.changes.outputs.main == 'true' ||
+      needs.changes.outputs.test == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -65,6 +80,10 @@ jobs:
 
   instrumentation-test:
     needs: [unit-test]
+    if: |
+      needs.changes.outputs.androidTest == 'true' ||
+      needs.changes.outputs.main == 'true' ||
+      needs.changes.outputs.test == 'true'
     runs-on: macos-latest
     strategy:
       matrix:

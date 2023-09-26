@@ -4,7 +4,18 @@ on:
     branches: [ "main" ]
   pull_request:
 jobs:
+  # Detect changes in source files
+  changes:
+    permissions:
+      pull-requests: read
+    uses: ./.github/workflows/detect-changes.yml
+
   upload-app-to-appsweep:
+    needs: [changes]
+    if: |
+      needs.changes.outputs.androidTest == 'true' ||
+      needs.changes.outputs.main == 'true' ||
+      needs.changes.outputs.test == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
