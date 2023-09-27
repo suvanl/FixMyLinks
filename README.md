@@ -66,6 +66,7 @@ FixMyLinks currently contains the following rules out of the box:
 </small>
 
 <br>
+<br>
 
 More built-in rules will be added in future releases.
 
