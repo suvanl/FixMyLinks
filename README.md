@@ -3,9 +3,11 @@
     <img alt="FixMyLinks" src="./.github/images//logo-wordmark-light.svg" height="96">
 </picture>
 
-### 🔗🛠️ Replace domain names and remove unwanted tracking data from links shared on Android
+**🔗🛠️ Replace domain names and remove unwanted tracking data from links shared on Android**
 
-<br>
+---
+
+<br >
 
 # How do I use FixMyLinks?
 
