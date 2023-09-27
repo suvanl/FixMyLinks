@@ -7,8 +7,6 @@
 
 ---
 
-<br >
-
 # How do I use FixMyLinks?
 
 ## Replace domain names
