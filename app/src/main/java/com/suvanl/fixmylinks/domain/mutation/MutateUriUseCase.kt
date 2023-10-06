@@ -62,7 +62,7 @@ class MutateUriUseCase {
         paramsToRemove: List<String>,
         useWwwSubdomain: Boolean
     ): URI {
-        if (paramsToRemove.isEmpty()) return uri
+        if (uri.rawQuery == null || paramsToRemove.isEmpty()) return uri
 
         val queryString = uri.rawQuery
 
@@ -114,17 +114,17 @@ class MutateUriUseCase {
         }
 
         // Create a map of URL param key/value pairs that should be present in the mutated URL
-        val filteredUrlParams = paramPairs.toMap().filter { (key, _) ->
+        val requiredUrlParams = paramPairs.toMap().filter { (key, _) ->
             // filter out keys that should be removed
             !paramsToRemove.contains(key)
         }
 
         // If no params need to be present in the mutated URL (since all params in the URL exist in
         // `paramsToRemove`), return the URL without any params
-        if (filteredUrlParams.isEmpty()) return URI(removeAllUrlParams(uri.toString()))
+        if (requiredUrlParams.isEmpty()) return URI(removeAllUrlParams(uri.toString()))
 
         // Format the map of new params in the correct format required for URLs
-        val mutatedQueryString = filteredUrlParams.entries.joinToString("&") { (key, value) ->
+        val mutatedQueryString = requiredUrlParams.entries.joinToString("&") { (key, value) ->
             "$key=$value"
         }
 

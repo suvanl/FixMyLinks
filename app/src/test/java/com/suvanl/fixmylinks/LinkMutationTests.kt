@@ -81,4 +81,17 @@ class LinkMutationTests {
 
         assertEquals(expected, actual)
     }
+
+    @Test
+    fun `attempt to remove URL parameters of a parameterless Spotify link`() {
+        val mutateUriUseCase = MutateUriUseCase()
+        val actual = mutateUriUseCase(
+            uri = URI("https://open.spotify.com/track/3PRljkcobGtC6Kc3ILLSmq"),
+            mutationType = MutationType.URL_PARAMS_SPECIFIC
+        )
+        // URI should not change
+        val expected = URI("https://open.spotify.com/track/3PRljkcobGtC6Kc3ILLSmq")
+
+        assertEquals(expected, actual)
+    }
 }
