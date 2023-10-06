@@ -62,7 +62,7 @@ class MutateUriUseCase {
         paramsToRemove: List<String>,
         useWwwSubdomain: Boolean
     ): URI {
-        if (paramsToRemove.isEmpty()) return uri
+        if (uri.rawQuery == null || paramsToRemove.isEmpty()) return uri
 
         val queryString = uri.rawQuery
 
