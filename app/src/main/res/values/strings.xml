@@ -6,4 +6,6 @@
     <string name="home">Home</string>
     <string name="rules">Rules</string>
     <string name="saved">Saved</string>
+
+    <string name="add_new_rule">Add new rule</string>
 </resources>
