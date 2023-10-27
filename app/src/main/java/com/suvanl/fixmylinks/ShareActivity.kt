@@ -6,7 +6,9 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.suvanl.fixmylinks.ui.screens.ShareScreen
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
 import com.suvanl.fixmylinks.util.shareTextContent
@@ -28,7 +30,8 @@ class ShareActivity : ComponentActivity() {
                 // the share sheet for the mutated URI. This share sheet gets launched in onResume
                 // and the tinted backdrop will be the original application the ShareActivity was
                 // started from (via a Send intent).
-                if (viewModel.mutatedUri == null) {
+                val mutatedUri by viewModel.mutatedUri.collectAsStateWithLifecycle()
+                if (mutatedUri == null) {
                     ShareScreen()
                 }
             }
@@ -48,7 +51,7 @@ class ShareActivity : ComponentActivity() {
             updateUri(intentContent)
             updateMutatedContent(intentContent)
 
-            mutatedUri?.let { link -> shareTextContent(content = link) }
+            mutatedUri.value?.let { link -> shareTextContent(content = link) }
         }
 
         Log.d(TAG, "Content: ${viewModel.receivedContent}\nMutated: ${viewModel.mutatedUri}")
