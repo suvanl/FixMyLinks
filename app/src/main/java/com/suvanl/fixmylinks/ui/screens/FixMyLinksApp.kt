@@ -2,6 +2,7 @@ package com.suvanl.fixmylinks.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -34,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.suvanl.fixmylinks.R
@@ -50,23 +50,21 @@ val navItems = listOf(
 )
 
 @Composable
-fun FixMyLinksAppPortrait(navController: NavHostController) {
+fun FixMyLinksAppPortrait(
+    navHost: @Composable (padding: PaddingValues) -> Unit,
+    onItemClick: (screen: FmlScreen) -> Unit,
+    selectedFn: (screen: FmlScreen) -> Boolean
+) {
     FixMyLinksTheme {
         Scaffold(
             bottomBar = {
                 NavigationBar {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
-
                     navItems.forEach { screen ->
-                        val isSelected =
-                            currentDestination?.hierarchy?.any { it.route == screen.route } == true
+                        val isSelected = selectedFn(screen)
 
                         NavigationBarItem(
                             selected = isSelected,
-                            onClick = {
-                                navController.navigateSingleTop(screen.route)
-                            },
+                            onClick = { onItemClick(screen) },
                             icon = {
                                 Icon(
                                     imageVector = if (isSelected) screen.selectedIcon else screen.unselectedIcon,
@@ -90,22 +88,20 @@ fun FixMyLinksAppPortrait(navController: NavHostController) {
             },
             contentWindowInsets = WindowInsets.safeDrawing
         ) { innerPadding ->
-            FmlNavHost(
-                navController = navController,
-                modifier = Modifier.padding(innerPadding)
-            )
+            navHost(innerPadding)
         }
     }
 }
 
 @Composable
-fun FixMyLinksAppLandscape(navController: NavHostController) {
+fun FixMyLinksAppLandscape(
+    navHost: @Composable () -> Unit,
+    onItemClick: (screen: FmlScreen) -> Unit,
+    selectedFn: (screen: FmlScreen) -> Boolean
+) {
     FixMyLinksTheme {
         @Composable
         fun NavRail() {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
-
             NavigationRail(
                 header = {
                     FloatingActionButton(
@@ -128,12 +124,11 @@ fun FixMyLinksAppLandscape(navController: NavHostController) {
                     modifier = Modifier.fillMaxHeight()
                 ) {
                     navItems.forEachIndexed { index, screen ->
-                        val isSelected =
-                            currentDestination?.hierarchy?.any { it.route == screen.route } == true
+                        val isSelected = selectedFn(screen)
 
                         NavigationRailItem(
                             selected = isSelected,
-                            onClick = { navController.navigateSingleTop(screen.route) },
+                            onClick = { onItemClick(screen) },
                             icon = {
                                 Icon(
                                     imageVector = if (isSelected) screen.selectedIcon else screen.unselectedIcon,
@@ -165,7 +160,7 @@ fun FixMyLinksAppLandscape(navController: NavHostController) {
         ) {
             Row(modifier = Modifier.statusBarsPadding()) {
                 NavRail()
-                FmlNavHost(navController = navController)
+                navHost()
             }
         }
     }
@@ -175,9 +170,43 @@ fun FixMyLinksAppLandscape(navController: NavHostController) {
 fun FixMyLinksApp(windowSize: WindowSizeClass) {
     val navController = rememberNavController()
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
+    @Composable
+    fun PortraitLayout() = FixMyLinksAppPortrait(
+        navHost = { innerPadding ->
+            FmlNavHost(
+                navController = navController,
+                modifier = Modifier.padding(innerPadding)
+            )
+        },
+        onItemClick = { screen ->
+            navController.navigateSingleTop(screen.route)
+        },
+        selectedFn = { screen ->
+            currentDestination?.hierarchy?.any { it.route == screen.route } == true
+        }
+    )
+
+    @Composable
+    fun LandscapeLayout() {
+        FixMyLinksAppLandscape(
+            navHost = {
+                FmlNavHost(navController = navController)
+            },
+            onItemClick = { screen ->
+                navController.navigateSingleTop(screen.route)
+            },
+            selectedFn = { screen ->
+                currentDestination?.hierarchy?.any { it.route == screen.route } == true
+            }
+        )
+    }
+
     when (windowSize.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> FixMyLinksAppPortrait(navController = navController)
-        WindowWidthSizeClass.Medium -> FixMyLinksAppLandscape(navController = navController)
-        WindowWidthSizeClass.Expanded -> FixMyLinksAppLandscape(navController = navController)
+        WindowWidthSizeClass.Compact -> PortraitLayout()
+        WindowWidthSizeClass.Medium -> LandscapeLayout()
+        WindowWidthSizeClass.Expanded -> LandscapeLayout()
     }
 }
