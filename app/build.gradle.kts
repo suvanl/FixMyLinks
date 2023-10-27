@@ -52,11 +52,13 @@ android {
 
 dependencies {
     val lifecycleVersion = "2.6.2"
+    val navVersion = "2.7.4"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
+    implementation("androidx.navigation:navigation-compose:$navVersion")
     implementation("androidx.activity:activity-compose:1.8.0")
 
     implementation(platform("androidx.compose:compose-bom:2023.10.00"))

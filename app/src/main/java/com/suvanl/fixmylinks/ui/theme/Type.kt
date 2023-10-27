@@ -16,7 +16,7 @@ private fun defaultCustomFont(
 ): FontFamily {
     return FontFamily(
         Font(
-            resId = R.font.overusedgrotesk_vf,
+            resId = R.font.inter_vf,
             variationSettings = FontVariation.Settings(variationSettings)
         )
     )
