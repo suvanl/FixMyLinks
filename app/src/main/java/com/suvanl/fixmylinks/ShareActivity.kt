@@ -6,10 +6,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import com.suvanl.fixmylinks.ui.screens.ShareScreen
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
@@ -27,19 +23,13 @@ class ShareActivity : ComponentActivity() {
 
         setContent {
             FixMyLinksTheme {
-                // Only show Surface containing ShareScreen if mutatedUri is null. If mutatedUri has
-                // a value, there's no need to show the contents of this screen since all that is
-                // required will be the share sheet for the mutated URI. This share sheet gets
-                // launched in onResume and the tinted backdrop will be the original application the
-                // ShareActivity was started from (via a Send intent).
+                // Only show ShareScreen if mutatedUri is null. If mutatedUri has a value, there's
+                // no need to show the contents of this screen since all that is required will be
+                // the share sheet for the mutated URI. This share sheet gets launched in onResume
+                // and the tinted backdrop will be the original application the ShareActivity was
+                // started from (via a Send intent).
                 if (viewModel.mutatedUri == null) {
-                    // A surface container using the 'background' color from the theme
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
-                        ShareScreen()
-                    }
+                    ShareScreen()
                 }
             }
         }

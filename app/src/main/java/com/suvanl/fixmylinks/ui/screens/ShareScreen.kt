@@ -2,7 +2,10 @@ package com.suvanl.fixmylinks.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,24 +22,32 @@ import com.suvanl.fixmylinks.viewmodel.ShareViewModel
 @Composable
 fun ShareScreen(
     modifier: Modifier = Modifier,
-    shareViewModel: ShareViewModel = viewModel(factory = ShareViewModel.Factory)
+    shareViewModel: ShareViewModel = viewModel(factory = ShareViewModel.Factory),
+    shareSheetButtonIsEnabled: Boolean = shareViewModel.mutatedUri != null
 ) {
     val context = LocalContext.current
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = modifier
+    // A surface container using the 'background' color from the theme
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
-        Button(
-            onClick = {
-                shareViewModel.mutatedUri?.let { content ->
-                    context.shareTextContent(content)
-                }
-            },
-            enabled = shareViewModel.mutatedUri != null
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = modifier
         ) {
-            Text(text = stringResource(id = R.string.open_share_sheet))
+            Button(
+                onClick = {
+                    shareViewModel.mutatedUri?.let { content ->
+                        context.shareTextContent(content)
+                    }
+                },
+                enabled = shareSheetButtonIsEnabled
+            ) {
+                Text(text = stringResource(id = R.string.open_share_sheet))
+            }
         }
     }
 }
@@ -45,6 +56,6 @@ fun ShareScreen(
 @Composable
 fun ShareScreenPreview() {
     FixMyLinksTheme {
-        ShareScreen()
+        ShareScreen(shareSheetButtonIsEnabled = true)
     }
 }
