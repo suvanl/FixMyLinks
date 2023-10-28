@@ -44,6 +44,7 @@ import com.suvanl.fixmylinks.ui.navigation.FmlScreen
 import com.suvanl.fixmylinks.ui.navigation.allFmlScreens
 import com.suvanl.fixmylinks.ui.navigation.navigateSingleTop
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
+import com.suvanl.fixmylinks.ui.theme.TIGHT_LETTER_SPACING
 
 private val navItems = listOf(
     FmlScreen.Home,
@@ -100,7 +101,7 @@ fun FixMyLinksAppPortrait(
                                     Column {
                                         Text(
                                             text = stringResource(id = screen.label),
-                                            letterSpacing = (-0.035F).sp,
+                                            letterSpacing = TIGHT_LETTER_SPACING,
                                             fontWeight = if (isSelected) {
                                                 FontWeight.Bold
                                             } else {
@@ -173,7 +174,7 @@ fun FixMyLinksAppLandscape(
                                 Column {
                                     Text(
                                         text = stringResource(id = screen.label),
-                                        letterSpacing = (-0.035F).sp,
+                                        letterSpacing = TIGHT_LETTER_SPACING,
                                         fontWeight = if (isSelected) {
                                             FontWeight.Bold
                                         } else {

@@ -93,3 +93,5 @@ val Typography = Typography(
         fontFamily = defaultCustomFont()
     )
 )
+
+val TIGHT_LETTER_SPACING = (-0.035F).sp
