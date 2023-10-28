@@ -45,7 +45,7 @@ import com.suvanl.fixmylinks.ui.navigation.allFmlScreens
 import com.suvanl.fixmylinks.ui.navigation.navigateSingleTop
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
 
-val navItems = listOf(
+private val navItems = listOf(
     FmlScreen.Home,
     FmlScreen.Rules,
     FmlScreen.Saved,
