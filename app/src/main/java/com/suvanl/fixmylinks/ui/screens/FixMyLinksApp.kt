@@ -1,5 +1,8 @@
 package com.suvanl.fixmylinks.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -79,7 +83,23 @@ fun FixMyLinksAppPortrait(
                 }
             },
             bottomBar = {
-                if (showNavBar) {
+                val density = LocalDensity.current
+
+                AnimatedVisibility(
+                    visible = showNavBar,
+                    enter = slideInVertically(
+                        initialOffsetY = {
+                            it / 2
+                            with(density) { 128.dp.roundToPx() }
+                        },
+                    ),
+                    exit = slideOutVertically(
+                        targetOffsetY = {
+                            it / 2
+                            with(density) { 128.dp.roundToPx() }
+                        }
+                    )
+                ) {
                     NavigationBar {
                         navItems.forEach { screen ->
                             val isSelected = navItemSelectedFn(screen)
