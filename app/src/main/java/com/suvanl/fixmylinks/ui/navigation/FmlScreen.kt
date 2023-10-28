@@ -15,7 +15,7 @@ import com.suvanl.fixmylinks.R
 
 sealed class FmlScreen(
     val route: String,
-    @StringRes val label: Int = R.string.screen,
+    @StringRes val label: Int,
     val selectedIcon: ImageVector = Icons.Filled.Star,
     val unselectedIcon: ImageVector = Icons.Outlined.StarOutline
 ) {
@@ -42,5 +42,13 @@ sealed class FmlScreen(
 
     object AddRule : FmlScreen(
         route = "add_rule",
+        label = R.string.add_new_rule
     )
 }
+
+val allFmlScreens = listOf(
+    FmlScreen.Home,
+    FmlScreen.Rules,
+    FmlScreen.Saved,
+    FmlScreen.AddRule
+)

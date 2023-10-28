@@ -12,10 +12,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -24,12 +27,15 @@ import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -40,6 +46,7 @@ import androidx.navigation.compose.rememberNavController
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.navigation.FmlNavHost
 import com.suvanl.fixmylinks.ui.navigation.FmlScreen
+import com.suvanl.fixmylinks.ui.navigation.allFmlScreens
 import com.suvanl.fixmylinks.ui.navigation.navigateSingleTop
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
 
@@ -49,17 +56,41 @@ val navItems = listOf(
     FmlScreen.Saved,
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FixMyLinksAppPortrait(
     navHost: @Composable (padding: PaddingValues) -> Unit,
     onNavItemClick: (screen: FmlScreen) -> Unit,
     navItemSelectedFn: (screen: FmlScreen) -> Boolean,
     onFabClick: () -> Unit,
+    onNavigateUp: () -> Unit,
+    topAppBarTitle: String,
     showFab: Boolean = true,
     showNavBar: Boolean = true,
+    showTopAppBar: Boolean = false,
 ) {
     FixMyLinksTheme {
+        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
         Scaffold(
+            topBar = {
+                if (showTopAppBar) {
+                    TopAppBar(
+                        title = {
+                            Text(text = topAppBarTitle)
+                        },
+                        navigationIcon = {
+                            IconButton(onClick = { onNavigateUp() }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = stringResource(id = R.string.navigate_up)
+                                )
+                            }
+                        },
+                        scrollBehavior = scrollBehavior
+                    )
+                }
+            },
             bottomBar = {
                 if (showNavBar) {
                     NavigationBar {
@@ -111,7 +142,9 @@ fun FixMyLinksAppPortrait(
                     }
                 }
             },
-            contentWindowInsets = WindowInsets.safeDrawing
+            contentWindowInsets = WindowInsets.safeDrawing,
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
             navHost(innerPadding)
         }
@@ -209,23 +242,35 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
     val hideNavBarOn = listOf(FmlScreen.AddRule)
 
     @Composable
-    fun PortraitLayout() = FixMyLinksAppPortrait(
-        navHost = { innerPadding ->
-            FmlNavHost(
-                navController = navController,
-                modifier = Modifier.padding(innerPadding)
-            )
-        },
-        onNavItemClick = { screen ->
-            navController.navigateSingleTop(screen.route)
-        },
-        navItemSelectedFn = { screen ->
-            currentDestination?.hierarchy?.any { it.route == screen.route } == true
-        },
-        onFabClick = { navController.navigateSingleTop(FmlScreen.AddRule.route) },
-        showFab = displayFabOn.any { it.route == currentDestination?.route },
-        showNavBar = hideNavBarOn.none { it.route == currentDestination?.route }
-    )
+    fun PortraitLayout() {
+        val currentScreen = allFmlScreens.find { currentDestination?.route == it.route }
+
+        FixMyLinksAppPortrait(
+            navHost = { innerPadding ->
+                FmlNavHost(
+                    navController = navController,
+                    modifier = Modifier.padding(innerPadding)
+                )
+            },
+            onNavItemClick = { screen ->
+                navController.navigateSingleTop(screen.route)
+            },
+            navItemSelectedFn = { screen ->
+                currentDestination?.hierarchy?.any { it.route == screen.route } == true
+            },
+            onFabClick = {
+                navController.navigateSingleTop(
+                    route = FmlScreen.AddRule.route,
+                    popUpToStartDestination = false
+                )
+            },
+            onNavigateUp = { navController.navigateUp() },
+            topAppBarTitle = stringResource(id = currentScreen?.label ?: R.string.app_name),
+            showFab = displayFabOn.any { it.route == currentDestination?.route },
+            showNavBar = hideNavBarOn.none { it.route == currentDestination?.route },
+            showTopAppBar = hideNavBarOn.any { it.route == currentDestination?.route }
+        )
+    }
 
     @Composable
     fun LandscapeLayout() {
@@ -242,7 +287,8 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
             onFabClick = {
                 navController.navigateSingleTop(FmlScreen.AddRule.route)
             },
-            showNavRail = hideNavBarOn.none { it.route == currentDestination?.route
+            showNavRail = hideNavBarOn.none {
+                it.route == currentDestination?.route
             }
         )
     }
