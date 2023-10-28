@@ -29,6 +29,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -58,6 +59,30 @@ val navItems = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun FmlTopAppBar(
+    title: String,
+    onNavigateUp: () -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior,
+    modifier: Modifier = Modifier
+) {
+    TopAppBar(
+        title = {
+            Text(text = title)
+        },
+        navigationIcon = {
+            IconButton(onClick = { onNavigateUp() }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = stringResource(id = R.string.navigate_up)
+                )
+            }
+        },
+        scrollBehavior = scrollBehavior
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun FixMyLinksAppPortrait(
     navHost: @Composable (padding: PaddingValues) -> Unit,
     onNavItemClick: (screen: FmlScreen) -> Unit,
@@ -75,18 +100,9 @@ fun FixMyLinksAppPortrait(
         Scaffold(
             topBar = {
                 if (showTopAppBar) {
-                    TopAppBar(
-                        title = {
-                            Text(text = topAppBarTitle)
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = { onNavigateUp() }) {
-                                Icon(
-                                    imageVector = Icons.Default.ArrowBack,
-                                    contentDescription = stringResource(id = R.string.navigate_up)
-                                )
-                            }
-                        },
+                    FmlTopAppBar(
+                        title = topAppBarTitle,
+                        onNavigateUp = { onNavigateUp() },
                         scrollBehavior = scrollBehavior
                     )
                 }
@@ -151,15 +167,21 @@ fun FixMyLinksAppPortrait(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FixMyLinksAppLandscape(
     navHost: @Composable () -> Unit,
     onItemClick: (screen: FmlScreen) -> Unit,
     selectedFn: (screen: FmlScreen) -> Boolean,
     onFabClick: () -> Unit,
+    onNavigateUp: () -> Unit,
+    topAppBarTitle: String,
+    showTopAppBar: Boolean = false,
     showNavRail: Boolean = true
 ) {
     FixMyLinksTheme {
+        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
         @Composable
         fun NavRail() {
             NavigationRail(
@@ -222,7 +244,20 @@ fun FixMyLinksAppLandscape(
                 if (showNavRail) {
                     NavRail()
                 }
-                navHost()
+
+                Column(
+                    modifier = Modifier
+                        .nestedScroll(scrollBehavior.nestedScrollConnection)
+                ) {
+                    if (showTopAppBar) {
+                        FmlTopAppBar(
+                            title = topAppBarTitle,
+                            onNavigateUp = { onNavigateUp() },
+                            scrollBehavior = scrollBehavior
+                        )
+                    }
+                    navHost()
+                }
             }
         }
     }
@@ -234,6 +269,7 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val currentScreen = allFmlScreens.find { currentDestination?.route == it.route }
 
     // The screens on which the Floating Action Button (FAB) should be displayed
     val displayFabOn = listOf(FmlScreen.Home, FmlScreen.Rules)
@@ -243,8 +279,6 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
 
     @Composable
     fun PortraitLayout() {
-        val currentScreen = allFmlScreens.find { currentDestination?.route == it.route }
-
         FixMyLinksAppPortrait(
             navHost = { innerPadding ->
                 FmlNavHost(
@@ -285,11 +319,17 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                 currentDestination?.hierarchy?.any { it.route == screen.route } == true
             },
             onFabClick = {
-                navController.navigateSingleTop(FmlScreen.AddRule.route)
+                navController.navigateSingleTop(
+                    route = FmlScreen.AddRule.route,
+                    popUpToStartDestination = false
+                )
             },
             showNavRail = hideNavBarOn.none {
                 it.route == currentDestination?.route
-            }
+            },
+            onNavigateUp = { navController.navigateUp() },
+            topAppBarTitle = stringResource(id = currentScreen?.label ?: R.string.app_name),
+            showTopAppBar = hideNavBarOn.any { it.route == currentDestination?.route }
         )
     }
 
