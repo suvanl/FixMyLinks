@@ -6,6 +6,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.suvanl.fixmylinks.ui.screens.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.HomeScreen
 import com.suvanl.fixmylinks.ui.screens.RulesScreen
 import com.suvanl.fixmylinks.ui.screens.SavedScreen
@@ -28,6 +29,10 @@ fun FmlNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         composable(route = FmlScreen.Saved.route) {
             SavedScreen()
         }
+
+        composable(route = FmlScreen.AddRule.route) {
+            AddRuleScreen()
+        }
     }
 }
 
@@ -35,12 +40,14 @@ fun FmlNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
  * Navigates to the given route with `launchSingleTop` enabled, to ensure that there will be at most
  * only one copy of a given destination on top of the back stack.
  */
-fun NavHostController.navigateSingleTop(route: String) {
+fun NavHostController.navigateSingleTop(route: String, popUpToStartDestination: Boolean = true) {
     this.navigate(route) {
         // Pop up to the start destination of the graph to avoid building up a large stack of
         // destinations on the back stack as users select items
-        popUpTo(this@navigateSingleTop.graph.findStartDestination().id) {
-            saveState = true
+        if (popUpToStartDestination) {
+            popUpTo(this@navigateSingleTop.graph.findStartDestination().id) {
+                saveState = true
+            }
         }
 
         // Avoid multiple copies of the same destination when re-selecting the same item
