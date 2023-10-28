@@ -52,36 +52,61 @@ val navItems = listOf(
 @Composable
 fun FixMyLinksAppPortrait(
     navHost: @Composable (padding: PaddingValues) -> Unit,
-    onItemClick: (screen: FmlScreen) -> Unit,
-    selectedFn: (screen: FmlScreen) -> Boolean
+    onNavItemClick: (screen: FmlScreen) -> Unit,
+    navItemSelectedFn: (screen: FmlScreen) -> Boolean,
+    onFabClick: () -> Unit,
+    showFab: Boolean = true,
+    showNavBar: Boolean = true,
 ) {
     FixMyLinksTheme {
         Scaffold(
             bottomBar = {
-                NavigationBar {
-                    navItems.forEach { screen ->
-                        val isSelected = selectedFn(screen)
+                if (showNavBar) {
+                    NavigationBar {
+                        navItems.forEach { screen ->
+                            val isSelected = navItemSelectedFn(screen)
 
-                        NavigationBarItem(
-                            selected = isSelected,
-                            onClick = { onItemClick(screen) },
-                            icon = {
-                                Icon(
-                                    imageVector = if (isSelected) screen.selectedIcon else screen.unselectedIcon,
-                                    contentDescription = null
-                                )
-                            },
-                            label = {
-                                Column {
-                                    Text(
-                                        text = stringResource(id = screen.label),
-                                        letterSpacing = (-0.035F).sp,
-                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                        fontSize = 13.sp,
-                                        modifier = Modifier.padding(top = 64.dp)
+                            NavigationBarItem(
+                                selected = isSelected,
+                                onClick = { onNavItemClick(screen) },
+                                icon = {
+                                    Icon(
+                                        imageVector = if (isSelected) {
+                                            screen.selectedIcon
+                                        } else {
+                                            screen.unselectedIcon
+                                        },
+                                        contentDescription = null
                                     )
+                                },
+                                label = {
+                                    Column {
+                                        Text(
+                                            text = stringResource(id = screen.label),
+                                            letterSpacing = (-0.035F).sp,
+                                            fontWeight = if (isSelected) {
+                                                FontWeight.Bold
+                                            } else {
+                                                FontWeight.Normal
+                                            },
+                                            fontSize = 13.sp,
+                                            modifier = Modifier.padding(top = 64.dp)
+                                        )
+                                    }
                                 }
-                            }
+                            )
+                        }
+                    }
+                }
+            },
+            floatingActionButton = {
+                if (showFab) {
+                    FloatingActionButton(
+                        onClick = { onFabClick() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Add,
+                            contentDescription = stringResource(id = R.string.add_new_rule)
                         )
                     }
                 }
@@ -97,7 +122,9 @@ fun FixMyLinksAppPortrait(
 fun FixMyLinksAppLandscape(
     navHost: @Composable () -> Unit,
     onItemClick: (screen: FmlScreen) -> Unit,
-    selectedFn: (screen: FmlScreen) -> Boolean
+    selectedFn: (screen: FmlScreen) -> Boolean,
+    onFabClick: () -> Unit,
+    showNavRail: Boolean = true
 ) {
     FixMyLinksTheme {
         @Composable
@@ -105,7 +132,7 @@ fun FixMyLinksAppLandscape(
             NavigationRail(
                 header = {
                     FloatingActionButton(
-                        onClick = { /*TODO*/ },
+                        onClick = { onFabClick() },
                         // remove elevation from FAB
                         elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
                     ) {
@@ -159,7 +186,9 @@ fun FixMyLinksAppLandscape(
             modifier = Modifier.fillMaxSize()
         ) {
             Row(modifier = Modifier.statusBarsPadding()) {
-                NavRail()
+                if (showNavRail) {
+                    NavRail()
+                }
                 navHost()
             }
         }
@@ -173,6 +202,12 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
+    // The screens on which the Floating Action Button (FAB) should be displayed
+    val displayFabOn = listOf(FmlScreen.Home, FmlScreen.Rules)
+
+    // The screens on which the Navigation Bar should be hidden
+    val hideNavBarOn = listOf(FmlScreen.AddRule)
+
     @Composable
     fun PortraitLayout() = FixMyLinksAppPortrait(
         navHost = { innerPadding ->
@@ -181,12 +216,15 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                 modifier = Modifier.padding(innerPadding)
             )
         },
-        onItemClick = { screen ->
+        onNavItemClick = { screen ->
             navController.navigateSingleTop(screen.route)
         },
-        selectedFn = { screen ->
+        navItemSelectedFn = { screen ->
             currentDestination?.hierarchy?.any { it.route == screen.route } == true
-        }
+        },
+        onFabClick = { navController.navigateSingleTop(FmlScreen.AddRule.route) },
+        showFab = displayFabOn.any { it.route == currentDestination?.route },
+        showNavBar = hideNavBarOn.none { it.route == currentDestination?.route }
     )
 
     @Composable
@@ -200,6 +238,11 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
             },
             selectedFn = { screen ->
                 currentDestination?.hierarchy?.any { it.route == screen.route } == true
+            },
+            onFabClick = {
+                navController.navigateSingleTop(FmlScreen.AddRule.route)
+            },
+            showNavRail = hideNavBarOn.none { it.route == currentDestination?.route
             }
         )
     }

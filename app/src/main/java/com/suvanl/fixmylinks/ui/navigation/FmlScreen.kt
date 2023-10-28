@@ -5,17 +5,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LibraryBooks
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.LibraryBooks
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.suvanl.fixmylinks.R
 
 sealed class FmlScreen(
     val route: String,
-    @StringRes val label: Int,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector
+    @StringRes val label: Int = R.string.screen,
+    val selectedIcon: ImageVector = Icons.Filled.Star,
+    val unselectedIcon: ImageVector = Icons.Outlined.StarOutline
 ) {
     object Home : FmlScreen(
         route = "home",
@@ -36,5 +38,9 @@ sealed class FmlScreen(
         label = R.string.saved,
         selectedIcon = Icons.Filled.Bookmarks,
         unselectedIcon = Icons.Outlined.Bookmarks
+    )
+
+    object AddRule : FmlScreen(
+        route = "add_rule",
     )
 }

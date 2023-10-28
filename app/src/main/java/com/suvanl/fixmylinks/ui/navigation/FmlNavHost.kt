@@ -6,6 +6,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.suvanl.fixmylinks.ui.screens.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.HomeScreen
 import com.suvanl.fixmylinks.ui.screens.RulesScreen
 import com.suvanl.fixmylinks.ui.screens.SavedScreen
@@ -27,6 +28,10 @@ fun FmlNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
 
         composable(route = FmlScreen.Saved.route) {
             SavedScreen()
+        }
+
+        composable(route = FmlScreen.AddRule.route) {
+            AddRuleScreen()
         }
     }
 }
