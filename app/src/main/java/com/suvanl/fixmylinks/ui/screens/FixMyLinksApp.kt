@@ -1,6 +1,9 @@
 package com.suvanl.fixmylinks.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
@@ -218,7 +221,15 @@ fun FixMyLinksAppLandscape(
             modifier = Modifier.fillMaxSize()
         ) {
             Row(modifier = Modifier.statusBarsPadding()) {
-                if (showNavRail) {
+                AnimatedVisibility(
+                    visible = showNavRail,
+                    enter = slideInHorizontally(
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioLowBouncy,
+                            stiffness = Spring.StiffnessMediumLow
+                        )
+                    )
+                ) {
                     NavRail()
                 }
 
