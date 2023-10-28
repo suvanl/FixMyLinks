@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.ui.theme.TIGHT_LETTER_SPACING
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,7 +24,10 @@ fun FmlTopAppBar(
 ) {
     TopAppBar(
         title = {
-            Text(text = title)
+            Text(
+                text = title,
+                letterSpacing = (TIGHT_LETTER_SPACING.times(16))
+            )
         },
         navigationIcon = {
             IconButton(onClick = { onNavigateUp() }) {
