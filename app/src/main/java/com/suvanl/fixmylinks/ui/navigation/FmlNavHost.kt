@@ -40,12 +40,14 @@ fun FmlNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
  * Navigates to the given route with `launchSingleTop` enabled, to ensure that there will be at most
  * only one copy of a given destination on top of the back stack.
  */
-fun NavHostController.navigateSingleTop(route: String) {
+fun NavHostController.navigateSingleTop(route: String, popUpToStartDestination: Boolean = true) {
     this.navigate(route) {
         // Pop up to the start destination of the graph to avoid building up a large stack of
         // destinations on the back stack as users select items
-        popUpTo(this@navigateSingleTop.graph.findStartDestination().id) {
-            saveState = true
+        if (popUpToStartDestination) {
+            popUpTo(this@navigateSingleTop.graph.findStartDestination().id) {
+                saveState = true
+            }
         }
 
         // Avoid multiple copies of the same destination when re-selecting the same item
