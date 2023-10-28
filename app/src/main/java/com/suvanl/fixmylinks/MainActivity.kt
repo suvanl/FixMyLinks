@@ -7,7 +7,6 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.core.view.WindowCompat
 import com.suvanl.fixmylinks.ui.screens.FixMyLinksApp
-import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -17,10 +16,8 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            FixMyLinksTheme {
-                val windowSizeClass = calculateWindowSizeClass(activity = this)
-                FixMyLinksApp(windowSize = windowSizeClass)
-            }
+            val windowSizeClass = calculateWindowSizeClass(activity = this)
+            FixMyLinksApp(windowSize = windowSizeClass)
         }
     }
 }
