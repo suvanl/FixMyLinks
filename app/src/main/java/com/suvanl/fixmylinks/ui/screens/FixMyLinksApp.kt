@@ -11,25 +11,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -45,6 +36,9 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.ui.components.button.AddNewRuleFab
+import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationRail
+import com.suvanl.fixmylinks.ui.components.nav.FmlTopAppBar
 import com.suvanl.fixmylinks.ui.navigation.FmlNavHost
 import com.suvanl.fixmylinks.ui.navigation.FmlScreen
 import com.suvanl.fixmylinks.ui.navigation.allFmlScreens
@@ -56,30 +50,6 @@ val navItems = listOf(
     FmlScreen.Rules,
     FmlScreen.Saved,
 )
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun FmlTopAppBar(
-    title: String,
-    onNavigateUp: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior,
-    modifier: Modifier = Modifier
-) {
-    TopAppBar(
-        title = {
-            Text(text = title)
-        },
-        navigationIcon = {
-            IconButton(onClick = { onNavigateUp() }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = stringResource(id = R.string.navigate_up)
-                )
-            }
-        },
-        scrollBehavior = scrollBehavior
-    )
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -148,14 +118,7 @@ fun FixMyLinksAppPortrait(
             },
             floatingActionButton = {
                 if (showFab) {
-                    FloatingActionButton(
-                        onClick = { onFabClick() }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Add,
-                            contentDescription = stringResource(id = R.string.add_new_rule)
-                        )
-                    }
+                    AddNewRuleFab(onClick = { onFabClick() })
                 }
             },
             contentWindowInsets = WindowInsets.safeDrawing,
@@ -184,22 +147,7 @@ fun FixMyLinksAppLandscape(
 
         @Composable
         fun NavRail() {
-            NavigationRail(
-                header = {
-                    FloatingActionButton(
-                        onClick = { onFabClick() },
-                        // remove elevation from FAB
-                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Add,
-                            contentDescription = stringResource(id = R.string.add_new_rule)
-                        )
-                    }
-                },
-                containerColor = MaterialTheme.colorScheme.background,
-                modifier = Modifier.padding(8.dp)
-            ) {
+            FmlNavigationRail(onFabClick = { onFabClick() }) {
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -213,7 +161,11 @@ fun FixMyLinksAppLandscape(
                             onClick = { onItemClick(screen) },
                             icon = {
                                 Icon(
-                                    imageVector = if (isSelected) screen.selectedIcon else screen.unselectedIcon,
+                                    imageVector = if (isSelected) {
+                                        screen.selectedIcon
+                                    } else {
+                                        screen.unselectedIcon
+                                    },
                                     contentDescription = null
                                 )
                             },
@@ -222,7 +174,11 @@ fun FixMyLinksAppLandscape(
                                     Text(
                                         text = stringResource(id = screen.label),
                                         letterSpacing = (-0.035F).sp,
-                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                        fontWeight = if (isSelected) {
+                                            FontWeight.Bold
+                                        } else {
+                                            FontWeight.Normal
+                                        },
                                     )
                                 }
                             }
