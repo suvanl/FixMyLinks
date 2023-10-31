@@ -27,12 +27,12 @@ fun FmlNavigationRail(
             )
         },
         containerColor = MaterialTheme.colorScheme.background,
-        modifier = Modifier.padding(8.dp)
+        modifier = modifier.padding(8.dp)
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxHeight()
+            modifier = modifier.fillMaxHeight()
         ) {
             navItemsColumn()
         }
