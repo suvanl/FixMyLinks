@@ -11,4 +11,5 @@
     <string name="add_new_rule">Add new rule</string>
     <string name="new_rule">New rule</string>
     <string name="navigate_up">Navigate up</string>
+    <string name="select_rule_type">Select rule type</string>
 </resources>

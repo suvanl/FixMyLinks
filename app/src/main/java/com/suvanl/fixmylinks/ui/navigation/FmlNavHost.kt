@@ -6,10 +6,12 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.suvanl.fixmylinks.ui.screens.AddRuleScreen
+import com.suvanl.fixmylinks.domain.mutation.MutationType
+import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.HomeScreen
 import com.suvanl.fixmylinks.ui.screens.RulesScreen
 import com.suvanl.fixmylinks.ui.screens.SavedScreen
+import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
 
 @Composable
 fun FmlNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -30,8 +32,20 @@ fun FmlNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             SavedScreen()
         }
 
-        composable(route = FmlScreen.AddRule.route) {
-            AddRuleScreen()
+        composable(route = FmlScreen.SelectRuleType.route) {
+            SelectRuleTypeScreen()
+        }
+
+        composable(
+            route = FmlScreen.AddRule.routeWithArgs,
+            arguments = FmlScreen.AddRule.args
+        ) { navBackStackEntry ->
+            val mutationTypeArg =
+                navBackStackEntry.arguments?.getString(FmlScreen.AddRule.mutationTypeArg)
+
+            val mutationType = MutationType.valueOf(mutationTypeArg ?: "FALLBACK")
+
+            AddRuleScreen(mutationType)
         }
     }
 }

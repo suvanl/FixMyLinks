@@ -263,7 +263,7 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
     val displayFabOn = listOf(FmlScreen.Home, FmlScreen.Rules)
 
     // The screens on which the Navigation Bar should be hidden
-    val hideNavBarOn = listOf(FmlScreen.AddRule)
+    val hideNavBarOn = listOf(FmlScreen.SelectRuleType, FmlScreen.AddRule)
 
     @Composable
     fun PortraitLayout() {
@@ -282,7 +282,7 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
             },
             onFabClick = {
                 navController.navigateSingleTop(
-                    route = FmlScreen.AddRule.route,
+                    route = FmlScreen.SelectRuleType.route,
                     popUpToStartDestination = false
                 )
             },
@@ -308,7 +308,7 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
             },
             onFabClick = {
                 navController.navigateSingleTop(
-                    route = FmlScreen.AddRule.route,
+                    route = FmlScreen.SelectRuleType.route,
                     popUpToStartDestination = false
                 )
             },
