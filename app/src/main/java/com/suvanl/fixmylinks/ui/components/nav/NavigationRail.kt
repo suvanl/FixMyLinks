@@ -23,7 +23,8 @@ fun FmlNavigationRail(
         header = {
             AddNewRuleFab(
                 onClick = { onFabClick() },
-                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
+                modifier = modifier
             )
         },
         containerColor = MaterialTheme.colorScheme.background,

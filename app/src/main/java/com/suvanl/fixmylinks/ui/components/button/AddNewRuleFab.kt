@@ -9,6 +9,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import com.suvanl.fixmylinks.R
 
 @Composable
@@ -19,7 +21,8 @@ fun AddNewRuleFab(
 ) {
     FloatingActionButton(
         onClick = { onClick() },
-        elevation = elevation
+        elevation = elevation,
+        modifier = modifier.semantics { testTag = "Add New Rule FAB" }
     ) {
         Icon(
             imageVector = Icons.Outlined.Add,
