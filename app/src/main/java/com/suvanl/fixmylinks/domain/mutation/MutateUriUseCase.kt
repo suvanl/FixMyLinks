@@ -148,7 +148,7 @@ class MutateUriUseCase {
         ).build()
 
         // Find the domain name mutation
-        val mutation = DomainNameMutation.values().find {
+        val mutation = DomainNameMutation.entries.find {
             uri.host == it.info.from
         } ?: return originalUri
 
