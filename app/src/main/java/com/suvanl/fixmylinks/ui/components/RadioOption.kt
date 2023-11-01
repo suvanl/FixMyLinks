@@ -56,7 +56,7 @@ fun RadioOption(
         )
 
         Column(
-            modifier = modifier.padding(16.dp)
+            modifier = modifier.padding(horizontal = 8.dp, vertical = 16.dp)
         ) {
             if (data.title != null) {
                 Text(
