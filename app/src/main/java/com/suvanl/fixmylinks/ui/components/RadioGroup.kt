@@ -11,6 +11,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 
+@Composable
+private fun BaseRadioGroup(
+    options: List<RadioOptionData>,
+    modifier: Modifier = Modifier,
+    radioOption: @Composable (RadioOptionData) -> Unit
+) {
+    // Modifier.selectableGroup() is essential to ensure correct accessibility behavior
+    Column(modifier = modifier.selectableGroup()) {
+        options.forEach { optionData ->
+            radioOption(optionData)
+        }
+    }
+}
+
 /**
  * Stateless RadioGroup composable
  */
@@ -21,16 +35,13 @@ fun RadioGroup(
     onOptionClick: (currentOption: RadioOptionData) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Modifier.selectableGroup() is essential to ensure correct accessibility behavior
-    Column(Modifier.selectableGroup()) {
-        options.forEach { optionData ->
-            RadioOption(
-                data = optionData,
-                isSelected = optionData.id == selectedOptionId,
-                onClick = { onOptionClick(optionData) },
-                modifier = modifier.padding(horizontal = 8.dp)
-            )
-        }
+    BaseRadioGroup(options = options) { optionData ->
+        RadioOption(
+            data = optionData,
+            isSelected = optionData.id == selectedOptionId,
+            onClick = { onOptionClick(optionData) },
+            modifier = modifier.padding(horizontal = 8.dp)
+        )
     }
 }
 
@@ -45,20 +56,17 @@ fun RadioGroup(
 ) {
     val (selectedOption, onOptionSelected) = selectedState
 
-    // Modifier.selectableGroup() is essential to ensure correct accessibility behavior
-    Column(Modifier.selectableGroup()) {
-        options.forEach { optionData ->
-            RadioOption(
-                data = optionData,
-                isSelected = optionData == selectedOption,
-                onClick = {
-                    onOptionSelected(
-                        options.find { it == optionData } ?: options.first()
-                    )
-                },
-                modifier = modifier.padding(horizontal = 16.dp)
-            )
-        }
+    BaseRadioGroup(options = options) { optionData ->
+        RadioOption(
+            data = optionData,
+            isSelected = optionData == selectedOption,
+            onClick = {
+                onOptionSelected(
+                    options.find { it == optionData } ?: options.first()
+                )
+            },
+            modifier = modifier.padding(horizontal = 8.dp)
+        )
     }
 }
 
