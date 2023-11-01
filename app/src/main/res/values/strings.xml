@@ -12,4 +12,13 @@
     <string name="new_rule">New rule</string>
     <string name="navigate_up">Navigate up</string>
     <string name="select_rule_type">Select rule type</string>
+
+    <string name="radio_option_content_description">%1$s option</string>
+
+    <!-- mt = mutation type -->
+    <string name="mt_domain_name">Change domain name</string>
+    <string name="mt_url_params_all">Remove all URL parameters</string>
+    <string name="mt_url_params_specific">Remove specific URL parameters</string>
+    <string name="mt_domain_name_and_url_params_all">Change domain name and remove all URL parameters</string>
+    <string name="empty" />
 </resources>
