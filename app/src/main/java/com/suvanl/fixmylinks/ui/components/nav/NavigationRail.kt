@@ -23,16 +23,17 @@ fun FmlNavigationRail(
         header = {
             AddNewRuleFab(
                 onClick = { onFabClick() },
-                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
+                modifier = modifier
             )
         },
         containerColor = MaterialTheme.colorScheme.background,
-        modifier = Modifier.padding(8.dp)
+        modifier = modifier.padding(8.dp)
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxHeight()
+            modifier = modifier.fillMaxHeight()
         ) {
             navItemsColumn()
         }

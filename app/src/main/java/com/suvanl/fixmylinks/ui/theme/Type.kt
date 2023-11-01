@@ -22,6 +22,8 @@ private fun defaultCustomFont(
     )
 }
 
+val TIGHT_LETTER_SPACING = (-0.035F).sp
+
 private val defaultTypography = Typography()
 val Typography = Typography(
     // Display
@@ -84,7 +86,7 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
+        letterSpacing = TIGHT_LETTER_SPACING
     ),
     bodyMedium = defaultTypography.bodyMedium.copy(
         fontFamily = defaultCustomFont()
@@ -94,4 +96,3 @@ val Typography = Typography(
     )
 )
 
-val TIGHT_LETTER_SPACING = (-0.035F).sp

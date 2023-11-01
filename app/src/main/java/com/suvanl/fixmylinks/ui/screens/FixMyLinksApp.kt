@@ -46,6 +46,7 @@ import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.components.button.AddNewRuleFab
 import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationRail
 import com.suvanl.fixmylinks.ui.components.nav.FmlTopAppBar
+import com.suvanl.fixmylinks.ui.components.nav.TopAppBarSize
 import com.suvanl.fixmylinks.ui.navigation.FmlNavHost
 import com.suvanl.fixmylinks.ui.navigation.FmlScreen
 import com.suvanl.fixmylinks.ui.navigation.allFmlScreens
@@ -73,7 +74,7 @@ fun FixMyLinksAppPortrait(
     showTopAppBar: Boolean = false,
 ) {
     FixMyLinksTheme {
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
         Scaffold(
             topBar = {
@@ -81,6 +82,7 @@ fun FixMyLinksAppPortrait(
                     FmlTopAppBar(
                         title = topAppBarTitle,
                         onNavigateUp = { onNavigateUp() },
+                        size = TopAppBarSize.LARGE,
                         scrollBehavior = scrollBehavior
                     )
                 }
@@ -241,6 +243,7 @@ fun FixMyLinksAppLandscape(
                         FmlTopAppBar(
                             title = topAppBarTitle,
                             onNavigateUp = { onNavigateUp() },
+                            size = TopAppBarSize.SMALL,
                             scrollBehavior = scrollBehavior
                         )
                     }
@@ -263,7 +266,7 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
     val displayFabOn = listOf(FmlScreen.Home, FmlScreen.Rules)
 
     // The screens on which the Navigation Bar should be hidden
-    val hideNavBarOn = listOf(FmlScreen.AddRule)
+    val hideNavBarOn = listOf(FmlScreen.SelectRuleType, FmlScreen.AddRule)
 
     @Composable
     fun PortraitLayout() {
@@ -282,7 +285,7 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
             },
             onFabClick = {
                 navController.navigateSingleTop(
-                    route = FmlScreen.AddRule.route,
+                    route = FmlScreen.SelectRuleType.route,
                     popUpToStartDestination = false
                 )
             },
@@ -308,7 +311,7 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
             },
             onFabClick = {
                 navController.navigateSingleTop(
-                    route = FmlScreen.AddRule.route,
+                    route = FmlScreen.SelectRuleType.route,
                     popUpToStartDestination = false
                 )
             },
