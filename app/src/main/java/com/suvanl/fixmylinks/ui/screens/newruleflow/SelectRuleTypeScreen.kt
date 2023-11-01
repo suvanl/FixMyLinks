@@ -35,7 +35,12 @@ fun SelectRuleTypeScreen(modifier: Modifier = Modifier) {
                     defaultValue = StringResourceUtil.StringResource(R.string.empty)
                 ).id
             ),
-            description = it.name.lowercase()
+            description = stringResource(
+                id = StringResourceUtil.humanizedMutationTypeDescriptions.getOrDefault(
+                    key = it,
+                    defaultValue = StringResourceUtil.StringResource(R.string.empty)
+                ).id
+            )
         )
     }
 
@@ -49,7 +54,7 @@ fun SelectRuleTypeScreen(modifier: Modifier = Modifier) {
         RuleTypeRadioGroup(
             options = radioOptions,
             selectedState = selectedOption,
-            modifier = modifier
+            modifier = modifier.padding(horizontal = 8.dp)
         )
     }
 }
