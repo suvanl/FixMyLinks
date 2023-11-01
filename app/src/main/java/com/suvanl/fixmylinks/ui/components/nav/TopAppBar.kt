@@ -13,6 +13,8 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.theme.TIGHT_LETTER_SPACING
 
@@ -32,7 +34,8 @@ fun FmlTopAppBar(
             TopAppBar(
                 title = { TopAppBarTitle(text = title) },
                 navigationIcon = { TopAppBarNavigationIcon(onNavigateUp = { onNavigateUp() }) },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                modifier = modifier
             )
         }
 
@@ -40,15 +43,17 @@ fun FmlTopAppBar(
             MediumTopAppBar(
                 title = { TopAppBarTitle(text = title) },
                 navigationIcon = { TopAppBarNavigationIcon(onNavigateUp = { onNavigateUp() }) },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                modifier = modifier
             )
         }
 
         TopAppBarSize.LARGE -> {
             LargeTopAppBar(
-                title = { TopAppBarTitle(text = title) },
+                title = { TopAppBarTitle(text = title, fontSize = 32.sp) },
                 navigationIcon = { TopAppBarNavigationIcon(onNavigateUp = { onNavigateUp() }) },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                modifier = modifier
             )
         }
     }
@@ -57,11 +62,25 @@ fun FmlTopAppBar(
 @Composable
 private fun TopAppBarTitle(
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    fontSize: TextUnit? = null
 ) {
+    val letterSpacing = TIGHT_LETTER_SPACING.times(16)
+
+    if (fontSize == null) {
+        Text(
+            text = text,
+            letterSpacing = letterSpacing,
+            modifier = modifier
+        )
+        return
+    }
+
     Text(
         text = text,
-        letterSpacing = (TIGHT_LETTER_SPACING.times(16))
+        letterSpacing = letterSpacing,
+        fontSize = fontSize,
+        modifier = modifier
     )
 }
 
@@ -70,7 +89,10 @@ private fun TopAppBarNavigationIcon(
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    IconButton(onClick = { onNavigateUp() }) {
+    IconButton(
+        onClick = onNavigateUp,
+        modifier = modifier
+    ) {
         Icon(
             imageVector = Icons.Default.ArrowBack,
             contentDescription = stringResource(id = R.string.navigate_up)
