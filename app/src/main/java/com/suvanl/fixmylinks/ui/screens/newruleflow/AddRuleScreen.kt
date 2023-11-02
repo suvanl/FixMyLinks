@@ -2,6 +2,7 @@ package com.suvanl.fixmylinks.ui.screens.newruleflow
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -21,6 +22,7 @@ fun AddRuleScreen(
 ) {
     Column(
         modifier = modifier
+            .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .semantics { contentDescription = "Add Rule Screen" }
     ) {

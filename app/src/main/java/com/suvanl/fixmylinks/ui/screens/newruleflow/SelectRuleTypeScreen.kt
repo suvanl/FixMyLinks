@@ -1,7 +1,11 @@
 package com.suvanl.fixmylinks.ui.screens.newruleflow
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -48,14 +52,22 @@ fun SelectRuleTypeScreen(modifier: Modifier = Modifier) {
 
     Column(
         modifier = modifier
+            .fillMaxHeight()
             .padding(top = 16.dp)
-            .semantics { contentDescription = "Select Rule Type Screen" }
+            .semantics { contentDescription = "Select Rule Type Screen" },
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         RuleTypeRadioGroup(
             options = radioOptions,
             selectedState = selectedOption,
             modifier = modifier.padding(horizontal = 8.dp)
         )
+        
+        Row(
+            modifier = modifier.weight(1F, fill = false)
+        ) {
+            Text(text = "Heyy")
+        }
     }
 }
 

@@ -7,10 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.suvanl.fixmylinks.domain.mutation.MutationType
-import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.HomeScreen
 import com.suvanl.fixmylinks.ui.screens.RulesScreen
 import com.suvanl.fixmylinks.ui.screens.SavedScreen
+import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
 
 @Composable
