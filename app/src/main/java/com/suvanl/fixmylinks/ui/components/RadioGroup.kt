@@ -11,16 +11,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 
+private val radioOptionHorizontalPadding = 8.dp
+private val radioOptionDefaultSpacerHeight = 40.dp
+
 @Composable
 private fun BaseRadioGroup(
     options: List<RadioOptionData>,
     modifier: Modifier = Modifier,
-    radioOption: @Composable (RadioOptionData) -> Unit
+    radioOption: @Composable (Int, RadioOptionData) -> Unit
 ) {
     // Modifier.selectableGroup() is essential to ensure correct accessibility behavior
     Column(modifier = modifier.selectableGroup()) {
-        options.forEach { optionData ->
-            radioOption(optionData)
+        options.forEachIndexed { index, optionData ->
+            radioOption(index, optionData)
         }
     }
 }
@@ -35,12 +38,13 @@ fun RadioGroup(
     onOptionClick: (currentOption: RadioOptionData) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BaseRadioGroup(options = options) { optionData ->
+    BaseRadioGroup(options = options) { optionIndex, optionData ->
         RadioOption(
             data = optionData,
             isSelected = optionData.id == selectedOptionId,
+            spacerHeight = if (optionIndex == options.lastIndex) 0.dp else radioOptionDefaultSpacerHeight,
             onClick = { onOptionClick(optionData) },
-            modifier = modifier.padding(horizontal = 8.dp)
+            modifier = modifier.padding(horizontal = radioOptionHorizontalPadding)
         )
     }
 }
@@ -56,16 +60,17 @@ fun RadioGroup(
 ) {
     val (selectedOption, onOptionSelected) = selectedState
 
-    BaseRadioGroup(options = options) { optionData ->
+    BaseRadioGroup(options = options) { optionIndex, optionData ->
         RadioOption(
             data = optionData,
             isSelected = optionData == selectedOption,
+            spacerHeight = if (optionIndex == options.lastIndex) 0.dp else radioOptionDefaultSpacerHeight,
             onClick = {
                 onOptionSelected(
                     options.find { it == optionData } ?: options.first()
                 )
             },
-            modifier = modifier.padding(horizontal = 8.dp)
+            modifier = modifier.padding(horizontal = radioOptionHorizontalPadding)
         )
     }
 }
