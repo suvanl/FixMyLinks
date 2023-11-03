@@ -81,8 +81,6 @@ class MutateUriUseCase {
                 ).build()
             }
 
-            println("about to remove all URL params")
-
             // if `paramsToRemove` does contain the name of this param, we'll remove the entire
             // query string (since it only had one parameter, and a parameter with this name exists
             // within the `paramsToRemove` List, meaning it should be removed).
