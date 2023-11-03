@@ -3,7 +3,9 @@ package com.suvanl.fixmylinks.ui.components
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +19,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
@@ -31,6 +34,7 @@ data class RadioOptionData(
 fun RadioOption(
     data: RadioOptionData,
     isSelected: Boolean,
+    spacerHeight: Dp,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -39,37 +43,41 @@ fun RadioOption(
         data.title ?: data.description
     )
 
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .selectable(
-                selected = isSelected,
-                onClick = onClick,
-                role = Role.RadioButton
-            )
-            .semantics { contentDescription = rowContentDescription },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        RadioButton(
-            selected = isSelected,
-            onClick = null  // null recommended for accessibility with screen readers
-        )
-
-        Column(
-            modifier = modifier.padding(16.dp)
+    Column {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .selectable(
+                    selected = isSelected,
+                    onClick = onClick,
+                    role = Role.RadioButton
+                )
+                .semantics { contentDescription = rowContentDescription },
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            if (data.title != null) {
+            RadioButton(
+                selected = isSelected,
+                onClick = null  // null recommended for accessibility with screen readers
+            )
+
+            Column(
+                modifier = modifier.padding(horizontal = 8.dp)
+            ) {
+                if (data.title != null) {
+                    Text(
+                        text = data.title,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                }
+
                 Text(
-                    text = data.title,
-                    style = MaterialTheme.typography.titleLarge
+                    text = data.description,
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
-
-            Text(
-                text = data.description,
-                style = MaterialTheme.typography.bodyLarge
-            )
         }
+
+        Spacer(modifier = Modifier.height(spacerHeight))
     }
 }
 
@@ -95,6 +103,7 @@ private fun RadioOptionWithTitlePreview() {
         RadioOption(
             data = option,
             isSelected = true,
+            spacerHeight = 0.dp,
             onClick = { /* do nothing */ }
         )
     }
@@ -122,6 +131,7 @@ private fun RadioOptionPreview() {
         RadioOption(
             data = option,
             isSelected = true,
+            spacerHeight = 0.dp,
             onClick = { /* do nothing */ }
         )
     }

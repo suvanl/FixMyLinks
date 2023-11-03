@@ -2,6 +2,7 @@ package com.suvanl.fixmylinks.ui.components.nav
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -17,7 +18,7 @@ import com.suvanl.fixmylinks.ui.components.button.AddNewRuleFab
 fun FmlNavigationRail(
     onFabClick: () -> Unit,
     modifier: Modifier = Modifier,
-    navItemsColumn: @Composable () -> Unit,
+    itemsColumnScope: @Composable ColumnScope.() -> Unit
 ) {
     NavigationRail(
         header = {
@@ -33,9 +34,8 @@ fun FmlNavigationRail(
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier.fillMaxHeight()
-        ) {
-            navItemsColumn()
-        }
+            modifier = modifier.fillMaxHeight(),
+            content = itemsColumnScope
+        )
     }
 }

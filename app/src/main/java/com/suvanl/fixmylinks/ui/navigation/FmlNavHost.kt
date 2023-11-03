@@ -7,10 +7,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.suvanl.fixmylinks.domain.mutation.MutationType
-import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
+import com.suvanl.fixmylinks.ui.navigation.transition.NavigationEnterTransitionMode
+import com.suvanl.fixmylinks.ui.navigation.transition.NavigationExitTransitionMode
+import com.suvanl.fixmylinks.ui.navigation.transition.enterNavigationTransition
+import com.suvanl.fixmylinks.ui.navigation.transition.exitNavigationTransition
 import com.suvanl.fixmylinks.ui.screens.HomeScreen
 import com.suvanl.fixmylinks.ui.screens.RulesScreen
 import com.suvanl.fixmylinks.ui.screens.SavedScreen
+import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
 
 @Composable
@@ -18,6 +22,18 @@ fun FmlNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
     NavHost(
         navController = navController,
         startDestination = FmlScreen.Home.route,
+        enterTransition = {
+            enterNavigationTransition(NavigationEnterTransitionMode.ENTER, this)
+        },
+        exitTransition = {
+            exitNavigationTransition(NavigationExitTransitionMode.EXIT, this)
+        },
+        popEnterTransition = {
+            enterNavigationTransition(NavigationEnterTransitionMode.POP_ENTER, this)
+        },
+        popExitTransition = {
+            exitNavigationTransition(NavigationExitTransitionMode.POP_EXIT, this)
+        },
         modifier = modifier
     ) {
         composable(route = FmlScreen.Home.route) {

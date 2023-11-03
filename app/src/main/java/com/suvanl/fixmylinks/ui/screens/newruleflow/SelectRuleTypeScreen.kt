@@ -1,7 +1,15 @@
 package com.suvanl.fixmylinks.ui.screens.newruleflow
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -35,7 +43,12 @@ fun SelectRuleTypeScreen(modifier: Modifier = Modifier) {
                     defaultValue = StringResourceUtil.StringResource(R.string.empty)
                 ).id
             ),
-            description = it.name.lowercase()
+            description = stringResource(
+                id = StringResourceUtil.humanizedMutationTypeDescriptions.getOrDefault(
+                    key = it,
+                    defaultValue = StringResourceUtil.StringResource(R.string.empty)
+                ).id
+            )
         )
     }
 
@@ -43,14 +56,33 @@ fun SelectRuleTypeScreen(modifier: Modifier = Modifier) {
 
     Column(
         modifier = modifier
-            .padding(top = 16.dp)
-            .semantics { contentDescription = "Select Rule Type Screen" }
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(vertical = 24.dp, horizontal = 8.dp)
+            .semantics { contentDescription = "Select Rule Type Screen" },
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         RuleTypeRadioGroup(
             options = radioOptions,
             selectedState = selectedOption,
-            modifier = modifier
+            modifier = Modifier.padding(bottom = 4.dp)
         )
+
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .weight(1F, fill = false)
+        ) {
+            Button(
+                onClick = { /*TODO*/ },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp)
+                    .padding(horizontal = 8.dp)
+            ) {
+                Text(text = stringResource(id = R.string.next))
+            }
+        }
     }
 }
 

@@ -19,4 +19,13 @@ object StringResourceUtil {
             R.string.mt_domain_name_and_url_params_all
         )
     )
+
+    val humanizedMutationTypeDescriptions = mapOf(
+        MutationType.DOMAIN_NAME to StringResource(R.string.mt_domain_name_desc),
+        MutationType.URL_PARAMS_ALL to StringResource(R.string.mt_url_params_all_desc),
+        MutationType.URL_PARAMS_SPECIFIC to StringResource(R.string.mt_url_params_specific_desc),
+        MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL to StringResource(
+            R.string.mt_domain_name_and_url_params_all_desc
+        )
+    )
 }

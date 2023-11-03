@@ -4,19 +4,14 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,10 +26,8 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -72,9 +65,14 @@ fun FixMyLinksAppPortrait(
     showFab: Boolean = true,
     showNavBar: Boolean = true,
     showTopAppBar: Boolean = false,
+    topAppBarSize: TopAppBarSize = TopAppBarSize.SMALL,
 ) {
     FixMyLinksTheme {
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val scrollBehavior = when (topAppBarSize) {
+            TopAppBarSize.SMALL -> TopAppBarDefaults.pinnedScrollBehavior()
+            TopAppBarSize.MEDIUM -> TopAppBarDefaults.enterAlwaysScrollBehavior()
+            TopAppBarSize.LARGE -> TopAppBarDefaults.enterAlwaysScrollBehavior()
+        }
 
         Scaffold(
             topBar = {
@@ -82,29 +80,13 @@ fun FixMyLinksAppPortrait(
                     FmlTopAppBar(
                         title = topAppBarTitle,
                         onNavigateUp = { onNavigateUp() },
-                        size = TopAppBarSize.LARGE,
+                        size = topAppBarSize,
                         scrollBehavior = scrollBehavior
                     )
                 }
             },
             bottomBar = {
-                val density = LocalDensity.current
-
-                AnimatedVisibility(
-                    visible = showNavBar,
-                    enter = slideInVertically(
-                        initialOffsetY = {
-                            it / 2
-                            with(density) { 128.dp.roundToPx() }
-                        },
-                    ),
-                    exit = slideOutVertically(
-                        targetOffsetY = {
-                            it / 2
-                            with(density) { 128.dp.roundToPx() }
-                        }
-                    )
-                ) {
+                if (showNavBar) {
                     NavigationBar {
                         navItems.forEach { screen ->
                             val isSelected = navItemSelectedFn(screen)
@@ -174,45 +156,39 @@ fun FixMyLinksAppLandscape(
         @Composable
         fun NavRail() {
             FmlNavigationRail(onFabClick = { onFabClick() }) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxHeight()
-                ) {
-                    navItems.forEachIndexed { index, screen ->
-                        val isSelected = selectedFn(screen)
+                navItems.forEachIndexed { index, screen ->
+                    val isSelected = selectedFn(screen)
 
-                        NavigationRailItem(
-                            selected = isSelected,
-                            onClick = { onItemClick(screen) },
-                            icon = {
-                                Icon(
-                                    imageVector = if (isSelected) {
-                                        screen.selectedIcon
+                    NavigationRailItem(
+                        selected = isSelected,
+                        onClick = { onItemClick(screen) },
+                        icon = {
+                            Icon(
+                                imageVector = if (isSelected) {
+                                    screen.selectedIcon
+                                } else {
+                                    screen.unselectedIcon
+                                },
+                                contentDescription = null
+                            )
+                        },
+                        label = {
+                            Column {
+                                Text(
+                                    text = stringResource(id = screen.label),
+                                    letterSpacing = TIGHT_LETTER_SPACING,
+                                    fontWeight = if (isSelected) {
+                                        FontWeight.Bold
                                     } else {
-                                        screen.unselectedIcon
+                                        FontWeight.Normal
                                     },
-                                    contentDescription = null
                                 )
-                            },
-                            label = {
-                                Column {
-                                    Text(
-                                        text = stringResource(id = screen.label),
-                                        letterSpacing = TIGHT_LETTER_SPACING,
-                                        fontWeight = if (isSelected) {
-                                            FontWeight.Bold
-                                        } else {
-                                            FontWeight.Normal
-                                        },
-                                    )
-                                }
                             }
-                        )
-
-                        if (index != navItems.lastIndex) {
-                            Spacer(modifier = Modifier.padding(8.dp))
                         }
+                    )
+
+                    if (index != navItems.lastIndex) {
+                        Spacer(modifier = Modifier.padding(8.dp))
                     }
                 }
             }
@@ -222,7 +198,7 @@ fun FixMyLinksAppLandscape(
             color = MaterialTheme.colorScheme.background,
             modifier = Modifier.fillMaxSize()
         ) {
-            Row(modifier = Modifier.statusBarsPadding()) {
+            Row {
                 AnimatedVisibility(
                     visible = showNavRail,
                     enter = slideInHorizontally(
@@ -293,7 +269,8 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
             topAppBarTitle = stringResource(id = currentScreen?.label ?: R.string.app_name),
             showFab = displayFabOn.any { it.route == currentDestination?.route },
             showNavBar = hideNavBarOn.none { it.route == currentDestination?.route },
-            showTopAppBar = hideNavBarOn.any { it.route == currentDestination?.route }
+            showTopAppBar = hideNavBarOn.any { it.route == currentDestination?.route },
+            topAppBarSize = TopAppBarSize.LARGE
         )
     }
 
