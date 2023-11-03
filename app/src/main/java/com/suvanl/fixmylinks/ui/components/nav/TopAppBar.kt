@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.sp
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.theme.TIGHT_LETTER_SPACING
 
@@ -50,7 +49,7 @@ fun FmlTopAppBar(
 
         TopAppBarSize.LARGE -> {
             LargeTopAppBar(
-                title = { TopAppBarTitle(text = title, fontSize = 32.sp) },
+                title = { TopAppBarTitle(text = title) },
                 navigationIcon = { TopAppBarNavigationIcon(onNavigateUp = { onNavigateUp() }) },
                 scrollBehavior = scrollBehavior,
                 modifier = modifier
