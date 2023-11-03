@@ -38,13 +38,16 @@ fun RadioGroup(
     onOptionClick: (currentOption: RadioOptionData) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BaseRadioGroup(options = options) { optionIndex, optionData ->
+    BaseRadioGroup(
+        options = options,
+        modifier = modifier
+    ) { optionIndex, optionData ->
         RadioOption(
             data = optionData,
             isSelected = optionData.id == selectedOptionId,
             spacerHeight = if (optionIndex == options.lastIndex) 0.dp else radioOptionDefaultSpacerHeight,
             onClick = { onOptionClick(optionData) },
-            modifier = modifier.padding(horizontal = radioOptionHorizontalPadding)
+            modifier = Modifier.padding(horizontal = radioOptionHorizontalPadding)
         )
     }
 }
@@ -60,7 +63,10 @@ fun RadioGroup(
 ) {
     val (selectedOption, onOptionSelected) = selectedState
 
-    BaseRadioGroup(options = options) { optionIndex, optionData ->
+    BaseRadioGroup(
+        options = options,
+        modifier = modifier
+    ) { optionIndex, optionData ->
         RadioOption(
             data = optionData,
             isSelected = optionData == selectedOption,
@@ -70,7 +76,7 @@ fun RadioGroup(
                     options.find { it == optionData } ?: options.first()
                 )
             },
-            modifier = modifier.padding(horizontal = radioOptionHorizontalPadding)
+            modifier = Modifier.padding(horizontal = radioOptionHorizontalPadding)
         )
     }
 }
