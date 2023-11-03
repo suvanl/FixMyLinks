@@ -3,8 +3,12 @@ package com.suvanl.fixmylinks.ui.screens.newruleflow
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -52,21 +56,32 @@ fun SelectRuleTypeScreen(modifier: Modifier = Modifier) {
 
     Column(
         modifier = modifier
-            .fillMaxHeight()
-            .padding(top = 16.dp)
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(vertical = 24.dp, horizontal = 8.dp)
             .semantics { contentDescription = "Select Rule Type Screen" },
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         RuleTypeRadioGroup(
             options = radioOptions,
             selectedState = selectedOption,
-            modifier = modifier.padding(horizontal = 8.dp)
+            modifier = Modifier.padding(bottom = 4.dp)
         )
-        
+
         Row(
-            modifier = modifier.weight(1F, fill = false)
+            modifier = modifier
+                .fillMaxWidth()
+                .weight(1F, fill = false)
         ) {
-            Text(text = "Heyy")
+            Button(
+                onClick = { /*TODO*/ },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp)
+                    .padding(horizontal = 8.dp)
+            ) {
+                Text(text = stringResource(id = R.string.next))
+            }
         }
     }
 }

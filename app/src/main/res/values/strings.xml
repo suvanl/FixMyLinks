@@ -29,4 +29,5 @@
     <string name="mt_domain_name_and_url_params_all_desc">Modify the domain name and strip every parameter out of the link</string>
 
     <string name="empty" />
+    <string name="next">Next</string>
 </resources>
