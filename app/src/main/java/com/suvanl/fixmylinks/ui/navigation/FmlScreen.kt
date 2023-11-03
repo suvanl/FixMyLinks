@@ -82,3 +82,11 @@ val allFmlScreens = setOf(
     FmlScreen.SelectRuleType,
     FmlScreen.AddRule
 )
+
+/**
+ * Screens that are part of the "add new rule" flow
+ */
+val addNewRuleFlowScreens = setOf(
+    FmlScreen.SelectRuleType,
+    FmlScreen.AddRule
+)
