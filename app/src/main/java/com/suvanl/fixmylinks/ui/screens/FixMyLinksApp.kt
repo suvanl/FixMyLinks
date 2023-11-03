@@ -4,13 +4,11 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -29,7 +27,6 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -155,45 +152,39 @@ fun FixMyLinksAppLandscape(
         @Composable
         fun NavRail() {
             FmlNavigationRail(onFabClick = { onFabClick() }) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxHeight()
-                ) {
-                    navItems.forEachIndexed { index, screen ->
-                        val isSelected = selectedFn(screen)
+                navItems.forEachIndexed { index, screen ->
+                    val isSelected = selectedFn(screen)
 
-                        NavigationRailItem(
-                            selected = isSelected,
-                            onClick = { onItemClick(screen) },
-                            icon = {
-                                Icon(
-                                    imageVector = if (isSelected) {
-                                        screen.selectedIcon
+                    NavigationRailItem(
+                        selected = isSelected,
+                        onClick = { onItemClick(screen) },
+                        icon = {
+                            Icon(
+                                imageVector = if (isSelected) {
+                                    screen.selectedIcon
+                                } else {
+                                    screen.unselectedIcon
+                                },
+                                contentDescription = null
+                            )
+                        },
+                        label = {
+                            Column {
+                                Text(
+                                    text = stringResource(id = screen.label),
+                                    letterSpacing = TIGHT_LETTER_SPACING,
+                                    fontWeight = if (isSelected) {
+                                        FontWeight.Bold
                                     } else {
-                                        screen.unselectedIcon
+                                        FontWeight.Normal
                                     },
-                                    contentDescription = null
                                 )
-                            },
-                            label = {
-                                Column {
-                                    Text(
-                                        text = stringResource(id = screen.label),
-                                        letterSpacing = TIGHT_LETTER_SPACING,
-                                        fontWeight = if (isSelected) {
-                                            FontWeight.Bold
-                                        } else {
-                                            FontWeight.Normal
-                                        },
-                                    )
-                                }
                             }
-                        )
-
-                        if (index != navItems.lastIndex) {
-                            Spacer(modifier = Modifier.padding(8.dp))
                         }
+                    )
+
+                    if (index != navItems.lastIndex) {
+                        Spacer(modifier = Modifier.padding(8.dp))
                     }
                 }
             }
