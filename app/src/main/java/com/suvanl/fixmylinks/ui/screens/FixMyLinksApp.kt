@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -66,9 +65,14 @@ fun FixMyLinksAppPortrait(
     showFab: Boolean = true,
     showNavBar: Boolean = true,
     showTopAppBar: Boolean = false,
+    topAppBarSize: TopAppBarSize = TopAppBarSize.SMALL,
 ) {
     FixMyLinksTheme {
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val scrollBehavior = when (topAppBarSize) {
+            TopAppBarSize.SMALL -> TopAppBarDefaults.pinnedScrollBehavior()
+            TopAppBarSize.MEDIUM -> TopAppBarDefaults.enterAlwaysScrollBehavior()
+            TopAppBarSize.LARGE -> TopAppBarDefaults.enterAlwaysScrollBehavior()
+        }
 
         Scaffold(
             topBar = {
@@ -76,7 +80,7 @@ fun FixMyLinksAppPortrait(
                     FmlTopAppBar(
                         title = topAppBarTitle,
                         onNavigateUp = { onNavigateUp() },
-                        size = TopAppBarSize.LARGE,
+                        size = topAppBarSize,
                         scrollBehavior = scrollBehavior
                     )
                 }
@@ -194,7 +198,7 @@ fun FixMyLinksAppLandscape(
             color = MaterialTheme.colorScheme.background,
             modifier = Modifier.fillMaxSize()
         ) {
-            Row(modifier = Modifier.statusBarsPadding()) {
+            Row {
                 AnimatedVisibility(
                     visible = showNavRail,
                     enter = slideInHorizontally(
@@ -265,7 +269,8 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
             topAppBarTitle = stringResource(id = currentScreen?.label ?: R.string.app_name),
             showFab = displayFabOn.any { it.route == currentDestination?.route },
             showNavBar = hideNavBarOn.none { it.route == currentDestination?.route },
-            showTopAppBar = hideNavBarOn.any { it.route == currentDestination?.route }
+            showTopAppBar = hideNavBarOn.any { it.route == currentDestination?.route },
+            topAppBarSize = TopAppBarSize.LARGE
         )
     }
 
