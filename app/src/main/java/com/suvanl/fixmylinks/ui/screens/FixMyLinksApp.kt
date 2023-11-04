@@ -5,13 +5,17 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -47,53 +52,73 @@ import com.suvanl.fixmylinks.ui.navigation.navigateSingleTop
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
 import com.suvanl.fixmylinks.ui.theme.TIGHT_LETTER_SPACING
 
-private val navItems = listOf(
+private val topLevelNavItems = listOf(
     FmlScreen.Home,
     FmlScreen.Rules,
     FmlScreen.Saved,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun FixMyLinksAppPortrait(
-    navHost: @Composable (padding: PaddingValues) -> Unit,
-    onNavItemClick: (screen: FmlScreen) -> Unit,
-    navItemSelectedFn: (screen: FmlScreen) -> Boolean,
-    onFabClick: () -> Unit,
-    onNavigateUp: () -> Unit,
-    topAppBarTitle: String,
-    showFab: Boolean = true,
-    showNavBar: Boolean = true,
-    showTopAppBar: Boolean = false,
-    topAppBarSize: TopAppBarSize = TopAppBarSize.SMALL,
-) {
-    FixMyLinksTheme {
-        val scrollBehavior = when (topAppBarSize) {
-            TopAppBarSize.SMALL -> TopAppBarDefaults.pinnedScrollBehavior()
-            TopAppBarSize.MEDIUM -> TopAppBarDefaults.enterAlwaysScrollBehavior()
-            TopAppBarSize.LARGE -> TopAppBarDefaults.enterAlwaysScrollBehavior()
-        }
+fun FixMyLinksApp(windowSize: WindowSizeClass) {
+    val navController = rememberNavController()
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    val currentScreen = allFmlScreens.find { currentDestination?.route == it.route }
+
+    // The screens on which the Floating Action Button (FAB) should be displayed
+    val displayFabOn = listOf(FmlScreen.Home, FmlScreen.Rules)
+
+    // The screens on which the Navigation Bar should be hidden
+    val hideNavBarOn = listOf(FmlScreen.SelectRuleType, FmlScreen.AddRule)
+
+    val topAppBarSize = when (windowSize.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> TopAppBarSize.LARGE
+        else -> TopAppBarSize.SMALL
+    }
+
+    val topAppBarScrollBehavior = when (topAppBarSize) {
+        TopAppBarSize.SMALL -> TopAppBarDefaults.pinnedScrollBehavior()
+        else -> TopAppBarDefaults.enterAlwaysScrollBehavior()
+    }
+
+    val shouldShowNavRail = when (windowSize.widthSizeClass) {
+        WindowWidthSizeClass.Medium -> true
+        WindowWidthSizeClass.Expanded -> true
+        else -> false
+    } && hideNavBarOn.none { it.route == currentDestination?.route }
+
+    val shouldShowNavBar = when (windowSize.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> true
+        else -> false
+    } && hideNavBarOn.none { it.route == currentDestination?.route }
+
+    val shouldShowTopAppBar = hideNavBarOn.any { it.route == currentDestination?.route }
+    val shouldShowFab = displayFabOn.any { it.route == currentDestination?.route }
+
+    FixMyLinksTheme {
         Scaffold(
             topBar = {
-                if (showTopAppBar) {
+                if (shouldShowTopAppBar) {
                     FmlTopAppBar(
-                        title = topAppBarTitle,
-                        onNavigateUp = { onNavigateUp() },
+                        title = stringResource(id = currentScreen?.label ?: R.string.app_name),
+                        onNavigateUp = { navController.navigateUp() },
                         size = topAppBarSize,
-                        scrollBehavior = scrollBehavior
+                        scrollBehavior = topAppBarScrollBehavior
                     )
                 }
             },
             bottomBar = {
-                if (showNavBar) {
+                if (shouldShowNavBar) {
                     NavigationBar {
-                        navItems.forEach { screen ->
-                            val isSelected = navItemSelectedFn(screen)
+                        topLevelNavItems.forEach { screen ->
+                            val isSelected =
+                                currentDestination?.hierarchy?.any { it.route == screen.route } == true
 
                             NavigationBarItem(
                                 selected = isSelected,
-                                onClick = { onNavItemClick(screen) },
+                                onClick = { navController.navigateSingleTop(screen.route) },
                                 icon = {
                                     Icon(
                                         imageVector = if (isSelected) {
@@ -125,185 +150,97 @@ fun FixMyLinksAppPortrait(
                 }
             },
             floatingActionButton = {
-                if (showFab) {
-                    AddNewRuleFab(onClick = { onFabClick() })
+                // Don't show the FAB if shouldShowNavRail is true as the navigation rail will contain
+                // a FAB within it
+                if (!shouldShowNavRail && shouldShowFab) {
+                    AddNewRuleFab(onClick = {
+                        navController.navigateSingleTop(
+                            route = FmlScreen.SelectRuleType.route,
+                            popUpToStartDestination = false
+                        )
+                    })
                 }
             },
-            contentWindowInsets = WindowInsets.safeDrawing,
-            modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
+            contentWindowInsets = WindowInsets(
+                left = 0,
+                top = WindowInsets.safeDrawing.getTop(LocalDensity.current),
+                right = 0,
+                bottom = 0
+            ),
+            modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
-            navHost(innerPadding)
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun FixMyLinksAppLandscape(
-    navHost: @Composable () -> Unit,
-    onItemClick: (screen: FmlScreen) -> Unit,
-    selectedFn: (screen: FmlScreen) -> Boolean,
-    onFabClick: () -> Unit,
-    onNavigateUp: () -> Unit,
-    topAppBarTitle: String,
-    showTopAppBar: Boolean = false,
-    showNavRail: Boolean = true
-) {
-    FixMyLinksTheme {
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
-        @Composable
-        fun NavRail() {
-            FmlNavigationRail(onFabClick = { onFabClick() }) {
-                navItems.forEachIndexed { index, screen ->
-                    val isSelected = selectedFn(screen)
-
-                    NavigationRailItem(
-                        selected = isSelected,
-                        onClick = { onItemClick(screen) },
-                        icon = {
-                            Icon(
-                                imageVector = if (isSelected) {
-                                    screen.selectedIcon
-                                } else {
-                                    screen.unselectedIcon
-                                },
-                                contentDescription = null
+            Surface(
+                color = MaterialTheme.colorScheme.background,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .consumeWindowInsets(innerPadding)
+                        .windowInsetsPadding(
+                            WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)
+                        )
+                ) {
+                    AnimatedVisibility(
+                        visible = shouldShowNavRail,
+                        enter = slideInHorizontally(
+                            animationSpec = spring(
+                                dampingRatio = Spring.DampingRatioLowBouncy,
+                                stiffness = Spring.StiffnessMediumLow
                             )
-                        },
-                        label = {
-                            Column {
-                                Text(
-                                    text = stringResource(id = screen.label),
-                                    letterSpacing = TIGHT_LETTER_SPACING,
-                                    fontWeight = if (isSelected) {
-                                        FontWeight.Bold
-                                    } else {
-                                        FontWeight.Normal
-                                    },
+                        )
+                    ) {
+                        FmlNavigationRail(
+                            onFabClick = {
+                                navController.navigateSingleTop(
+                                    route = FmlScreen.SelectRuleType.route,
+                                    popUpToStartDestination = false
                                 )
                             }
+                        ) {
+                            topLevelNavItems.forEachIndexed { index, screen ->
+                                val isSelected =
+                                    currentDestination?.hierarchy?.any { it.route == screen.route } == true
+
+                                NavigationRailItem(
+                                    selected = isSelected,
+                                    onClick = { navController.navigateSingleTop(screen.route) },
+                                    icon = {
+                                        Icon(
+                                            imageVector = if (isSelected) {
+                                                screen.selectedIcon
+                                            } else {
+                                                screen.unselectedIcon
+                                            },
+                                            contentDescription = null
+                                        )
+                                    },
+                                    label = {
+                                        Column {
+                                            Text(
+                                                text = stringResource(id = screen.label),
+                                                letterSpacing = TIGHT_LETTER_SPACING,
+                                                fontWeight = if (isSelected) {
+                                                    FontWeight.Bold
+                                                } else {
+                                                    FontWeight.Normal
+                                                },
+                                            )
+                                        }
+                                    }
+                                )
+
+                                if (index != topLevelNavItems.lastIndex) {
+                                    Spacer(modifier = Modifier.padding(8.dp))
+                                }
+                            }
                         }
-                    )
-
-                    if (index != navItems.lastIndex) {
-                        Spacer(modifier = Modifier.padding(8.dp))
                     }
+
+                    FmlNavHost(navController = navController)
                 }
             }
         }
-
-        Surface(
-            color = MaterialTheme.colorScheme.background,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Row {
-                AnimatedVisibility(
-                    visible = showNavRail,
-                    enter = slideInHorizontally(
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioLowBouncy,
-                            stiffness = Spring.StiffnessMediumLow
-                        )
-                    )
-                ) {
-                    NavRail()
-                }
-
-                Column(
-                    modifier = Modifier
-                        .nestedScroll(scrollBehavior.nestedScrollConnection)
-                ) {
-                    if (showTopAppBar) {
-                        FmlTopAppBar(
-                            title = topAppBarTitle,
-                            onNavigateUp = { onNavigateUp() },
-                            size = TopAppBarSize.SMALL,
-                            scrollBehavior = scrollBehavior
-                        )
-                    }
-                    navHost()
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun FixMyLinksApp(windowSize: WindowSizeClass) {
-    val navController = rememberNavController()
-
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-    val currentScreen = allFmlScreens.find { currentDestination?.route == it.route }
-
-    // The screens on which the Floating Action Button (FAB) should be displayed
-    val displayFabOn = listOf(FmlScreen.Home, FmlScreen.Rules)
-
-    // The screens on which the Navigation Bar should be hidden
-    val hideNavBarOn = listOf(FmlScreen.SelectRuleType, FmlScreen.AddRule)
-
-    @Composable
-    fun PortraitLayout() {
-        FixMyLinksAppPortrait(
-            navHost = { innerPadding ->
-                FmlNavHost(
-                    navController = navController,
-                    modifier = Modifier.padding(innerPadding)
-                )
-            },
-            onNavItemClick = { screen ->
-                navController.navigateSingleTop(screen.route)
-            },
-            navItemSelectedFn = { screen ->
-                currentDestination?.hierarchy?.any { it.route == screen.route } == true
-            },
-            onFabClick = {
-                navController.navigateSingleTop(
-                    route = FmlScreen.SelectRuleType.route,
-                    popUpToStartDestination = false
-                )
-            },
-            onNavigateUp = { navController.navigateUp() },
-            topAppBarTitle = stringResource(id = currentScreen?.label ?: R.string.app_name),
-            showFab = displayFabOn.any { it.route == currentDestination?.route },
-            showNavBar = hideNavBarOn.none { it.route == currentDestination?.route },
-            showTopAppBar = hideNavBarOn.any { it.route == currentDestination?.route },
-            topAppBarSize = TopAppBarSize.LARGE
-        )
-    }
-
-    @Composable
-    fun LandscapeLayout() {
-        FixMyLinksAppLandscape(
-            navHost = {
-                FmlNavHost(navController = navController)
-            },
-            onItemClick = { screen ->
-                navController.navigateSingleTop(screen.route)
-            },
-            selectedFn = { screen ->
-                currentDestination?.hierarchy?.any { it.route == screen.route } == true
-            },
-            onFabClick = {
-                navController.navigateSingleTop(
-                    route = FmlScreen.SelectRuleType.route,
-                    popUpToStartDestination = false
-                )
-            },
-            showNavRail = hideNavBarOn.none {
-                it.route == currentDestination?.route
-            },
-            onNavigateUp = { navController.navigateUp() },
-            topAppBarTitle = stringResource(id = currentScreen?.label ?: R.string.app_name),
-            showTopAppBar = hideNavBarOn.any { it.route == currentDestination?.route }
-        )
-    }
-
-    when (windowSize.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> PortraitLayout()
-        WindowWidthSizeClass.Medium -> LandscapeLayout()
-        WindowWidthSizeClass.Expanded -> LandscapeLayout()
     }
 }
