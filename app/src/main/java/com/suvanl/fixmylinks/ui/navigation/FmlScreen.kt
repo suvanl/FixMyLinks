@@ -12,8 +12,6 @@ import androidx.compose.material.icons.outlined.LibraryBooks
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import com.suvanl.fixmylinks.R
 
 sealed class FmlScreen(
@@ -64,15 +62,7 @@ sealed class FmlScreen(
     data object AddRule : FmlScreen(
         route = "add_rule",
         label = R.string.add_new_rule
-    ), FmlScreenWithArgs {
-        const val mutationTypeArg = "mutation_type"
-
-        override val args: List<NamedNavArgument> = listOf(
-            navArgument(mutationTypeArg) { type = NavType.StringType },
-        )
-
-        override val routeWithArgs = "$route/{${mutationTypeArg}}"
-    }
+    )
 }
 
 val allFmlScreens = setOf(
