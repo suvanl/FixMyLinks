@@ -1,14 +1,22 @@
 package com.suvanl.fixmylinks.ui.navigation
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
+import com.suvanl.fixmylinks.ui.components.appbar.ProvideAppBarActions
 import com.suvanl.fixmylinks.ui.navigation.transition.NavigationEnterTransitionMode
 import com.suvanl.fixmylinks.ui.navigation.transition.NavigationExitTransitionMode
 import com.suvanl.fixmylinks.ui.navigation.transition.enterNavigationTransition
@@ -55,6 +63,17 @@ fun FmlNavHost(
         }
 
         composable(route = FmlScreen.SelectRuleType.route) {
+            // Show "Next" button as top app bar action on Medium and Expanded layouts
+            ProvideAppBarActions(
+                shouldShowActions = windowSize.widthSizeClass != WindowWidthSizeClass.Compact
+            ) {
+                Button(onClick = { /*TODO*/ }) {
+                    Text(text = stringResource(id = R.string.next))
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+            }
+
             SelectRuleTypeScreen(
                 showNextButton = windowSize.widthSizeClass == WindowWidthSizeClass.Compact
             )
