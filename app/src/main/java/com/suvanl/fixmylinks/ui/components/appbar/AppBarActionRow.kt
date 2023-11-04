@@ -22,13 +22,16 @@ private class TopAppBarViewModel : ViewModel() {
 }
 
 @Composable
-fun ProvideAppBarActions(actions: @Composable RowScope.() -> Unit) {
+fun ProvideAppBarActions(
+    shouldShowActions: Boolean = true,
+    actions: @Composable RowScope.() -> Unit
+) {
     val viewModelStoreOwner = LocalViewModelStoreOwner.current
     if (viewModelStoreOwner == null || viewModelStoreOwner !is NavBackStackEntry) return
 
     val actionViewModel = viewModel(initializer = { TopAppBarViewModel() })
     SideEffect {
-        actionViewModel.actionState = actions
+        actionViewModel.actionState = if (shouldShowActions) actions else null
     }
 }
 
