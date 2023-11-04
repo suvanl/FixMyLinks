@@ -65,7 +65,14 @@ fun FmlNavHost(
             ProvideAppBarActions(
                 shouldShowActions = windowWidthSize != WindowWidthSizeClass.Compact
             ) {
-                Button(onClick = { /*TODO*/ }) {
+                Button(
+                    onClick = {
+                        navController.navigateSingleTop(
+                            route = FmlScreen.AddRule.route,
+                            popUpToStartDestination = false
+                        )
+                    }
+                ) {
                     Text(text = stringResource(id = R.string.next))
                 }
 
@@ -73,7 +80,13 @@ fun FmlNavHost(
             }
 
             SelectRuleTypeScreen(
-                showNextButton = windowWidthSize == WindowWidthSizeClass.Compact
+                showNextButton = windowWidthSize == WindowWidthSizeClass.Compact,
+                onNextButtonClick = {
+                    navController.navigateSingleTop(
+                        route = FmlScreen.AddRule.route,
+                        popUpToStartDestination = false
+                    )
+                }
             )
         }
 

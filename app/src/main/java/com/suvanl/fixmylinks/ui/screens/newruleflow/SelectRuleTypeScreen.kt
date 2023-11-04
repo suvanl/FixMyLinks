@@ -28,6 +28,7 @@ import com.suvanl.fixmylinks.ui.util.StringResourceUtil
 @Composable
 fun SelectRuleTypeScreen(
     showNextButton: Boolean,
+    onNextButtonClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val selectableMutationTypes = setOf(
@@ -83,7 +84,7 @@ fun SelectRuleTypeScreen(
                     .weight(1F, fill = false)
             ) {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = onNextButtonClick,
                     modifier = modifier
                         .fillMaxWidth()
                         .padding(bottom = 32.dp)
