@@ -94,7 +94,8 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         title = stringResource(id = currentScreen?.label ?: R.string.app_name),
                         onNavigateUp = { navController.navigateUp() },
                         size = topAppBarSize,
-                        scrollBehavior = topAppBarScrollBehavior
+                        scrollBehavior = topAppBarScrollBehavior,
+                        currentBackStackEntryFlow = navController.currentBackStackEntryFlow
                     )
                 }
             },

@@ -11,11 +11,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.TextUnit
+import androidx.navigation.FloatingWindow
+import androidx.navigation.NavBackStackEntry
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.theme.TIGHT_LETTER_SPACING
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNot
 
 enum class TopAppBarSize { SMALL, MEDIUM, LARGE }
 
@@ -25,14 +31,25 @@ fun FmlTopAppBar(
     title: String,
     size: TopAppBarSize,
     scrollBehavior: TopAppBarScrollBehavior,
+    currentBackStackEntryFlow: Flow<NavBackStackEntry>,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val currentContentBackStackEntry by produceState(
+        initialValue = null as NavBackStackEntry?,
+        producer = {
+            currentBackStackEntryFlow
+                .filterNot { it.destination is FloatingWindow }
+                .collect { value = it }
+        }
+    )
+
     when (size) {
         TopAppBarSize.SMALL -> {
             TopAppBar(
                 title = { TopAppBarTitle(text = title) },
                 navigationIcon = { TopAppBarNavigationIcon(onNavigateUp = { onNavigateUp() }) },
+                actions = { AppBarActionRow(navBackStackEntry = currentContentBackStackEntry) },
                 scrollBehavior = scrollBehavior,
                 modifier = modifier
             )
@@ -42,6 +59,7 @@ fun FmlTopAppBar(
             MediumTopAppBar(
                 title = { TopAppBarTitle(text = title) },
                 navigationIcon = { TopAppBarNavigationIcon(onNavigateUp = { onNavigateUp() }) },
+                actions = { AppBarActionRow(navBackStackEntry = currentContentBackStackEntry) },
                 scrollBehavior = scrollBehavior,
                 modifier = modifier
             )
@@ -51,6 +69,7 @@ fun FmlTopAppBar(
             LargeTopAppBar(
                 title = { TopAppBarTitle(text = title) },
                 navigationIcon = { TopAppBarNavigationIcon(onNavigateUp = { onNavigateUp() }) },
+                actions = { AppBarActionRow(navBackStackEntry = currentContentBackStackEntry) },
                 scrollBehavior = scrollBehavior,
                 modifier = modifier
             )
