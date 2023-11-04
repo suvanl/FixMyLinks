@@ -7,7 +7,6 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -21,7 +20,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -192,50 +190,21 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         )
                     ) {
                         FmlNavigationRail(
+                            navItems = topLevelNavItems,
+                            currentDestination = currentDestination,
                             onFabClick = {
                                 navController.navigateSingleTop(
                                     route = FmlScreen.SelectRuleType.route,
+                                    // we want to return to the screen the FAB was clicked on (i.e.
+                                    // the previous destination) when popping the back stack rather
+                                    // than popping all the way up to the startDestination.
                                     popUpToStartDestination = false
                                 )
+                            },
+                            onNavItemClick = { screen ->
+                                navController.navigateSingleTop(screen.route)
                             }
-                        ) {
-                            topLevelNavItems.forEachIndexed { index, screen ->
-                                val isSelected =
-                                    currentDestination?.hierarchy?.any { it.route == screen.route } == true
-
-                                NavigationRailItem(
-                                    selected = isSelected,
-                                    onClick = { navController.navigateSingleTop(screen.route) },
-                                    icon = {
-                                        Icon(
-                                            imageVector = if (isSelected) {
-                                                screen.selectedIcon
-                                            } else {
-                                                screen.unselectedIcon
-                                            },
-                                            contentDescription = null
-                                        )
-                                    },
-                                    label = {
-                                        Column {
-                                            Text(
-                                                text = stringResource(id = screen.label),
-                                                letterSpacing = TIGHT_LETTER_SPACING,
-                                                fontWeight = if (isSelected) {
-                                                    FontWeight.Bold
-                                                } else {
-                                                    FontWeight.Normal
-                                                },
-                                            )
-                                        }
-                                    }
-                                )
-
-                                if (index != topLevelNavItems.lastIndex) {
-                                    Spacer(modifier = Modifier.padding(8.dp))
-                                }
-                            }
-                        }
+                        )
                     }
 
                     FmlNavHost(navController = navController)
