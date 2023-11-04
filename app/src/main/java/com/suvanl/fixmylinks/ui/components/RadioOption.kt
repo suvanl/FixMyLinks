@@ -12,6 +12,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,7 +30,24 @@ data class RadioOptionData(
     val id: String,
     val title: String?,
     val description: String
-)
+) {
+    companion object {
+        /**
+         * [Saver] that converts a [RadioOptionData] object into a Saveable, to ensure that it can
+         * be stored in a Bundle.
+         */
+        val saver: Saver<RadioOptionData, *> = listSaver(
+            save = { listOf(it.id, it.title ?: "", it.description) },
+            restore = {
+                RadioOptionData(
+                    id = it[0],
+                    title = it[1],
+                    description = it[2]
+                )
+            }
+        )
+    }
+}
 
 @Composable
 fun RadioOption(
