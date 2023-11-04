@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,7 +29,7 @@ import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
 @Composable
 fun FmlNavHost(
     navController: NavHostController,
-    windowSize: WindowSizeClass,
+    windowWidthSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -65,7 +64,7 @@ fun FmlNavHost(
         composable(route = FmlScreen.SelectRuleType.route) {
             // Show "Next" button as top app bar action on Medium and Expanded layouts
             ProvideAppBarActions(
-                shouldShowActions = windowSize.widthSizeClass != WindowWidthSizeClass.Compact
+                shouldShowActions = windowWidthSize != WindowWidthSizeClass.Compact
             ) {
                 Button(onClick = { /*TODO*/ }) {
                     Text(text = stringResource(id = R.string.next))
@@ -75,7 +74,7 @@ fun FmlNavHost(
             }
 
             SelectRuleTypeScreen(
-                showNextButton = windowSize.widthSizeClass == WindowWidthSizeClass.Compact
+                showNextButton = windowWidthSize == WindowWidthSizeClass.Compact
             )
         }
 

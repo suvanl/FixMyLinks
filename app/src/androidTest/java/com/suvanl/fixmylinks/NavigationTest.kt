@@ -1,5 +1,6 @@
 package com.suvanl.fixmylinks
 
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -29,7 +30,10 @@ class NavigationTest {
             // Assign a ComposeNavigator to the navController so it can navigate through composables
             navController.navigatorProvider.addNavigator(ComposeNavigator())
 
-            FmlNavHost(navController = navController)
+            FmlNavHost(
+                navController = navController,
+                windowWidthSize = WindowWidthSizeClass.Compact
+            )
         }
     }
 
