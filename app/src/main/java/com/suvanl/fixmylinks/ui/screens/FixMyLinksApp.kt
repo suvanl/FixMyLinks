@@ -33,8 +33,8 @@ import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.components.button.AddNewRuleFab
 import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationBar
 import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationRail
-import com.suvanl.fixmylinks.ui.components.nav.FmlTopAppBar
-import com.suvanl.fixmylinks.ui.components.nav.TopAppBarSize
+import com.suvanl.fixmylinks.ui.components.appbar.FmlTopAppBar
+import com.suvanl.fixmylinks.ui.components.appbar.TopAppBarSize
 import com.suvanl.fixmylinks.ui.navigation.FmlNavHost
 import com.suvanl.fixmylinks.ui.navigation.FmlScreen
 import com.suvanl.fixmylinks.ui.navigation.allFmlScreens

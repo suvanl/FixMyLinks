@@ -1,4 +1,4 @@
-package com.suvanl.fixmylinks.ui.components.nav
+package com.suvanl.fixmylinks.ui.components.appbar
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -23,9 +23,9 @@ enum class TopAppBarSize { SMALL, MEDIUM, LARGE }
 @Composable
 fun FmlTopAppBar(
     title: String,
-    onNavigateUp: () -> Unit,
     size: TopAppBarSize,
     scrollBehavior: TopAppBarScrollBehavior,
+    onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (size) {
