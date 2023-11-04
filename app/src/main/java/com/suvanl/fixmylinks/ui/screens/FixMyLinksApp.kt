@@ -170,7 +170,10 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         )
                     }
 
-                    FmlNavHost(navController = navController)
+                    FmlNavHost(
+                        navController = navController,
+                        windowSize = windowSize
+                    )
                 }
             }
         }

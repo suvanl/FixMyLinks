@@ -1,5 +1,7 @@
 package com.suvanl.fixmylinks.ui.navigation
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -18,7 +20,11 @@ import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
 
 @Composable
-fun FmlNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
+fun FmlNavHost(
+    navController: NavHostController,
+    windowSize: WindowSizeClass,
+    modifier: Modifier = Modifier
+) {
     NavHost(
         navController = navController,
         startDestination = FmlScreen.Home.route,
@@ -49,7 +55,9 @@ fun FmlNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         }
 
         composable(route = FmlScreen.SelectRuleType.route) {
-            SelectRuleTypeScreen()
+            SelectRuleTypeScreen(
+                showNextButton = windowSize.widthSizeClass == WindowWidthSizeClass.Compact
+            )
         }
 
         composable(
