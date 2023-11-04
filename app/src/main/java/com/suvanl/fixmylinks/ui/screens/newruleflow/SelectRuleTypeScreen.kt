@@ -13,7 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -26,7 +26,10 @@ import com.suvanl.fixmylinks.ui.components.RadioOptionData
 import com.suvanl.fixmylinks.ui.util.StringResourceUtil
 
 @Composable
-fun SelectRuleTypeScreen(modifier: Modifier = Modifier) {
+fun SelectRuleTypeScreen(
+    showNextButton: Boolean,
+    modifier: Modifier = Modifier
+) {
     val selectableMutationTypes = setOf(
         MutationType.DOMAIN_NAME,
         MutationType.URL_PARAMS_ALL,
@@ -52,7 +55,9 @@ fun SelectRuleTypeScreen(modifier: Modifier = Modifier) {
         )
     }
 
-    val selectedOption = remember { mutableStateOf(radioOptions[0]) }
+    val selectedOption = rememberSaveable(stateSaver = RadioOptionData.saver) {
+        mutableStateOf(radioOptions[0])
+    }
 
     Column(
         modifier = modifier
@@ -68,19 +73,24 @@ fun SelectRuleTypeScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(bottom = 4.dp)
         )
 
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .weight(1F, fill = false)
-        ) {
-            Button(
-                onClick = { /*TODO*/ },
+        // The row containing the "Next" button is conditionally shown as it won't be required
+        // in cases where this button is provided inside the Top App Bar instead, i.e.,
+        // medium and expanded layouts.
+        if (showNextButton) {
+            Row(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp)
-                    .padding(horizontal = 8.dp)
+                    .weight(1F, fill = false)
             ) {
-                Text(text = stringResource(id = R.string.next))
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 32.dp)
+                        .padding(horizontal = 8.dp)
+                ) {
+                    Text(text = stringResource(id = R.string.next))
+                }
             }
         }
     }

@@ -1,12 +1,21 @@
 package com.suvanl.fixmylinks.ui.navigation
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
+import com.suvanl.fixmylinks.ui.components.appbar.ProvideAppBarActions
 import com.suvanl.fixmylinks.ui.navigation.transition.NavigationEnterTransitionMode
 import com.suvanl.fixmylinks.ui.navigation.transition.NavigationExitTransitionMode
 import com.suvanl.fixmylinks.ui.navigation.transition.enterNavigationTransition
@@ -18,7 +27,11 @@ import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
 
 @Composable
-fun FmlNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
+fun FmlNavHost(
+    navController: NavHostController,
+    windowWidthSize: WindowWidthSizeClass,
+    modifier: Modifier = Modifier
+) {
     NavHost(
         navController = navController,
         startDestination = FmlScreen.Home.route,
@@ -49,7 +62,20 @@ fun FmlNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         }
 
         composable(route = FmlScreen.SelectRuleType.route) {
-            SelectRuleTypeScreen()
+            // Show "Next" button as top app bar action on Medium and Expanded layouts
+            ProvideAppBarActions(
+                shouldShowActions = windowWidthSize != WindowWidthSizeClass.Compact
+            ) {
+                Button(onClick = { /*TODO*/ }) {
+                    Text(text = stringResource(id = R.string.next))
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+            }
+
+            SelectRuleTypeScreen(
+                showNextButton = windowWidthSize == WindowWidthSizeClass.Compact
+            )
         }
 
         composable(
