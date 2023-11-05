@@ -13,9 +13,4 @@ class AddRuleViewModel : ViewModel() {
     fun updateSelectedMutationType(selection: MutationType) {
         _mutationType.value = selection
     }
-
-    override fun onCleared() {
-        super.onCleared()
-        println("AddRuleViewModel cleared")
-    }
 }
