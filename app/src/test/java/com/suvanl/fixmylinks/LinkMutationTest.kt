@@ -6,9 +6,9 @@ import org.junit.Test
 import java.net.URI
 
 /**
- * Tests for link mutation business logic
+ * Test suite for link mutation business logic
  */
-class LinkMutationTests {
+class LinkMutationTest {
     @Test
     fun `remove ONLY 'igshid' parameter from Instagram link with multiple parameters`() {
         val mutateUriUseCase = MutateUriUseCase()
