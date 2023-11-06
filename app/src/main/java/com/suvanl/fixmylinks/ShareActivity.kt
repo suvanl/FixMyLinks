@@ -49,12 +49,15 @@ class ShareActivity : ComponentActivity() {
         val intentContent = intent.getStringExtra(Intent.EXTRA_TEXT)
         viewModel.apply {
             updateUri(intentContent)
-            updateMutatedContent(intentContent)
+            generateMutatedUri(intentContent)
 
             mutatedUri.value?.let { link -> shareTextContent(content = link) }
         }
 
-        Log.d(TAG, "Content: ${viewModel.receivedContent}\nMutated: ${viewModel.mutatedUri}")
+        Log.d(
+            TAG,
+            "Content: ${viewModel.receivedContent.value}\nMutated: ${viewModel.mutatedUri.value}"
+        )
     }
 
     override fun onPause() {

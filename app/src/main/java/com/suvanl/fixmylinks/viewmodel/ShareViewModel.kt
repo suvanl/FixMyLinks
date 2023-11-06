@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.suvanl.fixmylinks.domain.mutation.MutateUriUseCase
-import com.suvanl.fixmylinks.domain.mutation.util.MutationUtils
 import com.suvanl.fixmylinks.domain.util.StringUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,7 +23,7 @@ class ShareViewModel(
         _receivedContent.value = content
     }
 
-    fun updateMutatedContent(content: String?) {
+    fun generateMutatedUri(content: String?) {
         if (content == null) {
             _mutatedUri.value = null
             return
@@ -44,10 +43,7 @@ class ShareViewModel(
             return
         }
 
-        _mutatedUri.value = mutateUriUseCase(
-            uri = extractedUrl,
-            mutationType = MutationUtils.determineMutationType(content)
-        ).toString()
+        _mutatedUri.value = mutateUriUseCase(extractedUrl).toString()
     }
 
     companion object {
