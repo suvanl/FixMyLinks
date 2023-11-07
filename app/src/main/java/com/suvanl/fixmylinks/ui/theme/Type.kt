@@ -97,3 +97,7 @@ val Typography = Typography(
     )
 )
 
+object TextStyleDefaults {
+    val dropdownItemStyle = Typography.bodyLarge
+}
+

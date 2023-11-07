@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.ui.theme.TextStyleDefaults
 
 @Composable
 fun HintsDropdownItem(
@@ -16,7 +17,10 @@ fun HintsDropdownItem(
 ) {
     DropdownMenuItem(
         text = {
-            Text(text = stringResource(id = R.string.show_hints))
+            Text(
+                text = stringResource(id = R.string.show_hints),
+                style = TextStyleDefaults.dropdownItemStyle
+            )
         },
         onClick = { onCheckedChange(!isChecked) },
         trailingIcon = {
