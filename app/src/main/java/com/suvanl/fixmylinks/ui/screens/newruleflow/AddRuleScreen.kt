@@ -1,57 +1,147 @@
 package com.suvanl.fixmylinks.ui.screens.newruleflow
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Backup
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
+import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleForm
+import com.suvanl.fixmylinks.ui.components.list.SwitchList
+import com.suvanl.fixmylinks.ui.components.list.SwitchListItemState
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
+
+/**
+ * The amount of vertical space between form fields
+ */
+private val interFieldSpacing = 12.dp
 
 @Composable
 fun AddRuleScreen(
+    showSaveButton: Boolean,
     mutationType: MutationType,
-    onDoneClick: () -> Unit,
+    onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var isRuleEnabled by rememberSaveable { mutableStateOf(true) }
+    var isBackupEnabled by rememberSaveable { mutableStateOf(false) }
+
+    val ruleOptions = listOf(
+        SwitchListItemState(
+            headlineText = stringResource(id = R.string.enable),
+            supportingText = "Start applying this rule now",
+            leadingIcon = Icons.Outlined.CheckCircle,
+            isSwitchChecked = isRuleEnabled,
+            onSwitchCheckedChange = { isRuleEnabled = it }
+        ),
+        SwitchListItemState(
+            headlineText = "Backup to cloud",
+            supportingText = "Sync rule across signed-in devices",
+            leadingIcon = Icons.Outlined.Backup,
+            isSwitchChecked = isBackupEnabled,
+            onSwitchCheckedChange = { isBackupEnabled = it },
+        )
+    )
+
+    AddRuleScreenBody(
+        mutationType = mutationType,
+        showSaveButton = showSaveButton,
+        ruleOptions = ruleOptions,
+        onSaveClick = onSaveClick,
+        modifier = modifier
+    ) {
+        DomainNameRuleForm(
+            interFieldSpacing = interFieldSpacing,
+            onRuleNameChange = {},
+            onInitialDomainNameChange = {},
+            onTargetDomainNameChange = {},
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+private fun AddRuleScreenBody(
+    mutationType: MutationType,
+    showSaveButton: Boolean,
+    ruleOptions: List<SwitchListItemState>,
+    onSaveClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    form: @Composable () -> Unit,
+) {
     Column(
+        verticalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .semantics { contentDescription = "Add Rule Screen" }
+            .padding(horizontal = 16.dp)
+            .padding(top = 16.dp)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
-
         Text(
-            text = "Add a new ${mutationType.name} rule",
-            modifier = modifier.padding(horizontal = 16.dp)
+            text = "Let's create a new ${mutationType.name} rule",
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.primary
         )
 
-        Button(onClick = onDoneClick) {
-            Text(text = "Done")
+        Spacer(modifier = Modifier.height(8.dp))
+
+        form()
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        SwitchList(items = ruleOptions)
+
+        if (showSaveButton) {
+            Spacer(modifier = Modifier.weight(1F))
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(
+                    onClick = onSaveClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .navigationBarsPadding()
+                        .padding(vertical = 32.dp, horizontal = 8.dp)
+                ) {
+                    Text(text = stringResource(id = R.string.save))
+                }
+            }
         }
     }
 }
 
 @Preview(
     showBackground = true,
-    widthDp = 320
+    widthDp = 400
 )
 @Preview(
     name = "Dark",
     showBackground = true,
-    widthDp = 320,
+    widthDp = 400,
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
@@ -59,7 +149,8 @@ fun AddRuleScreenPreview() {
     PreviewContainer {
         AddRuleScreen(
             mutationType = MutationType.URL_PARAMS_SPECIFIC,
-            onDoneClick = { }
+            showSaveButton = true,
+            onSaveClick = { },
         )
     }
 }

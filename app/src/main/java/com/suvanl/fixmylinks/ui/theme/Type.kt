@@ -89,7 +89,8 @@ val Typography = Typography(
         letterSpacing = TIGHT_LETTER_SPACING
     ),
     bodyMedium = defaultTypography.bodyMedium.copy(
-        fontFamily = defaultCustomFont()
+        fontFamily = defaultCustomFont(),
+        letterSpacing = TIGHT_LETTER_SPACING
     ),
     bodySmall = defaultTypography.bodySmall.copy(
         fontFamily = defaultCustomFont()

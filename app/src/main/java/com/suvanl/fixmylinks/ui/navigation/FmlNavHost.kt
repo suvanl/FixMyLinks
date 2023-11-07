@@ -115,7 +115,8 @@ fun FmlNavHost(
 
                 AddRuleScreen(
                     mutationType = viewModel.mutationType.collectAsStateWithLifecycle().value,
-                    onDoneClick = {
+                    showSaveButton = windowWidthSize == WindowWidthSizeClass.Compact,
+                    onSaveClick = {
                         navController.popBackStack(
                             route = NestedNavGraphParent.NewRuleFlow.route,
                             inclusive = true

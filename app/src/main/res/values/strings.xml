@@ -30,4 +30,15 @@
 
     <string name="empty" />
     <string name="next">Next</string>
+    <string name="enable">Enable</string>
+
+    <string name="rule_name_is_optional_supporting_text">
+        Optional. We\'ll generate a descriptive name for you if you don\'t provide one.
+    </string>
+    <string name="rule_name">Rule name</string>
+    <string name="initial_domain_name">Initial domain name</string>
+    <string name="initial_domain_supporting_text">The domain name of the link that should be changed.\nE.g., <b>x.com</b></string>
+    <string name="target_domain_name">Target domain name</string>
+    <string name="target_domain_supporting_text">The domain name that should replace the original one.\nE.g., <b>twitter.com</b></string>
+    <string name="save">Save</string>
 </resources>
