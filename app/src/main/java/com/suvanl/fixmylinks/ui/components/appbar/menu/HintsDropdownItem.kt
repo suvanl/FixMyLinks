@@ -11,7 +11,6 @@ import com.suvanl.fixmylinks.R
 @Composable
 fun HintsDropdownItem(
     isChecked: Boolean,
-    onClick: () -> Unit,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -19,11 +18,11 @@ fun HintsDropdownItem(
         text = {
             Text(text = stringResource(id = R.string.show_hints))
         },
-        onClick = onClick,
+        onClick = { onCheckedChange(!isChecked) },
         trailingIcon = {
             Checkbox(
                 checked = isChecked,
-                onCheckedChange = onCheckedChange
+                onCheckedChange = null  // null recommended for accessibility with screen readers
             )
         },
         modifier = modifier

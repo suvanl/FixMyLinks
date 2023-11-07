@@ -6,7 +6,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -116,6 +119,7 @@ fun FmlNavHost(
             composable(route = FmlScreen.AddRule.route) { navBackStackEntry ->
                 val viewModel = navBackStackEntry.sharedViewModel<AddRuleViewModel>(navController)
                 val isCompactLayout = windowWidthSize == WindowWidthSizeClass.Compact
+                var hintsOptionCheckedState by remember { mutableStateOf(true) }
 
                 fun popCurrentNavGraph() {
                     navController.popBackStack(
@@ -135,15 +139,15 @@ fun FmlNavHost(
 
                     OverflowMenu {
                         HintsDropdownItem(
-                            isChecked = true,
-                            onClick = { /*TODO*/ },
-                            onCheckedChange = {}
+                            isChecked = hintsOptionCheckedState,
+                            onCheckedChange = { hintsOptionCheckedState = it }
                         )
                     }
                 }
 
                 AddRuleScreen(
                     mutationType = viewModel.mutationType.collectAsStateWithLifecycle().value,
+                    showFormFieldHints = hintsOptionCheckedState,
                     showSaveButton = isCompactLayout,
                     onSaveClick = { popCurrentNavGraph() }
                 )

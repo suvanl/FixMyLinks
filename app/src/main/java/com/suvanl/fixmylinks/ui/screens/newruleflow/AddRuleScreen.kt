@@ -42,6 +42,7 @@ private val interFieldSpacing = 12.dp
 @Composable
 fun AddRuleScreen(
     showSaveButton: Boolean,
+    showFormFieldHints: Boolean,
     mutationType: MutationType,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -74,6 +75,7 @@ fun AddRuleScreen(
         modifier = modifier
     ) {
         DomainNameRuleForm(
+            showHints = showFormFieldHints,
             interFieldSpacing = interFieldSpacing,
             onRuleNameChange = {},
             onInitialDomainNameChange = {},
@@ -156,6 +158,7 @@ fun AddRuleScreenPreview() {
         AddRuleScreen(
             mutationType = MutationType.URL_PARAMS_SPECIFIC,
             showSaveButton = true,
+            showFormFieldHints = true,
             onSaveClick = { },
         )
     }

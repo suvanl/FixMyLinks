@@ -1,5 +1,6 @@
 package com.suvanl.fixmylinks.ui.components.form
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,10 +22,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.ui.animation.TransitionDefaults
 import com.suvanl.fixmylinks.ui.components.form.common.RuleNameField
 
 @Composable
 fun DomainNameRuleForm(
+    showHints: Boolean,
     interFieldSpacing: Dp,
     onRuleNameChange: (String) -> Unit,
     onInitialDomainNameChange: (String) -> Unit,
@@ -60,7 +63,12 @@ fun DomainNameRuleForm(
                 Text(text = stringResource(id = R.string.initial_domain_name))
             },
             supportingText = {
-                Text(text = stringResource(id = R.string.initial_domain_supporting_text))
+                AnimatedVisibility(
+                    visible = showHints,
+                    enter = TransitionDefaults.supportingTextEnterTransition
+                ) {
+                    Text(text = stringResource(id = R.string.initial_domain_supporting_text))
+                }
             },
             leadingIcon = {
                 Icon(
@@ -89,7 +97,12 @@ fun DomainNameRuleForm(
                 Text(text = stringResource(id = R.string.target_domain_name))
             },
             supportingText = {
-                Text(text = stringResource(id = R.string.target_domain_supporting_text))
+                AnimatedVisibility(
+                    visible = showHints,
+                    enter = TransitionDefaults.supportingTextEnterTransition
+                ) {
+                    Text(text = stringResource(id = R.string.target_domain_supporting_text))
+                }
             },
             leadingIcon = {
                 Icon(
