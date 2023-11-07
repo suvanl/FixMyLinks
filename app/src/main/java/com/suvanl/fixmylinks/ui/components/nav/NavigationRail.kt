@@ -21,7 +21,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.suvanl.fixmylinks.ui.components.button.AddNewRuleFab
 import com.suvanl.fixmylinks.ui.navigation.FmlScreen
-import com.suvanl.fixmylinks.ui.theme.TIGHT_LETTER_SPACING
+import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 
 @Composable
 fun FmlNavigationRail(
@@ -68,7 +68,7 @@ fun FmlNavigationRail(
                         Column {
                             Text(
                                 text = stringResource(id = screen.label),
-                                letterSpacing = TIGHT_LETTER_SPACING,
+                                letterSpacing = LetterSpacingDefaults.Tight,
                                 fontWeight = if (isSelected) {
                                     FontWeight.Bold
                                 } else {

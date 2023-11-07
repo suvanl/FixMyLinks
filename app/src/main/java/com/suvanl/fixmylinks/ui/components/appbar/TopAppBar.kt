@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.navigation.FloatingWindow
 import androidx.navigation.NavBackStackEntry
 import com.suvanl.fixmylinks.R
-import com.suvanl.fixmylinks.ui.theme.TIGHT_LETTER_SPACING
+import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNot
 
@@ -83,7 +83,7 @@ private fun TopAppBarTitle(
     modifier: Modifier = Modifier,
     fontSize: TextUnit? = null
 ) {
-    val letterSpacing = TIGHT_LETTER_SPACING.times(16)
+    val letterSpacing = LetterSpacingDefaults.ExtraTight
 
     if (fontSize == null) {
         Text(
