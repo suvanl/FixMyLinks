@@ -22,7 +22,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
+import com.suvanl.fixmylinks.ui.components.appbar.menu.OverflowMenu
 import com.suvanl.fixmylinks.ui.components.appbar.ProvideAppBarActions
+import com.suvanl.fixmylinks.ui.components.appbar.menu.HintsDropdownItem
 import com.suvanl.fixmylinks.ui.navigation.transition.NavigationEnterTransitionMode
 import com.suvanl.fixmylinks.ui.navigation.transition.NavigationExitTransitionMode
 import com.suvanl.fixmylinks.ui.navigation.transition.enterNavigationTransition
@@ -75,10 +77,11 @@ fun FmlNavHost(
         ) {
             composable(route = FmlScreen.SelectRuleType.route) { navBackStackEntry ->
                 val viewModel = navBackStackEntry.sharedViewModel<AddRuleViewModel>(navController)
+                val isCompactLayout = windowWidthSize == WindowWidthSizeClass.Compact
 
                 // Show "Next" button as top app bar action on Medium and Expanded layouts
                 ProvideAppBarActions(
-                    shouldShowActions = windowWidthSize != WindowWidthSizeClass.Compact
+                    shouldShowActions = !isCompactLayout
                 ) {
                     Button(
                         onClick = {
@@ -95,7 +98,7 @@ fun FmlNavHost(
                 }
 
                 SelectRuleTypeScreen(
-                    showNextButton = windowWidthSize == WindowWidthSizeClass.Compact,
+                    showNextButton = isCompactLayout,
                     onSelectedMutationTypeChanged = { selectedOption ->
                         viewModel.updateSelectedMutationType(
                             selection = MutationType.valueOf(selectedOption.id)
@@ -112,16 +115,37 @@ fun FmlNavHost(
 
             composable(route = FmlScreen.AddRule.route) { navBackStackEntry ->
                 val viewModel = navBackStackEntry.sharedViewModel<AddRuleViewModel>(navController)
+                val isCompactLayout = windowWidthSize == WindowWidthSizeClass.Compact
+
+                fun popCurrentNavGraph() {
+                    navController.popBackStack(
+                        route = NestedNavGraphParent.NewRuleFlow.route,
+                        inclusive = true
+                    )
+                }
+
+                ProvideAppBarActions {
+                    if (!isCompactLayout) {
+                        Button(
+                            onClick = { popCurrentNavGraph() }
+                        ) {
+                            Text(text = stringResource(id = R.string.save))
+                        }
+                    }
+
+                    OverflowMenu {
+                        HintsDropdownItem(
+                            isChecked = true,
+                            onClick = { /*TODO*/ },
+                            onCheckedChange = {}
+                        )
+                    }
+                }
 
                 AddRuleScreen(
                     mutationType = viewModel.mutationType.collectAsStateWithLifecycle().value,
-                    showSaveButton = windowWidthSize == WindowWidthSizeClass.Compact,
-                    onSaveClick = {
-                        navController.popBackStack(
-                            route = NestedNavGraphParent.NewRuleFlow.route,
-                            inclusive = true
-                        )
-                    }
+                    showSaveButton = isCompactLayout,
+                    onSaveClick = { popCurrentNavGraph() }
                 )
             }
         }

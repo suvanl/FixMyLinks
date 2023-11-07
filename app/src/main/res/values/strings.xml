@@ -44,4 +44,6 @@
     <string name="enable_rule_supporting_text">Start applying this rule now</string>
     <string name="backup_to_cloud">Backup to cloud</string>
     <string name="backup_to_cloud_supporting_text">Sync rule across signed-in devices</string>
+    <string name="content_description_more_options">More options</string>
+    <string name="show_hints">Show hints</string>
 </resources>

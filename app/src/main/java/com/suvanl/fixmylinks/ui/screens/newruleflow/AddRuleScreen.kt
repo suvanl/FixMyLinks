@@ -112,7 +112,13 @@ private fun AddRuleScreenBody(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        SwitchList(items = ruleOptions)
+        SwitchList(
+            items = ruleOptions,
+            modifier = Modifier
+                .then(
+                    if (!showSaveButton) Modifier.padding(bottom = 32.dp) else Modifier
+                )
+        )
 
         if (showSaveButton) {
             Spacer(modifier = Modifier.weight(1F))
