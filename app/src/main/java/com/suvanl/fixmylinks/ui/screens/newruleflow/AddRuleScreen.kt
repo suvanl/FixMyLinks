@@ -52,14 +52,14 @@ fun AddRuleScreen(
     val ruleOptions = listOf(
         SwitchListItemState(
             headlineText = stringResource(id = R.string.enable),
-            supportingText = "Start applying this rule now",
+            supportingText = stringResource(R.string.enable_rule_supporting_text),
             leadingIcon = Icons.Outlined.CheckCircle,
             isSwitchChecked = isRuleEnabled,
             onSwitchCheckedChange = { isRuleEnabled = it }
         ),
         SwitchListItemState(
-            headlineText = "Backup to cloud",
-            supportingText = "Sync rule across signed-in devices",
+            headlineText = stringResource(R.string.backup_to_cloud),
+            supportingText = stringResource(R.string.backup_to_cloud_supporting_text),
             leadingIcon = Icons.Outlined.Backup,
             isSwitchChecked = isBackupEnabled,
             onSwitchCheckedChange = { isBackupEnabled = it },
