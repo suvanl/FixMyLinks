@@ -47,11 +47,11 @@ fun RadioGroup(
         RadioOption(
             data = optionData,
             isSelected = optionData.id == selectedOptionId,
-            spacerHeight = if (optionIndex == options.lastIndex) {
-                0.dp
-            } else {
-                customSpacerHeight ?: RadioOptionDefaults.spacerHeight
-            },
+            spacerHeight = calculateSpacerHeight(
+                currentIndex = optionIndex,
+                lastIndex = options.lastIndex,
+                customHeight = customSpacerHeight
+            ),
             onClick = { onOptionClick(optionData) },
             modifier = Modifier
                 .fillMaxWidth()
@@ -79,11 +79,11 @@ fun RadioGroup(
         RadioOption(
             data = optionData,
             isSelected = optionData == selectedOption,
-            spacerHeight = if (optionIndex == options.lastIndex) {
-                0.dp
-            } else {
-                customSpacerHeight ?: RadioOptionDefaults.spacerHeight
-            },
+            spacerHeight = calculateSpacerHeight(
+                optionIndex,
+                options.lastIndex,
+                customSpacerHeight
+            ),
             onClick = {
                 onOptionSelected(
                     options.find { it == optionData } ?: options.first()
@@ -93,6 +93,14 @@ fun RadioGroup(
                 .fillMaxWidth()
                 .padding(horizontal = radioOptionHorizontalPadding)
         )
+    }
+}
+
+private fun calculateSpacerHeight(currentIndex: Int, lastIndex: Int, customHeight: Dp?): Dp {
+    return if (currentIndex == lastIndex) {
+        0.dp
+    } else {
+        customHeight ?: RadioOptionDefaults.spacerHeight
     }
 }
 
