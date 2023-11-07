@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
@@ -49,13 +48,17 @@ data class RadioOptionData(
     }
 }
 
+object RadioOptionDefaults {
+    val spacerHeight = 40.dp
+}
+
 @Composable
 fun RadioOption(
     data: RadioOptionData,
     isSelected: Boolean,
-    spacerHeight: Dp,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    spacerHeight: Dp = RadioOptionDefaults.spacerHeight,
 ) {
     val rowContentDescription = stringResource(
         R.string.radio_option_content_description,
@@ -65,7 +68,6 @@ fun RadioOption(
     Column {
         Row(
             modifier = modifier
-                .fillMaxWidth()
                 .selectable(
                     selected = isSelected,
                     onClick = onClick,
