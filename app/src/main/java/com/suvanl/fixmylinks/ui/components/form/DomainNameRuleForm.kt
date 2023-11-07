@@ -38,7 +38,7 @@ fun DomainNameRuleForm(
     var initialDomainNameText by rememberSaveable { mutableStateOf("") }
     var targetDomainNameText by rememberSaveable { mutableStateOf("") }
 
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = modifier) {
         // "Rule name"
         RuleNameField(
             text = ruleNameText,
@@ -114,7 +114,7 @@ fun DomainNameRuleForm(
                 keyboardType = KeyboardType.Uri,
                 imeAction = ImeAction.Done
             ),
-            modifier = modifier
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

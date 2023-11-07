@@ -46,4 +46,7 @@
     <string name="backup_to_cloud_supporting_text">Sync rule across signed-in devices</string>
     <string name="content_description_more_options">More options</string>
     <string name="show_hints">Show hints</string>
+    <string name="domain_name">Domain name</string>
+    <string name="domain_name_supporting_text">The domain name that links of should be affected by this rule.</string>
+    <string name="delete">Delete</string>
 </resources>

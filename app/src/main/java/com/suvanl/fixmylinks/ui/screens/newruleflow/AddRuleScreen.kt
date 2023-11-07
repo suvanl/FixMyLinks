@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -29,7 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
+import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleForm
 import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleForm
+import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleForm
 import com.suvanl.fixmylinks.ui.components.list.SwitchList
 import com.suvanl.fixmylinks.ui.components.list.SwitchListItemState
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
@@ -74,14 +77,52 @@ fun AddRuleScreen(
         onSaveClick = onSaveClick,
         modifier = modifier
     ) {
-        DomainNameRuleForm(
-            showHints = showFormFieldHints,
-            interFieldSpacing = interFieldSpacing,
-            onRuleNameChange = {},
-            onInitialDomainNameChange = {},
-            onTargetDomainNameChange = {},
-            modifier = Modifier.fillMaxWidth()
-        )
+        when (mutationType) {
+            MutationType.DOMAIN_NAME -> {
+                DomainNameRuleForm(
+                    showHints = showFormFieldHints,
+                    interFieldSpacing = interFieldSpacing,
+                    onRuleNameChange = {},
+                    onInitialDomainNameChange = {},
+                    onTargetDomainNameChange = {},
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            MutationType.URL_PARAMS_ALL -> {
+                AllUrlParamsRuleForm(
+                    showHints = showFormFieldHints,
+                    interFieldSpacing = interFieldSpacing,
+                    onRuleNameChange = {},
+                    onDomainNameChange = {},
+                )
+            }
+
+            MutationType.URL_PARAMS_SPECIFIC -> {
+                SpecificUrlParamsRuleForm(
+                    showHints = showFormFieldHints,
+                    interFieldSpacing = interFieldSpacing,
+                    addedParamNames = listOf("TODO"),
+                    onRuleNameChange = {},
+                    onDomainNameChange = {},
+                    onClickAddParam = {},
+                    onClickDismissParam = {},
+                )
+            }
+
+            MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
+                DomainNameRuleForm(
+                    showHints = showFormFieldHints,
+                    interFieldSpacing = interFieldSpacing,
+                    onRuleNameChange = {},
+                    onInitialDomainNameChange = {},
+                    onTargetDomainNameChange = {},
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            else -> Text(text = "Unselectable mutation type - ${mutationType.name}")
+        }
     }
 }
 
@@ -101,6 +142,7 @@ private fun AddRuleScreenBody(
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 16.dp)
             .padding(top = 16.dp)
+            .imePadding()
     ) {
         Text(
             text = "Let's create a new ${mutationType.name} rule",
