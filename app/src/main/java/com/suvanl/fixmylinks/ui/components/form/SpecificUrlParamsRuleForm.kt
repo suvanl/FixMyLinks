@@ -40,7 +40,6 @@ import com.suvanl.fixmylinks.ui.util.PreviewContainer
 @Composable
 fun SpecificUrlParamsRuleForm(
     showHints: Boolean,
-    interFieldSpacing: Dp,
     addedParamNames: List<String>,
     ruleNameText: String,
     domainNameText: String,
@@ -48,7 +47,8 @@ fun SpecificUrlParamsRuleForm(
     onDomainNameChange: (String) -> Unit,
     onClickAddParam: () -> Unit,
     onClickDismissParam: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    interFieldSpacing: Dp = FormDefaults.InterFieldSpacing,
 ) {
     Column(modifier = modifier) {
         // "Rule name"

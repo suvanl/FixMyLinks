@@ -28,11 +28,11 @@ import com.suvanl.fixmylinks.ui.components.form.common.RuleNameField
 @Composable
 fun DomainNameRuleForm(
     showHints: Boolean,
-    interFieldSpacing: Dp,
     onRuleNameChange: (String) -> Unit,
     onInitialDomainNameChange: (String) -> Unit,
     onTargetDomainNameChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    interFieldSpacing: Dp = FormDefaults.InterFieldSpacing,
 ) {
     var ruleNameText by rememberSaveable { mutableStateOf("") }
     var initialDomainNameText by rememberSaveable { mutableStateOf("") }

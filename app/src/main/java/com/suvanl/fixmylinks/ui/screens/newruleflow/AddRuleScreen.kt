@@ -45,11 +45,6 @@ import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
 
-/**
- * The amount of vertical space between form fields
- */
-private val interFieldSpacing = 12.dp
-
 @Composable
 fun AddRuleScreen(
     showSaveButton: Boolean,
@@ -89,7 +84,6 @@ fun AddRuleScreen(
             MutationType.DOMAIN_NAME -> {
                 DomainNameRuleForm(
                     showHints = showFormFieldHints,
-                    interFieldSpacing = interFieldSpacing,
                     onRuleNameChange = {},
                     onInitialDomainNameChange = {},
                     onTargetDomainNameChange = {},
@@ -100,7 +94,6 @@ fun AddRuleScreen(
             MutationType.URL_PARAMS_ALL -> {
                 AllUrlParamsRuleForm(
                     showHints = showFormFieldHints,
-                    interFieldSpacing = interFieldSpacing,
                     onRuleNameChange = {},
                     onDomainNameChange = {},
                 )
@@ -116,7 +109,6 @@ fun AddRuleScreen(
 
                 SpecificUrlParamsRuleForm(
                     showHints = showFormFieldHints,
-                    interFieldSpacing = interFieldSpacing,
                     addedParamNames = addedParamNames,
                     ruleNameText = ruleNameText,
                     domainNameText = domainNameText,
@@ -140,7 +132,6 @@ fun AddRuleScreen(
             MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
                 DomainNameRuleForm(
                     showHints = showFormFieldHints,
-                    interFieldSpacing = interFieldSpacing,
                     onRuleNameChange = {},
                     onInitialDomainNameChange = {},
                     onTargetDomainNameChange = {},

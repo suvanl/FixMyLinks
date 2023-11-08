@@ -21,10 +21,10 @@ import com.suvanl.fixmylinks.ui.util.PreviewContainer
 @Composable
 fun AllUrlParamsRuleForm(
     showHints: Boolean,
-    interFieldSpacing: Dp,
     onRuleNameChange: (String) -> Unit,
     onDomainNameChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    interFieldSpacing: Dp = FormDefaults.InterFieldSpacing,
 ) {
     var ruleNameText by rememberSaveable { mutableStateOf("") }
     var domainNameText by rememberSaveable { mutableStateOf("") }
