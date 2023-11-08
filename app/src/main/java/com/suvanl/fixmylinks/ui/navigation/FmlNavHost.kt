@@ -37,7 +37,7 @@ import com.suvanl.fixmylinks.ui.screens.RulesScreen
 import com.suvanl.fixmylinks.ui.screens.SavedScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
-import com.suvanl.fixmylinks.viewmodel.SelectRuleTypeViewModel
+import com.suvanl.fixmylinks.viewmodel.newruleflow.SelectRuleTypeViewModel
 
 @Composable
 fun FmlNavHost(

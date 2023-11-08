@@ -1,4 +1,4 @@
-package com.suvanl.fixmylinks.viewmodel
+package com.suvanl.fixmylinks.viewmodel.newruleflow
 
 import androidx.lifecycle.ViewModel
 import com.suvanl.fixmylinks.domain.mutation.MutationType

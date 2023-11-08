@@ -31,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleForm
@@ -41,6 +43,7 @@ import com.suvanl.fixmylinks.ui.components.list.SwitchList
 import com.suvanl.fixmylinks.ui.components.list.SwitchListItemState
 import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
+import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
 
 /**
  * The amount of vertical space between form fields
@@ -104,23 +107,29 @@ fun AddRuleScreen(
             }
 
             MutationType.URL_PARAMS_SPECIFIC -> {
+                val viewModel = viewModel<AddSpecificUrlParamsRuleViewModel>()
+                val ruleNameText by viewModel.ruleName.collectAsStateWithLifecycle()
+                val domainNameText by viewModel.domainName.collectAsStateWithLifecycle()
+                val addedParamNames by viewModel.removableParams.collectAsStateWithLifecycle()
+
                 var openParamNameDialog by remember { mutableStateOf(false) }
-                var addedParamNames by rememberSaveable { mutableStateOf<List<String>>(listOf()) }
 
                 SpecificUrlParamsRuleForm(
                     showHints = showFormFieldHints,
                     interFieldSpacing = interFieldSpacing,
                     addedParamNames = addedParamNames,
-                    onRuleNameChange = {},
-                    onDomainNameChange = {},
+                    ruleNameText = ruleNameText,
+                    domainNameText = domainNameText,
+                    onRuleNameChange = viewModel::setRuleName,
+                    onDomainNameChange = viewModel::setDomainName,
                     onClickAddParam = { openParamNameDialog = true },
-                    onClickDismissParam = {}
+                    onClickDismissParam = viewModel::removeParam,
                 )
 
                 if (openParamNameDialog) {
                     AddParameterNameDialog(
                         onConfirmation = {
-                            addedParamNames += it
+                            viewModel.addParam(it)
                             openParamNameDialog = false
                         },
                         onDismissRequest = { openParamNameDialog = false }

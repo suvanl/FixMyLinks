@@ -1,6 +1,9 @@
 package com.suvanl.fixmylinks.ui.components.form
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -21,11 +24,6 @@ import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -44,23 +42,19 @@ fun SpecificUrlParamsRuleForm(
     showHints: Boolean,
     interFieldSpacing: Dp,
     addedParamNames: List<String>,
+    ruleNameText: String,
+    domainNameText: String,
     onRuleNameChange: (String) -> Unit,
     onDomainNameChange: (String) -> Unit,
     onClickAddParam: () -> Unit,
     onClickDismissParam: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var ruleNameText by rememberSaveable { mutableStateOf("") }
-    var domainNameText by rememberSaveable { mutableStateOf("") }
-
     Column(modifier = modifier) {
         // "Rule name"
         RuleNameField(
             text = ruleNameText,
-            onValueChange = {
-                ruleNameText = it
-                onRuleNameChange(it)
-            },
+            onValueChange = onRuleNameChange,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -70,10 +64,7 @@ fun SpecificUrlParamsRuleForm(
         DomainNameField(
             value = domainNameText,
             showHints = showHints,
-            onValueChange = {
-                domainNameText = it
-                onDomainNameChange(it)
-            },
+            onValueChange = onDomainNameChange,
             isLastFieldInForm = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -117,16 +108,18 @@ private fun ParamsChipGroup(
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
+            .fillMaxWidth()
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioLowBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            )
     ) {
         paramNames.forEachIndexed { index, name ->
-            var selected by remember { mutableStateOf(false) }
-
             InputChip(
-                selected = selected,
-                onClick = {
-                    selected = !selected
-                    onChipDismiss(index)
-                },
+                selected = false,
+                onClick = { onChipDismiss(index) },
                 label = { Text(text = name) },
                 trailingIcon = {
                     Icon(
@@ -152,6 +145,8 @@ private fun SpecificUrlParamsRuleFormPreview() {
             interFieldSpacing = 16.dp,
             showHints = true,
             addedParamNames = listOf("param1", "ok", "cool", "t", "calm", "g", "igshid"),
+            domainNameText = "",
+            ruleNameText = "",
             onRuleNameChange = {},
             onDomainNameChange = {},
             onClickAddParam = {},
