@@ -1,10 +1,10 @@
 package com.suvanl.fixmylinks.domain.mutation
 
-import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutation
-import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutation
-import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndSpecificUrlParamsMutation
-import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutation
-import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutation
+import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndSpecificUrlParamsMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.rule.BuiltInRules
 import com.suvanl.fixmylinks.domain.util.UriUtils.removeSubdomain
 import java.net.URI
@@ -23,7 +23,7 @@ class MutateUriUseCase {
         val replaceDomainNameUseCase = ReplaceDomainNameUseCase()
 
         when (triggeredRule) {
-            is DomainNameMutation -> {
+            is DomainNameMutationModel -> {
                 return replaceDomainNameUseCase(
                     uri = uriToMutate,
                     mutationInfo = triggeredRule.mutationInfo,
@@ -31,11 +31,11 @@ class MutateUriUseCase {
                 )
             }
 
-            is AllUrlParamsMutation -> {
+            is AllUrlParamsMutationModel -> {
                 return removeAllUrlParamsUseCase(uriToMutate)
             }
 
-            is SpecificUrlParamsMutation -> {
+            is SpecificUrlParamsMutationModel -> {
                 return removeSpecificUrlParamsUseCase(
                     uri = uriToMutate,
                     paramsToRemove = triggeredRule.mutationInfo.removableParams,
@@ -43,7 +43,7 @@ class MutateUriUseCase {
                 )
             }
 
-            is DomainNameAndAllUrlParamsMutation -> {
+            is DomainNameAndAllUrlParamsMutationModel -> {
                 val uriWithMutatedDomainName = replaceDomainNameUseCase(
                     uri = uriToMutate,
                     mutationInfo = triggeredRule.mutationInfo,
@@ -61,7 +61,7 @@ class MutateUriUseCase {
                 )
             }
 
-            is DomainNameAndSpecificUrlParamsMutation -> {
+            is DomainNameAndSpecificUrlParamsMutationModel -> {
                 throw NotImplementedError(
                     "DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC is not currently supported"
                 )

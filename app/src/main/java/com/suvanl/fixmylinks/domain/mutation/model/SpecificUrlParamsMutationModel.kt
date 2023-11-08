@@ -2,16 +2,15 @@ package com.suvanl.fixmylinks.domain.mutation.model
 
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 
-data class DomainNameMutationInfo(
-    val from: String,
-    val to: String
+data class SpecificUrlParamsMutationInfo(
+    val removableParams: List<String>
 )
 
-data class DomainNameMutation(
+data class SpecificUrlParamsMutationModel(
     override val name: String,
-    override val mutationType: MutationType = MutationType.DOMAIN_NAME,
+    override val mutationType: MutationType,
     override val triggerDomain: String,
     override val dateModifiedTimestamp: Long? = null,
     override val isLocalOnly: Boolean,
-    val mutationInfo: DomainNameMutationInfo,
-) : BaseMutation
+    val mutationInfo: SpecificUrlParamsMutationInfo,
+) : BaseMutationModel

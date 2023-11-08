@@ -7,7 +7,7 @@ import com.suvanl.fixmylinks.domain.mutation.MutationType
 //  annotations + KSP to ensure that only certain types can be used as allowed types of mutationInfo
 //  (such as a `@MutationInfo`) annotation, perhaps with a parameter that takes in the class this
 //  mutationInfo belongs to, such as `@MutationInfo(AllUrlParamsMutation::class)`.
-interface BaseMutation {
+interface BaseMutationModel {
     /**
      * The user-defined name of the rule for easy identification
      */

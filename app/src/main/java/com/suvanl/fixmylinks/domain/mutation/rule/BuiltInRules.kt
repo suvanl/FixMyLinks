@@ -1,13 +1,13 @@
 package com.suvanl.fixmylinks.domain.mutation.rule
 
 import com.suvanl.fixmylinks.domain.mutation.MutationType
-import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutation
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
-import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutation
+import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationInfo
 
 object BuiltInRules {
-    private val SpotifyTrackingParamsRule = SpecificUrlParamsMutation(
+    private val SpotifyTrackingParamsRule = SpecificUrlParamsMutationModel(
         name = "Spotify - tracking parameters",
         mutationType = MutationType.URL_PARAMS_SPECIFIC,
         triggerDomain = "spotify.com",
@@ -22,7 +22,7 @@ object BuiltInRules {
         )
     )
 
-    private val InstagramTrackingParamsRule = SpecificUrlParamsMutation(
+    private val InstagramTrackingParamsRule = SpecificUrlParamsMutationModel(
         name = "Instagram - tracking parameters",
         mutationType = MutationType.URL_PARAMS_SPECIFIC,
         triggerDomain = "instagram.com",
@@ -30,7 +30,7 @@ object BuiltInRules {
         mutationInfo = SpecificUrlParamsMutationInfo(removableParams = listOf("igshid"))
     )
 
-    private val XtoTwitterRule = DomainNameAndAllUrlParamsMutation(
+    private val XtoTwitterRule = DomainNameAndAllUrlParamsMutationModel(
         name = "X.com to Twitter.com",
         mutationType = MutationType.DOMAIN_NAME,
         triggerDomain = "x.com",
