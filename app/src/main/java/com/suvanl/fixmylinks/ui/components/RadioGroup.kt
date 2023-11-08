@@ -2,17 +2,18 @@ package com.suvanl.fixmylinks.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 
 private val radioOptionHorizontalPadding = 8.dp
-private val radioOptionDefaultSpacerHeight = 40.dp
 
 @Composable
 private fun BaseRadioGroup(
@@ -36,7 +37,8 @@ fun RadioGroup(
     options: List<RadioOptionData>,
     selectedOptionId: String,
     onOptionClick: (currentOption: RadioOptionData) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    customSpacerHeight: Dp? = null,
 ) {
     BaseRadioGroup(
         options = options,
@@ -45,9 +47,15 @@ fun RadioGroup(
         RadioOption(
             data = optionData,
             isSelected = optionData.id == selectedOptionId,
-            spacerHeight = if (optionIndex == options.lastIndex) 0.dp else radioOptionDefaultSpacerHeight,
+            spacerHeight = calculateSpacerHeight(
+                currentIndex = optionIndex,
+                lastIndex = options.lastIndex,
+                customHeight = customSpacerHeight
+            ),
             onClick = { onOptionClick(optionData) },
-            modifier = Modifier.padding(horizontal = radioOptionHorizontalPadding)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = radioOptionHorizontalPadding)
         )
     }
 }
@@ -59,7 +67,8 @@ fun RadioGroup(
 fun RadioGroup(
     options: List<RadioOptionData>,
     selectedState: MutableState<RadioOptionData>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    customSpacerHeight: Dp? = null,
 ) {
     val (selectedOption, onOptionSelected) = selectedState
 
@@ -70,14 +79,28 @@ fun RadioGroup(
         RadioOption(
             data = optionData,
             isSelected = optionData == selectedOption,
-            spacerHeight = if (optionIndex == options.lastIndex) 0.dp else radioOptionDefaultSpacerHeight,
+            spacerHeight = calculateSpacerHeight(
+                optionIndex,
+                options.lastIndex,
+                customSpacerHeight
+            ),
             onClick = {
                 onOptionSelected(
                     options.find { it == optionData } ?: options.first()
                 )
             },
-            modifier = Modifier.padding(horizontal = radioOptionHorizontalPadding)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = radioOptionHorizontalPadding)
         )
+    }
+}
+
+private fun calculateSpacerHeight(currentIndex: Int, lastIndex: Int, customHeight: Dp?): Dp {
+    return if (currentIndex == lastIndex) {
+        0.dp
+    } else {
+        customHeight ?: RadioOptionDefaults.spacerHeight
     }
 }
 
@@ -115,7 +138,8 @@ private fun RadioGroupPreview() {
         RadioGroup(
             options = radioOptions,
             selectedOptionId = "calls",
-            onOptionClick = { /* do nothing */ }
+            onOptionClick = { /* do nothing */ },
+            customSpacerHeight = 32.dp,
         )
     }
 }

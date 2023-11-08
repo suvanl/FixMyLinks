@@ -4,8 +4,10 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -68,7 +70,8 @@ fun SelectRuleTypeScreen(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(vertical = 24.dp, horizontal = 8.dp)
+            .padding(horizontal = 8.dp)
+            .padding(top = 16.dp)
             .semantics { contentDescription = "Select Rule Type Screen" },
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -83,15 +86,16 @@ fun SelectRuleTypeScreen(
         // in cases where this button is provided inside the Top App Bar instead, i.e.,
         // medium and expanded layouts.
         if (showNextButton) {
+            Spacer(modifier = Modifier.weight(1F))
+
             Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .weight(1F, fill = false)
+                modifier = modifier.fillMaxWidth()
             ) {
                 Button(
                     onClick = onNextButtonClick,
                     modifier = modifier
                         .fillMaxWidth()
+                        .navigationBarsPadding()
                         .padding(bottom = 32.dp)
                         .padding(horizontal = 8.dp)
                 ) {

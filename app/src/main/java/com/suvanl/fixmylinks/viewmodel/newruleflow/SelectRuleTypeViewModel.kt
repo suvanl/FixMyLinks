@@ -1,12 +1,11 @@
-package com.suvanl.fixmylinks.viewmodel
+package com.suvanl.fixmylinks.viewmodel.newruleflow
 
 import androidx.lifecycle.ViewModel
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class AddRuleViewModel : ViewModel() {
-
+class SelectRuleTypeViewModel : ViewModel() {
     private val _mutationType = MutableStateFlow(MutationType.DOMAIN_NAME)
     val mutationType = _mutationType.asStateFlow()
 

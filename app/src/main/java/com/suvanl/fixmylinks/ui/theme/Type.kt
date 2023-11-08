@@ -22,7 +22,11 @@ private fun defaultCustomFont(
     )
 }
 
-val TIGHT_LETTER_SPACING = (-0.035F).sp
+object LetterSpacingDefaults {
+    val Tight = (-0.035F).sp
+    val Tighter = Tight.times(8)
+    val ExtraTight = Tight.times(16)
+}
 
 private val defaultTypography = Typography()
 val Typography = Typography(
@@ -86,13 +90,18 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
-        letterSpacing = TIGHT_LETTER_SPACING
+        letterSpacing = LetterSpacingDefaults.Tight
     ),
     bodyMedium = defaultTypography.bodyMedium.copy(
-        fontFamily = defaultCustomFont()
+        fontFamily = defaultCustomFont(),
+        letterSpacing = LetterSpacingDefaults.Tight
     ),
     bodySmall = defaultTypography.bodySmall.copy(
         fontFamily = defaultCustomFont()
     )
 )
+
+object TextStyleDefaults {
+    val dropdownItemStyle = Typography.bodyLarge
+}
 

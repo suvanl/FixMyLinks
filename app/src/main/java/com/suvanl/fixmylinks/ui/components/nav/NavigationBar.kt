@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.suvanl.fixmylinks.ui.navigation.FmlScreen
-import com.suvanl.fixmylinks.ui.theme.TIGHT_LETTER_SPACING
+import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 
 @Composable
 fun FmlNavigationBar(
@@ -46,7 +46,7 @@ fun FmlNavigationBar(
                     Column {
                         Text(
                             text = stringResource(id = screen.label),
-                            letterSpacing = TIGHT_LETTER_SPACING,
+                            letterSpacing = LetterSpacingDefaults.Tight,
                             fontWeight = if (isSelected) {
                                 FontWeight.Bold
                             } else {
