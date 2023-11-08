@@ -12,7 +12,11 @@ class ReplaceDomainNameUseCase {
         uri.apply {
             return MutatedUri(
                 scheme = scheme,
-                host = if (useWwwSubdomain) "www.${mutationInfo.to}" else mutationInfo.to,
+                host = if (useWwwSubdomain) {
+                    "www.${mutationInfo.targetDomain}"
+                } else {
+                    mutationInfo.targetDomain
+                },
                 path = path,
                 rawQuery = rawQuery
             ).build()

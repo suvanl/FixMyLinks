@@ -3,8 +3,8 @@ package com.suvanl.fixmylinks.domain.mutation.model
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 
 data class DomainNameMutationInfo(
-    val from: String,
-    val to: String
+    val initialDomain: String,
+    val targetDomain: String
 )
 
 data class DomainNameMutationModel(

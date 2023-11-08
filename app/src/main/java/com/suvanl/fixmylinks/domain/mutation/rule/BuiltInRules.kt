@@ -35,7 +35,7 @@ object BuiltInRules {
         mutationType = MutationType.DOMAIN_NAME,
         triggerDomain = "x.com",
         isLocalOnly = true,
-        mutationInfo = DomainNameMutationInfo(from = "x.com", to = "twitter.com")
+        mutationInfo = DomainNameMutationInfo(initialDomain = "x.com", targetDomain = "twitter.com")
     )
 
     val all = listOf(
