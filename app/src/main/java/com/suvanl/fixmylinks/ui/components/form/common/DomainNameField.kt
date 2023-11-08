@@ -19,6 +19,7 @@ import com.suvanl.fixmylinks.ui.animation.TransitionDefaults
 fun DomainNameField(
     value: String,
     showHints: Boolean,
+    isLastFieldInForm: Boolean,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -45,7 +46,7 @@ fun DomainNameField(
         },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Uri,
-            imeAction = ImeAction.Next
+            imeAction = if (!isLastFieldInForm) ImeAction.Next else ImeAction.Done
         ),
         modifier = modifier
     )

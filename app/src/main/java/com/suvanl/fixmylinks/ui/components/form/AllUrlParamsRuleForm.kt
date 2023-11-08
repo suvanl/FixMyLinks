@@ -50,6 +50,7 @@ fun AllUrlParamsRuleForm(
                 domainNameText = it
                 onDomainNameChange(it)
             },
+            isLastFieldInForm = true,
             modifier = Modifier.fillMaxWidth()
         )
     }
