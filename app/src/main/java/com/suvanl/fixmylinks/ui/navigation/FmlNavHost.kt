@@ -37,7 +37,7 @@ import com.suvanl.fixmylinks.ui.screens.RulesScreen
 import com.suvanl.fixmylinks.ui.screens.SavedScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
-import com.suvanl.fixmylinks.viewmodel.AddRuleViewModel
+import com.suvanl.fixmylinks.viewmodel.SelectRuleTypeViewModel
 
 @Composable
 fun FmlNavHost(
@@ -78,8 +78,10 @@ fun FmlNavHost(
             startDestination = FmlScreen.SelectRuleType.route,
             route = NestedNavGraphParent.NewRuleFlow.route
         ) {
-            composable(route = FmlScreen.SelectRuleType.route) { navBackStackEntry ->
-                val viewModel = navBackStackEntry.sharedViewModel<AddRuleViewModel>(navController)
+            composable(route = FmlScreen.SelectRuleType.route) {
+                val viewModel = viewModel<SelectRuleTypeViewModel>()
+                val mutationType by viewModel.mutationType.collectAsStateWithLifecycle()
+
                 val isCompactLayout = windowWidthSize == WindowWidthSizeClass.Compact
 
                 // Show "Next" button as top app bar action on Medium and Expanded layouts
@@ -109,15 +111,23 @@ fun FmlNavHost(
                     },
                     onNextButtonClick = {
                         navController.navigateSingleTop(
-                            route = FmlScreen.AddRule.route,
+                            route = "${FmlScreen.AddRule.route}/${mutationType.name}",
                             popUpToStartDestination = false
                         )
                     }
                 )
             }
 
-            composable(route = FmlScreen.AddRule.route) { navBackStackEntry ->
-                val viewModel = navBackStackEntry.sharedViewModel<AddRuleViewModel>(navController)
+            composable(
+                route = FmlScreen.AddRule.routeWithArgs,
+                arguments = FmlScreen.AddRule.args
+            ) { navBackStackEntry ->
+                val mutationTypeArg =
+                    navBackStackEntry.arguments?.getString(FmlScreen.AddRule.mutationTypeArg)
+
+                val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
+                    ?: MutationType.FALLBACK
+
                 val isCompactLayout = windowWidthSize == WindowWidthSizeClass.Compact
                 var hintsOptionCheckedState by remember { mutableStateOf(true) }
 
@@ -146,7 +156,7 @@ fun FmlNavHost(
                 }
 
                 AddRuleScreen(
-                    mutationType = viewModel.mutationType.collectAsStateWithLifecycle().value,
+                    mutationType = mutationType,
                     showFormFieldHints = hintsOptionCheckedState,
                     showSaveButton = isCompactLayout,
                     onSaveClick = { popCurrentNavGraph() }

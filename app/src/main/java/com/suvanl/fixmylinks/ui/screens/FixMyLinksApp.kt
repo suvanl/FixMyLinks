@@ -38,6 +38,7 @@ import com.suvanl.fixmylinks.ui.components.appbar.TopAppBarSize
 import com.suvanl.fixmylinks.ui.navigation.FmlNavHost
 import com.suvanl.fixmylinks.ui.navigation.FmlScreen
 import com.suvanl.fixmylinks.ui.navigation.allFmlScreens
+import com.suvanl.fixmylinks.ui.navigation.getBaseRoute
 import com.suvanl.fixmylinks.ui.navigation.navigateSingleTop
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
 
@@ -54,7 +55,8 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    val currentScreen = allFmlScreens.find { currentDestination?.route == it.route }
+    val currentBaseRoute = getBaseRoute(currentDestination?.route)
+    val currentScreen = allFmlScreens.find { currentBaseRoute == it.route }
 
     // The screens on which the Floating Action Button (FAB) should be displayed
     val displayFabOn = listOf(FmlScreen.Home, FmlScreen.Rules)
@@ -76,15 +78,15 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
         WindowWidthSizeClass.Medium -> true
         WindowWidthSizeClass.Expanded -> true
         else -> false
-    } && hideNavBarOn.none { it.route == currentDestination?.route }
+    } && hideNavBarOn.none { it.route == currentBaseRoute }
 
     val shouldShowNavBar = when (windowSize.widthSizeClass) {
         WindowWidthSizeClass.Compact -> true
         else -> false
-    } && hideNavBarOn.none { it.route == currentDestination?.route }
+    } && hideNavBarOn.none { it.route == currentBaseRoute }
 
-    val shouldShowTopAppBar = hideNavBarOn.any { it.route == currentDestination?.route }
-    val shouldShowFab = displayFabOn.any { it.route == currentDestination?.route }
+    val shouldShowTopAppBar = hideNavBarOn.any { it.route == currentBaseRoute }
+    val shouldShowFab = displayFabOn.any { it.route == currentBaseRoute }
 
     FixMyLinksTheme {
         Scaffold(
