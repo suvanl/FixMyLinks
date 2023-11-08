@@ -43,6 +43,7 @@ import com.suvanl.fixmylinks.ui.components.list.SwitchList
 import com.suvanl.fixmylinks.ui.components.list.SwitchListItemState
 import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
+import com.suvanl.fixmylinks.viewmodel.newruleflow.AddDomainNameRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
 
 @Composable
@@ -82,12 +83,19 @@ fun AddRuleScreen(
     ) {
         when (mutationType) {
             MutationType.DOMAIN_NAME -> {
+                val viewModel = viewModel<AddDomainNameRuleViewModel>()
+                val ruleNameText by viewModel.ruleName.collectAsStateWithLifecycle()
+                val initialDomainNameText by viewModel.initialDomainName.collectAsStateWithLifecycle()
+                val targetDomainNameText by viewModel.targetDomainName.collectAsStateWithLifecycle()
+
                 DomainNameRuleForm(
                     showHints = showFormFieldHints,
-                    onRuleNameChange = {},
-                    onInitialDomainNameChange = {},
-                    onTargetDomainNameChange = {},
-                    modifier = Modifier.fillMaxWidth()
+                    ruleNameText = ruleNameText,
+                    initialDomainNameText = initialDomainNameText,
+                    targetDomainNameText = targetDomainNameText,
+                    onRuleNameChange = viewModel::setRuleName,
+                    onInitialDomainNameChange = viewModel::setInitialDomainName,
+                    onTargetDomainNameChange = viewModel::setTargetDomainName,
                 )
             }
 
@@ -130,12 +138,21 @@ fun AddRuleScreen(
             }
 
             MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
+                val viewModel = viewModel<AddDomainNameRuleViewModel>()
+                viewModel.setRemoveAllUrlParams(true)
+
+                val ruleNameText by viewModel.ruleName.collectAsStateWithLifecycle()
+                val initialDomainNameText by viewModel.initialDomainName.collectAsStateWithLifecycle()
+                val targetDomainNameText by viewModel.targetDomainName.collectAsStateWithLifecycle()
+
                 DomainNameRuleForm(
                     showHints = showFormFieldHints,
-                    onRuleNameChange = {},
-                    onInitialDomainNameChange = {},
-                    onTargetDomainNameChange = {},
-                    modifier = Modifier.fillMaxWidth()
+                    ruleNameText = ruleNameText,
+                    initialDomainNameText = initialDomainNameText,
+                    targetDomainNameText = targetDomainNameText,
+                    onRuleNameChange = viewModel::setRuleName,
+                    onInitialDomainNameChange = viewModel::setInitialDomainName,
+                    onTargetDomainNameChange = viewModel::setTargetDomainName,
                 )
             }
 

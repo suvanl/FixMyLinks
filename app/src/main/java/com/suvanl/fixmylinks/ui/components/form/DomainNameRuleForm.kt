@@ -12,10 +12,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -28,24 +24,20 @@ import com.suvanl.fixmylinks.ui.components.form.common.RuleNameField
 @Composable
 fun DomainNameRuleForm(
     showHints: Boolean,
+    ruleNameText: String,
+    initialDomainNameText: String,
+    targetDomainNameText: String,
     onRuleNameChange: (String) -> Unit,
     onInitialDomainNameChange: (String) -> Unit,
     onTargetDomainNameChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     interFieldSpacing: Dp = FormDefaults.InterFieldSpacing,
 ) {
-    var ruleNameText by rememberSaveable { mutableStateOf("") }
-    var initialDomainNameText by rememberSaveable { mutableStateOf("") }
-    var targetDomainNameText by rememberSaveable { mutableStateOf("") }
-
     Column(modifier = modifier) {
         // "Rule name"
         RuleNameField(
             text = ruleNameText,
-            onValueChange = {
-                ruleNameText = it
-                onRuleNameChange(it)
-            },
+            onValueChange = onRuleNameChange,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -54,10 +46,7 @@ fun DomainNameRuleForm(
         // "Initial domain name"
         OutlinedTextField(
             value = initialDomainNameText,
-            onValueChange = {
-                initialDomainNameText = it
-                onInitialDomainNameChange(it)
-            },
+            onValueChange = onInitialDomainNameChange,
             singleLine = true,
             label = {
                 Text(text = stringResource(id = R.string.initial_domain_name))
@@ -88,10 +77,7 @@ fun DomainNameRuleForm(
         // "Target domain name"
         OutlinedTextField(
             value = targetDomainNameText,
-            onValueChange = {
-                targetDomainNameText = it
-                onTargetDomainNameChange(it)
-            },
+            onValueChange = onTargetDomainNameChange,
             singleLine = true,
             label = {
                 Text(text = stringResource(id = R.string.target_domain_name))
