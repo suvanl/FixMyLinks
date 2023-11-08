@@ -6,10 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -21,22 +17,18 @@ import com.suvanl.fixmylinks.ui.util.PreviewContainer
 @Composable
 fun AllUrlParamsRuleForm(
     showHints: Boolean,
+    ruleNameText: String,
+    domainNameText: String,
     onRuleNameChange: (String) -> Unit,
     onDomainNameChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     interFieldSpacing: Dp = FormDefaults.InterFieldSpacing,
 ) {
-    var ruleNameText by rememberSaveable { mutableStateOf("") }
-    var domainNameText by rememberSaveable { mutableStateOf("") }
-
     Column(modifier = modifier) {
         // "Rule name"
         RuleNameField(
             text = ruleNameText,
-            onValueChange = {
-                ruleNameText = it
-                onRuleNameChange(it)
-            },
+            onValueChange = onRuleNameChange,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -46,10 +38,7 @@ fun AllUrlParamsRuleForm(
         DomainNameField(
             value = domainNameText,
             showHints = showHints,
-            onValueChange = {
-                domainNameText = it
-                onDomainNameChange(it)
-            },
+            onValueChange = onDomainNameChange,
             isLastFieldInForm = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -69,6 +58,8 @@ private fun AllUrlParamsRuleFormPreview() {
             interFieldSpacing = 16.dp,
             onRuleNameChange = {},
             onDomainNameChange = {},
+            ruleNameText = "",
+            domainNameText = "",
         )
     }
 }

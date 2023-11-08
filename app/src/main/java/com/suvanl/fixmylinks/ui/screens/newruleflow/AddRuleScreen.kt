@@ -43,6 +43,7 @@ import com.suvanl.fixmylinks.ui.components.list.SwitchList
 import com.suvanl.fixmylinks.ui.components.list.SwitchListItemState
 import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
+import com.suvanl.fixmylinks.viewmodel.newruleflow.AddAllUrlParamsRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddDomainNameRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
 
@@ -100,10 +101,16 @@ fun AddRuleScreen(
             }
 
             MutationType.URL_PARAMS_ALL -> {
+                val viewModel = viewModel<AddAllUrlParamsRuleViewModel>()
+                val ruleNameText by viewModel.ruleName.collectAsStateWithLifecycle()
+                val domainNameText by viewModel.domainName.collectAsStateWithLifecycle()
+
                 AllUrlParamsRuleForm(
                     showHints = showFormFieldHints,
-                    onRuleNameChange = {},
-                    onDomainNameChange = {},
+                    ruleNameText = ruleNameText,
+                    domainNameText = domainNameText,
+                    onRuleNameChange = viewModel::setRuleName,
+                    onDomainNameChange = viewModel::setDomainName,
                 )
             }
 
