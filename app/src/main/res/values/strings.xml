@@ -49,4 +49,5 @@
     <string name="domain_name">Domain name</string>
     <string name="domain_name_supporting_text">The domain name that links of should be affected by this rule.</string>
     <string name="delete">Delete</string>
+    <string name="url_parameter_name">URL parameter name</string>
 </resources>

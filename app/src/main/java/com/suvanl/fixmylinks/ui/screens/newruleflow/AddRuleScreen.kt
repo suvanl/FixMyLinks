@@ -16,12 +16,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Backup
 import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -33,8 +36,10 @@ import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleForm
 import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleForm
 import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleForm
+import com.suvanl.fixmylinks.ui.components.form.common.ParameterNameField
 import com.suvanl.fixmylinks.ui.components.list.SwitchList
 import com.suvanl.fixmylinks.ui.components.list.SwitchListItemState
+import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 
 /**
@@ -99,15 +104,28 @@ fun AddRuleScreen(
             }
 
             MutationType.URL_PARAMS_SPECIFIC -> {
+                var openParamNameDialog by remember { mutableStateOf(false) }
+                var addedParamNames by rememberSaveable { mutableStateOf<List<String>>(listOf()) }
+
                 SpecificUrlParamsRuleForm(
                     showHints = showFormFieldHints,
                     interFieldSpacing = interFieldSpacing,
-                    addedParamNames = listOf("TODO"),
+                    addedParamNames = addedParamNames,
                     onRuleNameChange = {},
                     onDomainNameChange = {},
-                    onClickAddParam = {},
-                    onClickDismissParam = {},
+                    onClickAddParam = { openParamNameDialog = true },
+                    onClickDismissParam = {}
                 )
+
+                if (openParamNameDialog) {
+                    AddParameterNameDialog(
+                        onConfirmation = {
+                            addedParamNames += it
+                            openParamNameDialog = false
+                        },
+                        onDismissRequest = { openParamNameDialog = false }
+                    )
+                }
             }
 
             MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
@@ -184,6 +202,47 @@ private fun AddRuleScreenBody(
     }
 }
 
+@Composable
+private fun AddParameterNameDialog(
+    onConfirmation: (String) -> Unit,
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var text by remember { mutableStateOf("") }
+
+    AlertDialog(
+        title = {
+            Text(
+                text = "Add parameter",
+                letterSpacing = LetterSpacingDefaults.Tighter
+            )
+        },
+        text = {
+            ParameterNameField(
+                text = text,
+                onValueChange = { text = it },
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        onDismissRequest = onDismissRequest,
+        confirmButton = {
+            TextButton(
+                onClick = { onConfirmation(text) }
+            ) {
+                Text("Add")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismissRequest
+            ) {
+                Text("Cancel")
+            }
+        },
+        modifier = modifier
+    )
+}
+
 @Preview(
     showBackground = true,
     widthDp = 400
@@ -195,7 +254,7 @@ private fun AddRuleScreenBody(
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun AddRuleScreenPreview() {
+private fun AddRuleScreenPreview() {
     PreviewContainer {
         AddRuleScreen(
             mutationType = MutationType.URL_PARAMS_SPECIFIC,
@@ -203,5 +262,13 @@ fun AddRuleScreenPreview() {
             showFormFieldHints = true,
             onSaveClick = { },
         )
+    }
+}
+
+@Preview(widthDp = 400)
+@Composable
+private fun AddParameterNameDialogPreview() {
+    PreviewContainer {
+        AddParameterNameDialog(onConfirmation = {}, onDismissRequest = {})
     }
 }
