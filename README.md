@@ -37,13 +37,12 @@ Currently, the only way to install FixMyLinks is to build from source. Other ins
     <b>Prerequisites</b>
 </summary>
 
-- [Git](https://git-scm.com/)
-- [Android Studio](https://d.android.com/studio)
-- [Android Debug Bridge (ADB)](https://developer.android.com/tools/adb) (should be bundled with Android Studio)
-- A [physical](https://developer.android.com/studio/run/device) or [virtual](https://developer.android.com/studio/run/managing-avds) Android device connected to ADB  
+-   [Git](https://git-scm.com/)
+-   [Android Studio](https://d.android.com/studio)
+-   [Android Debug Bridge (ADB)](https://developer.android.com/tools/adb) (should be bundled with Android Studio)
+-   A [physical](https://developer.android.com/studio/run/device) or [virtual](https://developer.android.com/studio/run/managing-avds) Android device connected to ADB
 </details>
 
-<!-- prettier-ignore -->
 <details>
 <summary>
   <b>Instructions</b>
@@ -56,31 +55,80 @@ Currently, the only way to install FixMyLinks is to build from source. Other ins
     ```sh
     cd FixMyLinks
     ```
-2. Build the app
-    - Windows:
-        ```sh
-        .\gradlew assemble
-        ```
-    - macOS and Linux:
-        ```sh
-        ./gradlew assemble
-        ```
-        > [!NOTE]
-        > You may need to grant execute permissions to `gradlew`:
-        >
-        > ```sh
-        > chmod +x gradlew
-        > ```
-3. Install the built APK on a connected device
+2. Create a **local.properties** file in the project root containing the path to the Android SDK:
+    <details>
+       <summary>
+       <b>Windows</b>
+       </summary>
+
+    ```sh
+    echo "sdk.dir=C\:\\Users\\<YOUR-USERNAME>\\AppData\\Local\\Android\\Sdk" >> local.properties
+    ```
+
+    </details>
+
+    <details>
+       <summary>
+       <b>macOS</b>
+       </summary>
+
+    ```sh
+    echo "sdk.dir = /Users/<YOUR-USERNAME>/Library/Android/sdk" >> local.properties
+    ```
+
+    </details>
+
+    <details>
+       <summary>
+       <b>Linux</b>
+       </summary>
+
+    ```sh
+    echo "sdk.dir = /home/<YOUR-USERNAME>/Android/sdk" >> local.properties
+    ```
+
+    </details>
+
+3. Build the app
+    <details>
+       <summary>
+       <b>Windows</b>
+       </summary>
+
+    ```sh
+    .\gradlew assemble
+    ```
+
+    </details>
+
+    <details>
+       <summary>
+       <b>macOS and Linux</b>
+       </summary>
+
+    ```sh
+    ./gradlew assemble
+    ```
+
+    > [!NOTE]
+    > You may need to grant execute permissions to `gradlew`:
+    >
+    > ```sh
+    > chmod +x gradlew
+    > ```
+
+    </details>
+
+4. Install the built APK on a connected device
     ```sh
     adb install app/build/outputs/apk/debug/app-debug.apk
     ```
-4. Open the app using the device's launcher. Alternatively, use the following command to run the app:
+5. Open the app using the device's launcher. Alternatively, use the following command to run the app:
     ```sh
     adb shell am start -n "com.suvanl.fixmylinks/com.suvanl.fixmylinks.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
     ```
-   > [!NOTE]
-   > Optionally, you may use the `--splashscreen-show-icon` flag.
+    > [!NOTE]
+    > Optionally, you may use the `--splashscreen-show-icon` flag.
 
 </details>
 
