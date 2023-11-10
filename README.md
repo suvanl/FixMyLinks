@@ -77,10 +77,10 @@ Currently, the only way to install FixMyLinks is to build from source. Other ins
     ```
 4. Open the app using the device's launcher. Alternatively, use the following command to run the app:
     ```sh
-    adb shell am start -n "com.suvanl.fixmylinks/com.suvanl.fixmylinks.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER [--splashscreen-show-icon]
+    adb shell am start -n "com.suvanl.fixmylinks/com.suvanl.fixmylinks.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
     ```
    > [!NOTE]
-   > Optional flags are enclosed in square brackets `[]`
+   > Optionally, you may use the `--splashscreen-show-icon` flag.
 
 </details>
 
