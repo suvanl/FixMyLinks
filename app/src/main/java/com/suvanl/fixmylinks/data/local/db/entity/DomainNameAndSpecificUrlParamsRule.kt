@@ -18,10 +18,10 @@ import androidx.room.PrimaryKey
 )
 data class DomainNameAndSpecificUrlParamsRule(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
 
     @ColumnInfo(name = "base_rule_id", index = true)
-    val baseRuleId: Int,
+    val baseRuleId: Long,
 
     @ColumnInfo(name = "initial_domain_name")
     val initialDomainName: String,

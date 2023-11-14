@@ -8,7 +8,7 @@ import com.suvanl.fixmylinks.domain.mutation.MutationType
 @Entity(tableName = "base_rule")
 data class BaseRule(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
 
     val title: String,
 

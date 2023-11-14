@@ -18,10 +18,10 @@ import androidx.room.PrimaryKey
 )
 data class SpecificUrlParamsRule(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
 
     @ColumnInfo(name = "base_rule_id", index = true)
-    val baseRuleId: Int,
+    val baseRuleId: Long,
 
     @ColumnInfo(name = "removable_params")
     val removableParams: List<String>,
