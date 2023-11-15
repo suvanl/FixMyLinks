@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class AddDomainNameRuleViewModel : ViewModel() {
+class AddDomainNameRuleViewModel : ViewModel(), NewRuleFlowViewModel {
 
     private val _ruleName = MutableStateFlow("")
     val ruleName = _ruleName.asStateFlow()
@@ -31,5 +31,9 @@ class AddDomainNameRuleViewModel : ViewModel() {
 
     fun setRemoveAllUrlParams(shouldRemove: Boolean) {
         _removeAllUrlParams.value = shouldRemove
+    }
+
+    override suspend fun saveRule() {
+        TODO("Not yet implemented")
     }
 }

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class AddSpecificUrlParamsRuleViewModel : ViewModel() {
+class AddSpecificUrlParamsRuleViewModel : ViewModel(), NewRuleFlowViewModel {
 
     private val _ruleName = MutableStateFlow("")
     val ruleName = _ruleName.asStateFlow()
@@ -32,5 +32,9 @@ class AddSpecificUrlParamsRuleViewModel : ViewModel() {
         mutable.removeAt(index)
 
         _removableParams.value = mutable.toList()
+    }
+
+    override suspend fun saveRule() {
+        TODO("Not yet implemented")
     }
 }

@@ -32,7 +32,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleForm
@@ -46,12 +45,14 @@ import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddAllUrlParamsRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddDomainNameRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
+import com.suvanl.fixmylinks.viewmodel.newruleflow.NewRuleFlowViewModel
 
 @Composable
 fun AddRuleScreen(
     showSaveButton: Boolean,
     showFormFieldHints: Boolean,
     mutationType: MutationType,
+    viewModel: NewRuleFlowViewModel?,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -64,7 +65,7 @@ fun AddRuleScreen(
             supportingText = stringResource(R.string.enable_rule_supporting_text),
             leadingIcon = Icons.Outlined.CheckCircle,
             isSwitchChecked = isRuleEnabled,
-            onSwitchCheckedChange = { isRuleEnabled = it }
+            onSwitchCheckedChange = { isRuleEnabled = it },
         ),
         SwitchListItemState(
             headlineText = stringResource(R.string.backup_to_cloud),
@@ -72,7 +73,7 @@ fun AddRuleScreen(
             leadingIcon = Icons.Outlined.Backup,
             isSwitchChecked = isBackupEnabled,
             onSwitchCheckedChange = { isBackupEnabled = it },
-        )
+        ),
     )
 
     AddRuleScreenBody(
@@ -82,9 +83,12 @@ fun AddRuleScreen(
         onSaveClick = onSaveClick,
         modifier = modifier
     ) {
-        when (mutationType) {
-            MutationType.DOMAIN_NAME -> {
-                val viewModel = viewModel<AddDomainNameRuleViewModel>()
+        when (viewModel) {
+            is AddDomainNameRuleViewModel -> {
+                if (mutationType == MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL) {
+                    viewModel.setRemoveAllUrlParams(true)
+                }
+
                 val ruleNameText by viewModel.ruleName.collectAsStateWithLifecycle()
                 val initialDomainNameText by viewModel.initialDomainName.collectAsStateWithLifecycle()
                 val targetDomainNameText by viewModel.targetDomainName.collectAsStateWithLifecycle()
@@ -100,8 +104,7 @@ fun AddRuleScreen(
                 )
             }
 
-            MutationType.URL_PARAMS_ALL -> {
-                val viewModel = viewModel<AddAllUrlParamsRuleViewModel>()
+            is AddAllUrlParamsRuleViewModel -> {
                 val ruleNameText by viewModel.ruleName.collectAsStateWithLifecycle()
                 val domainNameText by viewModel.domainName.collectAsStateWithLifecycle()
 
@@ -114,8 +117,7 @@ fun AddRuleScreen(
                 )
             }
 
-            MutationType.URL_PARAMS_SPECIFIC -> {
-                val viewModel = viewModel<AddSpecificUrlParamsRuleViewModel>()
+            is AddSpecificUrlParamsRuleViewModel -> {
                 val ruleNameText by viewModel.ruleName.collectAsStateWithLifecycle()
                 val domainNameText by viewModel.domainName.collectAsStateWithLifecycle()
                 val addedParamNames by viewModel.removableParams.collectAsStateWithLifecycle()
@@ -144,26 +146,11 @@ fun AddRuleScreen(
                 }
             }
 
-            MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
-                val viewModel = viewModel<AddDomainNameRuleViewModel>()
-                viewModel.setRemoveAllUrlParams(true)
-
-                val ruleNameText by viewModel.ruleName.collectAsStateWithLifecycle()
-                val initialDomainNameText by viewModel.initialDomainName.collectAsStateWithLifecycle()
-                val targetDomainNameText by viewModel.targetDomainName.collectAsStateWithLifecycle()
-
-                DomainNameRuleForm(
-                    showHints = showFormFieldHints,
-                    ruleNameText = ruleNameText,
-                    initialDomainNameText = initialDomainNameText,
-                    targetDomainNameText = targetDomainNameText,
-                    onRuleNameChange = viewModel::setRuleName,
-                    onInitialDomainNameChange = viewModel::setInitialDomainName,
-                    onTargetDomainNameChange = viewModel::setTargetDomainName,
+            else -> {
+                throw IllegalArgumentException(
+                    "null or unexpected ViewModel implementing NewRuleFlowViewModel was passed to AddRuleScreen"
                 )
             }
-
-            else -> Text(text = "Unselectable mutation type - ${mutationType.name}")
         }
     }
 }
@@ -280,12 +267,40 @@ private fun AddParameterNameDialog(
 @Composable
 private fun AddRuleScreenPreview() {
     PreviewContainer {
-        AddRuleScreen(
+        val ruleOptions = listOf(
+            SwitchListItemState(
+                headlineText = stringResource(id = R.string.enable),
+                supportingText = stringResource(R.string.enable_rule_supporting_text),
+                leadingIcon = Icons.Outlined.CheckCircle,
+                isSwitchChecked = true,
+                onSwitchCheckedChange = {},
+            ),
+            SwitchListItemState(
+                headlineText = stringResource(R.string.backup_to_cloud),
+                supportingText = stringResource(R.string.backup_to_cloud_supporting_text),
+                leadingIcon = Icons.Outlined.Backup,
+                isSwitchChecked = false,
+                onSwitchCheckedChange = {},
+            )
+        )
+
+        AddRuleScreenBody(
             mutationType = MutationType.URL_PARAMS_SPECIFIC,
             showSaveButton = true,
-            showFormFieldHints = true,
-            onSaveClick = { },
-        )
+            ruleOptions = ruleOptions,
+            onSaveClick = {}
+        ) {
+            SpecificUrlParamsRuleForm(
+                showHints = true,
+                addedParamNames = listOf(),
+                ruleNameText = "",
+                domainNameText = "",
+                onRuleNameChange = {},
+                onDomainNameChange = {},
+                onClickAddParam = {},
+                onClickDismissParam = {},
+            )
+        }
     }
 }
 
