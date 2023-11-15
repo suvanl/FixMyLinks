@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.suvanl.fixmylinks.data.local.db.dao.AllUrlParamsRuleDao
 import com.suvanl.fixmylinks.data.local.db.dao.BaseRuleDao
+import com.suvanl.fixmylinks.data.local.db.dao.DomainNameAndAllUrlParamsRuleDao
 import com.suvanl.fixmylinks.data.local.db.dao.DomainNameRuleDao
 import com.suvanl.fixmylinks.data.local.db.entity.AllUrlParamsRule
 import com.suvanl.fixmylinks.data.local.db.entity.BaseRule
@@ -31,6 +32,7 @@ import com.suvanl.fixmylinks.data.local.db.entity.SpecificUrlParamsRule
 abstract class RuleDatabase : RoomDatabase() {
     abstract fun baseRuleDao(): BaseRuleDao
     abstract fun allUrlParamsRuleDao(): AllUrlParamsRuleDao
+    abstract fun domainNameAndALlUrlParamsRuleDao(): DomainNameAndAllUrlParamsRuleDao
     abstract fun domainNameRuleDao(): DomainNameRuleDao
 
     companion object {

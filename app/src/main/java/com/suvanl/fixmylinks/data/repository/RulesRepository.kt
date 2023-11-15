@@ -39,7 +39,10 @@ class RulesRepository(private val localDatabase: RuleDatabase) {
                 }
 
                 is DomainNameAndSpecificUrlParamsMutationModel -> TODO()
-                is DomainNameAndAllUrlParamsMutationModel -> TODO()
+                is DomainNameAndAllUrlParamsMutationModel -> {
+                    domainNameAndALlUrlParamsRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
+                }
+
                 is SpecificUrlParamsMutationModel -> TODO()
 
                 else -> {
@@ -62,9 +65,15 @@ class RulesRepository(private val localDatabase: RuleDatabase) {
     fun getAllRules(): Flow<List<BaseMutationModel>> {
         val allUrlParamsRules = localDatabase.allUrlParamsRuleDao().getAll().toDomainModelListFlow()
         val domainNameRules = localDatabase.domainNameRuleDao().getAll().toDomainModelListFlow()
+        val domainNameAndAllUrlParamsRules =
+            localDatabase.domainNameAndALlUrlParamsRuleDao().getAll().toDomainModelListFlow()
 
         val combinedFlow: Flow<List<BaseMutationModel>> =
-            combine(allUrlParamsRules, domainNameRules) { combinedArray ->
+            combine(
+                allUrlParamsRules,
+                domainNameRules,
+                domainNameAndAllUrlParamsRules
+            ) { combinedArray ->
                 // flatten the Array<List<BaseMutationModel>> to be a List<BaseMutationModel>
                 combinedArray.flatMap { it }
             }

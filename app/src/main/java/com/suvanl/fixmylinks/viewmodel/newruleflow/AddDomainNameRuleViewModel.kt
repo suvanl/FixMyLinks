@@ -1,6 +1,7 @@
 package com.suvanl.fixmylinks.viewmodel.newruleflow
 
 import com.suvanl.fixmylinks.data.repository.RulesRepository
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,6 +42,18 @@ class AddDomainNameRuleViewModel(
         if (!_removeAllUrlParams.value) {
             rulesRepository.insertRule(
                 DomainNameMutationModel(
+                    name = _ruleName.value,
+                    triggerDomain = _initialDomainName.value,
+                    isLocalOnly = true,
+                    mutationInfo = DomainNameMutationInfo(
+                        initialDomain = _initialDomainName.value,
+                        targetDomain = _targetDomainName.value,
+                    )
+                )
+            )
+        } else {
+            rulesRepository.insertRule(
+                DomainNameAndAllUrlParamsMutationModel(
                     name = _ruleName.value,
                     triggerDomain = _initialDomainName.value,
                     isLocalOnly = true,
