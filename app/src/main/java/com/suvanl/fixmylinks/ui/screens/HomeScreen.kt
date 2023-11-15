@@ -16,7 +16,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.suvanl.fixmylinks.R
-import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
+import com.suvanl.fixmylinks.ui.util.PreviewContainer
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
@@ -28,8 +28,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             .verticalScroll(rememberScrollState())
             .semantics { contentDescription = "Home Screen" }
     ) {
-        //Spacer(modifier = Modifier.height(16.dp))
-
         Greeting(
             name = stringResource(id = R.string.app_name),
             modifier = Modifier.padding(horizontal = 16.dp)
@@ -47,8 +45,8 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    FixMyLinksTheme {
-        Greeting("FixMyLinks")
+private fun HomeScreenPreview() {
+    PreviewContainer {
+        HomeScreen()
     }
 }
