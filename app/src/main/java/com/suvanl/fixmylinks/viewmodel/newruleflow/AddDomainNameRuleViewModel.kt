@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class AddDomainNameRuleViewModel(
     private val rulesRepository: RulesRepository
-) : NewRuleFlowViewModel() {
+) : AddRuleViewModel() {
 
     private val _ruleName = MutableStateFlow("")
     val ruleName = _ruleName.asStateFlow()

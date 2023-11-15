@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class AddAllUrlParamsRuleViewModel(
     private val rulesRepository: RulesRepository
-) : NewRuleFlowViewModel() {
+) : AddRuleViewModel() {
 
     private val _ruleName = MutableStateFlow("")
     val ruleName = _ruleName.asStateFlow()

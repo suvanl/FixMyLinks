@@ -3,7 +3,7 @@ package com.suvanl.fixmylinks.viewmodel.newruleflow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class AddSpecificUrlParamsRuleViewModel : NewRuleFlowViewModel() {
+class AddSpecificUrlParamsRuleViewModel : AddRuleViewModel() {
 
     private val _ruleName = MutableStateFlow("")
     val ruleName = _ruleName.asStateFlow()

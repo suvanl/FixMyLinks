@@ -7,13 +7,13 @@ import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddAllUrlParamsRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddDomainNameRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
-import com.suvanl.fixmylinks.viewmodel.newruleflow.NewRuleFlowViewModel
+import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
 
 /**
  * Returns the viewModel composable associated with the given MutationType
  */
 @Composable
-fun getNewRuleFlowViewModel(mutationType: MutationType): NewRuleFlowViewModel {
+fun getNewRuleFlowViewModel(mutationType: MutationType): AddRuleViewModel {
     return when (mutationType) {
         MutationType.DOMAIN_NAME -> {
             viewModel<AddDomainNameRuleViewModel>(

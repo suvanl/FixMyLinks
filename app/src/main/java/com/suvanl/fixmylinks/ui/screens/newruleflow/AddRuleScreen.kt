@@ -45,14 +45,14 @@ import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddAllUrlParamsRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddDomainNameRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
-import com.suvanl.fixmylinks.viewmodel.newruleflow.NewRuleFlowViewModel
+import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
 
 @Composable
 fun AddRuleScreen(
     showSaveButton: Boolean,
     showFormFieldHints: Boolean,
     mutationType: MutationType,
-    viewModel: NewRuleFlowViewModel?,
+    viewModel: AddRuleViewModel?,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {

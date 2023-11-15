@@ -39,7 +39,7 @@ import com.suvanl.fixmylinks.ui.screens.SavedScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
 import com.suvanl.fixmylinks.ui.util.getNewRuleFlowViewModel
-import com.suvanl.fixmylinks.viewmodel.newruleflow.NewRuleFlowViewModel
+import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.SelectRuleTypeViewModel
 import kotlinx.coroutines.launch
 
@@ -134,7 +134,7 @@ fun FmlNavHost(
                 val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
                     ?: MutationType.FALLBACK
 
-                val viewModel: NewRuleFlowViewModel = getNewRuleFlowViewModel(mutationType)
+                val viewModel: AddRuleViewModel = getNewRuleFlowViewModel(mutationType)
 
                 val isCompactLayout = windowWidthSize == WindowWidthSizeClass.Compact
                 var hintsOptionCheckedState by remember { mutableStateOf(true) }
