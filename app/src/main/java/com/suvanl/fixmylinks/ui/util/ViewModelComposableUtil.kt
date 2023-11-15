@@ -28,7 +28,9 @@ fun getNewRuleFlowViewModel(mutationType: MutationType): AddRuleViewModel {
         }
 
         MutationType.URL_PARAMS_SPECIFIC -> {
-            viewModel<AddSpecificUrlParamsRuleViewModel>()
+            viewModel<AddSpecificUrlParamsRuleViewModel>(
+                factory = AppViewModelProvider.Factory
+            )
         }
 
         MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {

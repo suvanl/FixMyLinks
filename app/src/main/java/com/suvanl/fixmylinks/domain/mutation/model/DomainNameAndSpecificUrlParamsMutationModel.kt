@@ -11,7 +11,7 @@ data class DomainNameAndSpecificUrlParamsMutationInfo(
 
 data class DomainNameAndSpecificUrlParamsMutationModel(
     override val name: String,
-    override val mutationType: MutationType,
+    override val mutationType: MutationType = MutationType.DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC,
     override val triggerDomain: String,
     override val dateModifiedTimestamp: Long? = null,
     override val isLocalOnly: Boolean,
