@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -50,7 +51,10 @@ fun SpecificUrlParamsRuleForm(
     modifier: Modifier = Modifier,
     interFieldSpacing: Dp = FormDefaults.InterFieldSpacing,
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .semantics { testTag = "SpecificUrlParamsRuleForm" }
+    ) {
         // "Rule name"
         RuleNameField(
             text = ruleNameText,

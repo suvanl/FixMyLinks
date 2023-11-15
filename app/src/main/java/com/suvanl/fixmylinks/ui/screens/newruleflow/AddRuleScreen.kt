@@ -29,6 +29,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,8 +46,8 @@ import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddAllUrlParamsRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddDomainNameRuleViewModel
-import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
+import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
 
 @Composable
 fun AddRuleScreen(
@@ -172,6 +174,7 @@ private fun AddRuleScreenBody(
             .padding(horizontal = 16.dp)
             .padding(top = 16.dp)
             .imePadding()
+            .semantics { contentDescription = "Add Rule Screen" }
     ) {
         Text(
             text = "Let's create a new ${mutationType.name} rule",
