@@ -1,5 +1,6 @@
 package com.suvanl.fixmylinks.domain.mutation.model
 
+import com.suvanl.fixmylinks.data.local.db.entity.AllUrlParamsRule
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 
 data class AllUrlParamsMutationModel(
@@ -9,3 +10,6 @@ data class AllUrlParamsMutationModel(
     override val dateModifiedTimestamp: Long? = null,
     override val isLocalOnly: Boolean
 ) : BaseMutationModel
+
+fun AllUrlParamsMutationModel.toDatabaseEntity(baseRuleId: Long) =
+    AllUrlParamsRule(baseRuleId = baseRuleId)

@@ -1,5 +1,6 @@
 package com.suvanl.fixmylinks.domain.mutation.model
 
+import com.suvanl.fixmylinks.data.local.db.entity.DomainNameAndSpecificUrlParamsRule
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 
 data class DomainNameAndSpecificUrlParamsMutationInfo(
@@ -16,3 +17,11 @@ data class DomainNameAndSpecificUrlParamsMutationModel(
     override val isLocalOnly: Boolean,
     val mutationInfo: DomainNameAndSpecificUrlParamsMutationInfo,
 ) : BaseMutationModel
+
+fun DomainNameAndSpecificUrlParamsMutationModel.toDatabaseEntity(baseRuleId: Long) =
+    DomainNameAndSpecificUrlParamsRule(
+        baseRuleId = baseRuleId,
+        initialDomainName = mutationInfo.initialDomainName,
+        targetDomainName = mutationInfo.targetDomainName,
+        removableParams = mutationInfo.removableParams,
+    )

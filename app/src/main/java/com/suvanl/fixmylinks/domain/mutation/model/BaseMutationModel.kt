@@ -1,5 +1,6 @@
 package com.suvanl.fixmylinks.domain.mutation.model
 
+import com.suvanl.fixmylinks.data.local.db.entity.BaseRule
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 
 // TODO: maybe make mutationInfo a property of BaseMutation rather than having every data class
@@ -34,3 +35,12 @@ interface BaseMutationModel {
      */
     val isLocalOnly: Boolean
 }
+
+fun BaseMutationModel.toDatabaseEntity() = BaseRule(
+    title = name,
+    mutationType = mutationType,
+    triggerDomain = triggerDomain,
+    dateModified = dateModifiedTimestamp ?: (System.currentTimeMillis() / 1000),
+    isLocalOnly = isLocalOnly,
+    authorId = "local_user"
+)
