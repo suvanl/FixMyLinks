@@ -1,10 +1,9 @@
 package com.suvanl.fixmylinks.viewmodel.newruleflow
 
-import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class AddDomainNameRuleViewModel : ViewModel(), NewRuleFlowViewModel {
+class AddDomainNameRuleViewModel : NewRuleFlowViewModel() {
 
     private val _ruleName = MutableStateFlow("")
     val ruleName = _ruleName.asStateFlow()

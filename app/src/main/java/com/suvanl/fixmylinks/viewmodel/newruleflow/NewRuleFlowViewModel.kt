@@ -1,5 +1,7 @@
 package com.suvanl.fixmylinks.viewmodel.newruleflow
 
-interface NewRuleFlowViewModel {
-    suspend fun saveRule()
+import androidx.lifecycle.ViewModel
+
+abstract class NewRuleFlowViewModel : ViewModel() {
+    abstract suspend fun saveRule()
 }

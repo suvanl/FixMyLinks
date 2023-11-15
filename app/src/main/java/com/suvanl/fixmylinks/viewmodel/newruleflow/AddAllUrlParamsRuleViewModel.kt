@@ -1,6 +1,5 @@
 package com.suvanl.fixmylinks.viewmodel.newruleflow
 
-import androidx.lifecycle.ViewModel
 import com.suvanl.fixmylinks.data.repository.RulesRepository
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
@@ -9,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class AddAllUrlParamsRuleViewModel(
     private val rulesRepository: RulesRepository
-) : ViewModel(), NewRuleFlowViewModel {
+) : NewRuleFlowViewModel() {
 
     private val _ruleName = MutableStateFlow("")
     val ruleName = _ruleName.asStateFlow()
