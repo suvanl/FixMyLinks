@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.suvanl.fixmylinks.FmlApplication
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddAllUrlParamsRuleViewModel
+import com.suvanl.fixmylinks.viewmodel.newruleflow.AddDomainNameRuleViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
@@ -18,6 +19,12 @@ object AppViewModelProvider {
 
         initializer {
             AddAllUrlParamsRuleViewModel(
+                rulesRepository = application().container.rulesRepository
+            )
+        }
+
+        initializer {
+            AddDomainNameRuleViewModel(
                 rulesRepository = application().container.rulesRepository
             )
         }

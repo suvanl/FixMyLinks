@@ -16,7 +16,9 @@ import com.suvanl.fixmylinks.viewmodel.newruleflow.NewRuleFlowViewModel
 fun getNewRuleFlowViewModel(mutationType: MutationType): NewRuleFlowViewModel {
     return when (mutationType) {
         MutationType.DOMAIN_NAME -> {
-            viewModel<AddDomainNameRuleViewModel>()
+            viewModel<AddDomainNameRuleViewModel>(
+                factory = AppViewModelProvider.Factory
+            )
         }
 
         MutationType.URL_PARAMS_ALL -> {
@@ -30,7 +32,9 @@ fun getNewRuleFlowViewModel(mutationType: MutationType): NewRuleFlowViewModel {
         }
 
         MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
-            viewModel<AddDomainNameRuleViewModel>()
+            viewModel<AddDomainNameRuleViewModel>(
+                factory = AppViewModelProvider.Factory
+            )
         }
 
         else -> throw IllegalArgumentException("Invalid/unselectable MutationType")
