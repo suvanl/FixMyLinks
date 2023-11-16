@@ -44,16 +44,11 @@ class ShareViewModel(
                 initialValue = runBlocking { rulesRepository.getAllRules().first() }
             )
 
-    fun updateUri(content: String?) {
+    fun updateUri(content: String) {
         _receivedContent.value = content
     }
 
-    fun generateMutatedUri(content: String?) {
-        if (content == null) {
-            _mutatedUri.value = null
-            return
-        }
-
+    fun generateMutatedUri(content: String) {
         // Extract the first URL found in the received content
         val extractedUrl = StringUtils.extractUrl(content)
         if (extractedUrl == null) {

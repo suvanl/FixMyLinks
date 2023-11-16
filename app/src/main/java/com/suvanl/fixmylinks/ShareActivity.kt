@@ -3,6 +3,7 @@ package com.suvanl.fixmylinks
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -48,6 +49,12 @@ class ShareActivity : ComponentActivity() {
         super.onResume()
 
         val intentContent = intent.getStringExtra(Intent.EXTRA_TEXT)
+        if (intentContent == null) {
+            Log.w(TAG, "Intent content is null")
+            Toast.makeText(this, "Intent content is null", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         viewModel.apply {
             updateUri(intentContent)
             generateMutatedUri(intentContent)
