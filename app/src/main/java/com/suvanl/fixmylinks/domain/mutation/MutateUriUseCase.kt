@@ -45,14 +45,8 @@ class MutateUriUseCase {
             }
 
             is DomainNameAndAllUrlParamsMutationModel -> {
-                val uriWithMutatedDomainName = replaceDomainNameUseCase(
-                    uri = uriToMutate,
-                    mutationInfo = triggeredRule.mutationInfo,
-                    useWwwSubdomain = uriUsesWwwSubdomain
-                )
-
                 // first remove url params
-                val parameterlessUri = removeAllUrlParamsUseCase(uriWithMutatedDomainName)
+                val parameterlessUri = removeAllUrlParamsUseCase(uriToMutate)
 
                 // then replace the domain name as per the rule's mutationInfo
                 return replaceDomainNameUseCase(
