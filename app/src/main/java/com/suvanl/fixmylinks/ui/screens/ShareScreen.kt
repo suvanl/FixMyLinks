@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
 import com.suvanl.fixmylinks.util.shareTextContent
@@ -23,7 +22,7 @@ import com.suvanl.fixmylinks.viewmodel.ShareViewModel
 @Composable
 fun ShareScreen(
     modifier: Modifier = Modifier,
-    shareViewModel: ShareViewModel = viewModel(factory = ShareViewModel.Factory),
+    shareViewModel: ShareViewModel,
     shareSheetButtonIsEnabled: Boolean =
         shareViewModel.mutatedUri.collectAsStateWithLifecycle().value != null
 ) {
@@ -58,6 +57,6 @@ fun ShareScreen(
 @Composable
 fun ShareScreenPreview() {
     FixMyLinksTheme {
-        ShareScreen(shareSheetButtonIsEnabled = true)
+        //ShareScreen(shareSheetButtonIsEnabled = true)
     }
 }

@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.suvanl.fixmylinks.di.AppViewModelProvider
 import com.suvanl.fixmylinks.ui.screens.ShareScreen
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
 import com.suvanl.fixmylinks.util.shareTextContent
@@ -16,7 +17,7 @@ import com.suvanl.fixmylinks.viewmodel.ShareViewModel
 
 class ShareActivity : ComponentActivity() {
 
-    private val viewModel by viewModels<ShareViewModel> { ShareViewModel.Factory }
+    private val viewModel: ShareViewModel by viewModels { AppViewModelProvider.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +33,7 @@ class ShareActivity : ComponentActivity() {
                 // started from (via a Send intent).
                 val mutatedUri by viewModel.mutatedUri.collectAsStateWithLifecycle()
                 if (mutatedUri == null) {
-                    ShareScreen()
+                    ShareScreen(shareViewModel = viewModel)
                 }
             }
         }

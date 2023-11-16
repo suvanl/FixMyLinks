@@ -5,7 +5,9 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.suvanl.fixmylinks.FmlApplication
+import com.suvanl.fixmylinks.domain.mutation.MutateUriUseCase
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
+import com.suvanl.fixmylinks.viewmodel.ShareViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddAllUrlParamsRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddDomainNameRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
@@ -32,6 +34,14 @@ object AppViewModelProvider {
 
         initializer {
             AddSpecificUrlParamsRuleViewModel(
+                rulesRepository = application().container.rulesRepository
+            )
+        }
+
+        // ShareViewModel
+        initializer {
+            ShareViewModel(
+                mutateUriUseCase = MutateUriUseCase(),
                 rulesRepository = application().container.rulesRepository
             )
         }
