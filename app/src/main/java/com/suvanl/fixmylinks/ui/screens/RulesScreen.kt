@@ -1,5 +1,6 @@
 package com.suvanl.fixmylinks.ui.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,11 +17,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.suvanl.fixmylinks.di.AppViewModelProvider
 import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
+import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 import kotlinx.coroutines.launch
 
@@ -36,6 +41,23 @@ fun RulesScreen(
     val uiState by viewModel.rulesScreenUiState.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
 
+    RulesScreenBody(
+        uiState = uiState,
+        onClickDeleteAll = {
+            coroutineScope.launch {
+                viewModel.deleteAll()
+            }
+        },
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun RulesScreenBody(
+    uiState: RulesScreenUiState,
+    onClickDeleteAll: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -44,11 +66,7 @@ fun RulesScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {
-                coroutineScope.launch {
-                    viewModel.deleteAll()
-                }
-            }
+            onClick = onClickDeleteAll
         ) {
             Text(text = "Delete all")
         }
@@ -74,5 +92,38 @@ fun RulesScreen(
                 }
             }
         }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    widthDp = 380
+)
+@Preview(
+    name = "Dark",
+    showBackground = true,
+    widthDp = 380,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun RulesScreenPreview() {
+    PreviewContainer {
+        RulesScreenBody(
+            uiState = RulesScreenUiState(
+                rules = listOf(
+                    DomainNameAndAllUrlParamsMutationModel(
+                        name = "Google rule",
+                        triggerDomain = "google.com",
+                        isLocalOnly = true,
+                        dateModifiedTimestamp = 1700174822,
+                        mutationInfo = DomainNameMutationInfo(
+                            initialDomain = "google.com",
+                            targetDomain = "google.co.uk"
+                        )
+                    )
+                )
+            ),
+            onClickDeleteAll = {}
+        )
     }
 }
