@@ -25,7 +25,7 @@ class AddAllUrlParamsRuleViewModel(
     }
 
     override suspend fun saveRule() {
-        rulesRepository.insertRule(
+        rulesRepository.saveRule(
             AllUrlParamsMutationModel(
                 name = _ruleName.value,
                 mutationType = MutationType.URL_PARAMS_ALL,

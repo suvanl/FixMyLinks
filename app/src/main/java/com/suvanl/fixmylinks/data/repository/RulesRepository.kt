@@ -24,41 +24,12 @@ import kotlinx.coroutines.flow.map
 
 class RulesRepository(private val localDatabase: RuleDatabase) {
     /**
-     * Inserts a new rule into the database. The rule will exist in the DB as the entity equivalent
-     * of the type of the given domain model ([rule]).
+     * Save a rule locally (and optionally remotely based on user preferences).
      */
-    suspend fun insertRule(rule: BaseMutationModel) = localDatabase.apply {
-        withTransaction {
-            val baseRuleId = baseRuleDao().insert(rule.toDatabaseEntity())
+    suspend fun saveRule(rule: BaseMutationModel) {
+        insertRule(rule)
 
-            when (rule) {
-                is AllUrlParamsMutationModel -> {
-                    allUrlParamsRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
-                }
-
-                is DomainNameMutationModel -> {
-                    domainNameRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
-                }
-
-                is DomainNameAndSpecificUrlParamsMutationModel -> {
-                    domainNameAndSpecificUrlParamsRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
-                }
-
-                is DomainNameAndAllUrlParamsMutationModel -> {
-                    domainNameAndAllUrlParamsRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
-                }
-
-                is SpecificUrlParamsMutationModel -> {
-                    specificUrlParamsRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
-                }
-
-                else -> {
-                    throw IllegalArgumentException(
-                        "rule is not of a supported type that extends BaseMutationModel"
-                    )
-                }
-            }
-        }
+        // then perform logic for saving a rule remotely (if requested by user)
     }
 
     /**
@@ -92,6 +63,44 @@ class RulesRepository(private val localDatabase: RuleDatabase) {
             }
 
         return combinedFlow
+    }
+
+    /**
+     * Inserts a new rule into the database. The rule will exist in the DB as the entity equivalent
+     * of the type of the given domain model ([rule]).
+     */
+    private suspend fun insertRule(rule: BaseMutationModel) = localDatabase.apply {
+        withTransaction {
+            val baseRuleId = baseRuleDao().insert(rule.toDatabaseEntity())
+
+            when (rule) {
+                is AllUrlParamsMutationModel -> {
+                    allUrlParamsRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
+                }
+
+                is DomainNameMutationModel -> {
+                    domainNameRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
+                }
+
+                is DomainNameAndSpecificUrlParamsMutationModel -> {
+                    domainNameAndSpecificUrlParamsRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
+                }
+
+                is DomainNameAndAllUrlParamsMutationModel -> {
+                    domainNameAndAllUrlParamsRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
+                }
+
+                is SpecificUrlParamsMutationModel -> {
+                    specificUrlParamsRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
+                }
+
+                else -> {
+                    throw IllegalArgumentException(
+                        "rule is not of a supported type that extends BaseMutationModel"
+                    )
+                }
+            }
+        }
     }
 
     /**

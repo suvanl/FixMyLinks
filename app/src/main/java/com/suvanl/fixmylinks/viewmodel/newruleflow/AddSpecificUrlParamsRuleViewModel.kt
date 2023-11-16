@@ -39,7 +39,7 @@ class AddSpecificUrlParamsRuleViewModel(
     }
 
     override suspend fun saveRule() {
-        rulesRepository.insertRule(
+        rulesRepository.saveRule(
             SpecificUrlParamsMutationModel(
                 name = _ruleName.value,
                 triggerDomain = _domainName.value,

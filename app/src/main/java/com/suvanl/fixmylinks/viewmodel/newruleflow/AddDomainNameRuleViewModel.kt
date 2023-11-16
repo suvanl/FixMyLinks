@@ -40,7 +40,7 @@ class AddDomainNameRuleViewModel(
 
     override suspend fun saveRule() {
         if (!_removeAllUrlParams.value) {
-            rulesRepository.insertRule(
+            rulesRepository.saveRule(
                 DomainNameMutationModel(
                     name = _ruleName.value,
                     triggerDomain = _initialDomainName.value,
@@ -52,7 +52,7 @@ class AddDomainNameRuleViewModel(
                 )
             )
         } else {
-            rulesRepository.insertRule(
+            rulesRepository.saveRule(
                 DomainNameAndAllUrlParamsMutationModel(
                     name = _ruleName.value,
                     triggerDomain = _initialDomainName.value,
