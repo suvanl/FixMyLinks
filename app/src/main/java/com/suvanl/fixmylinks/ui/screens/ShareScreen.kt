@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.suvanl.fixmylinks.R
-import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
+import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.util.shareTextContent
 import com.suvanl.fixmylinks.viewmodel.ShareViewModel
 
@@ -28,6 +28,23 @@ fun ShareScreen(
 ) {
     val context = LocalContext.current
 
+    ShareScreenBody(
+        shareSheetButtonIsEnabled = shareSheetButtonIsEnabled,
+        onClickOpenShareSheet = {
+            shareViewModel.mutatedUri.value?.let { content ->
+                context.shareTextContent(content)
+            }
+        },
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun ShareScreenBody(
+    shareSheetButtonIsEnabled: Boolean,
+    onClickOpenShareSheet: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     // A surface container using the 'background' color from the theme
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -40,11 +57,7 @@ fun ShareScreen(
             modifier = modifier
         ) {
             Button(
-                onClick = {
-                    shareViewModel.mutatedUri.value?.let { content ->
-                        context.shareTextContent(content)
-                    }
-                },
+                onClick = onClickOpenShareSheet,
                 enabled = shareSheetButtonIsEnabled
             ) {
                 Text(text = stringResource(id = R.string.open_share_sheet))
@@ -56,7 +69,10 @@ fun ShareScreen(
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun ShareScreenPreview() {
-    FixMyLinksTheme {
-        //ShareScreen(shareSheetButtonIsEnabled = true)
+    PreviewContainer {
+        ShareScreenBody(
+            shareSheetButtonIsEnabled = true,
+            onClickOpenShareSheet = {}
+        )
     }
 }
