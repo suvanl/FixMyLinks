@@ -25,6 +25,17 @@ class ShareViewModel(
     private val _mutatedUri = MutableStateFlow<String?>(null)
     val mutatedUri = _mutatedUri.asStateFlow()
 
+    // TODO: find a solution that avoids use of `runBlocking` that doesn't result in multiple share
+    //  sheets being created, while successfully passing the latest list of custom rules to
+    //  MutateUriUseCase. Perhaps ignore the first emission (when the list is empty rather than
+    //  containing the saved custom rules) using `<Flow>.drop`? See
+    //  https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/drop.html
+    //  for more info.
+    //  Since no application UI is rendered (just the system share sheet) in the activity that uses
+    //  this ViewModel (ShareActivity), there isn't a possibility of application UI frame drops.
+    //  However, we don't want this to somehow impact the share sheet's performance. Based on manual
+    //  testing, no performance penalty is visible, although we might eventually run into situations
+    //  where this is the case.
     private val _customRules: StateFlow<List<BaseMutationModel>> =
         rulesRepository.getAllRules()
             .stateIn(
