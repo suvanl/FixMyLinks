@@ -58,7 +58,7 @@ class RulesRepository(private val localDatabase: RuleDatabase) {
                 domainNameAndSpecificUrlParamsRules,
                 specificUrlParamsRules
             ) { combinedArray ->
-                // flatten the Array<List<BaseMutationModel>> to be a List<BaseMutationModel>
+                // flatten the Array<List<BaseMutationModel>> to a List<BaseMutationModel>
                 combinedArray.flatMap { it }
             }
 
