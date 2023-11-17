@@ -17,7 +17,7 @@ body:
       label: Rationale behind the feature request
       description: |
         Be thorough but keep it concise. 
-        This may be a user story in the format **"As a [persona], I [want to...], [so that...]"**.
+        This may be a user story in the format: **"As a [persona], I [want to...], [so that...]"**.
     validations:
       required: true
   - type: textarea
@@ -26,7 +26,7 @@ body:
       description: |
         How can this feature be implemented and integrated?
     validations:
-      required: false
+      required: true
   - type: textarea
     attributes:
       label: Additional information
