@@ -1,0 +1,59 @@
+name: 🐛 Bug Report
+description: Create a bug report to let us know about something that isn't working as expected
+title: "bug: "
+labels: ["unconfirmed bug"]
+assignees:
+  - suvanl
+body:
+  - type: textarea
+    attributes:
+      label: App and system information
+      description: Information about the app and system you're encountering the bug on.
+      value: |
+        - FixMyLinks app version: 
+        - Android version: 
+        - Android build number: 
+        - Device model:
+        - Device type: [Physical / Emulated]
+      placeholder: |
+        - FixMyLinks app version: 1.0.0
+        - Android version: 14
+        - Android build number: UP1A.231105.003
+        - Device model: Google Pixel 7 Pro
+        - Device type: Physical
+      render: Text
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Summary of expected behaviour
+      description: What were you expecting to happen?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Summary of actual behaviour
+      description: What actually happens?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Description of what you think should be changed
+      description: Why is the actual behaviour incorrect? Be thorough while keeping it concise.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to reproduce the bug
+      description: |
+        Describe how the bug can be reproduced. Include all required steps from start to finish, as
+        well as code snippets if necessary.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional info
+      description: | 
+        Anything else related to the bug that would be useful, such as screenshots or screen recordings.
+    validations:
+      required: false

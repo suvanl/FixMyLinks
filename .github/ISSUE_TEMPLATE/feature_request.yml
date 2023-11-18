@@ -1,0 +1,36 @@
+name: ✨ Feature Request
+description: Suggest a new feature or idea for this project
+title: "feature: "
+labels: ["enhancement"]
+assignees:
+  - suvanl
+body:
+  - type: textarea
+    attributes:
+      label: Summary of the feature
+      description: | 
+        What area of the app does this feature relate to? What's the expected behaviour of this feature?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Rationale behind the feature request
+      description: |
+        Be thorough but keep it concise. 
+        This may be a user story in the format: **"As a [persona], I [want to...], [so that...]"**.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe a possible solution
+      description: |
+        How can this feature be implemented and integrated? In most cases a high-level overview is sufficient.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: |
+        Anything else that may be relevant, such as if this feature request relates to any existing issues, discussions, or pull requests (link here if so).
+    validations:
+      required: false
