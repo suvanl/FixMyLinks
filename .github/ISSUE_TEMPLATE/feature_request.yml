@@ -29,6 +29,17 @@ body:
       required: true
   - type: textarea
     attributes:
+      label: Definition of done
+      placeholder: |
+        * All related tests pass
+        * No known bugs
+        * Implementation doesn't introduce any security vulnerabilities
+      description: |
+        What criteria needs to be met for this feature to be considered "done"?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
       label: Additional information
       description: |
         Anything else that may be relevant, such as if this feature request relates to any existing issues, discussions, or pull requests (link here if so).
