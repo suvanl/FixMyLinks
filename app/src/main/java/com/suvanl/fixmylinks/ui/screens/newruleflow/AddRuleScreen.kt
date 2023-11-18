@@ -49,11 +49,15 @@ import com.suvanl.fixmylinks.viewmodel.newruleflow.AddDomainNameRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
 
+data class AddRuleScreenUiState(
+    val showSaveButton: Boolean,
+    val showFormFieldHints: Boolean,
+    val mutationType: MutationType,
+)
+
 @Composable
 fun AddRuleScreen(
-    showSaveButton: Boolean,
-    showFormFieldHints: Boolean,
-    mutationType: MutationType,
+    uiState: AddRuleScreenUiState,
     viewModel: AddRuleViewModel?,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -79,15 +83,15 @@ fun AddRuleScreen(
     )
 
     AddRuleScreenBody(
-        mutationType = mutationType,
-        showSaveButton = showSaveButton,
+        mutationType = uiState.mutationType,
+        showSaveButton = uiState.showSaveButton,
         ruleOptions = ruleOptions,
         onSaveClick = onSaveClick,
         modifier = modifier
     ) {
         when (viewModel) {
             is AddDomainNameRuleViewModel -> {
-                if (mutationType == MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL) {
+                if (uiState.mutationType == MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL) {
                     viewModel.setRemoveAllUrlParams(true)
                 }
 
@@ -96,7 +100,7 @@ fun AddRuleScreen(
                 val targetDomainNameText by viewModel.targetDomainName.collectAsStateWithLifecycle()
 
                 DomainNameRuleForm(
-                    showHints = showFormFieldHints,
+                    showHints = uiState.showFormFieldHints,
                     ruleNameText = ruleNameText,
                     initialDomainNameText = initialDomainNameText,
                     targetDomainNameText = targetDomainNameText,
@@ -111,7 +115,7 @@ fun AddRuleScreen(
                 val domainNameText by viewModel.domainName.collectAsStateWithLifecycle()
 
                 AllUrlParamsRuleForm(
-                    showHints = showFormFieldHints,
+                    showHints = uiState.showFormFieldHints,
                     ruleNameText = ruleNameText,
                     domainNameText = domainNameText,
                     onRuleNameChange = viewModel::setRuleName,
@@ -127,7 +131,7 @@ fun AddRuleScreen(
                 var openParamNameDialog by remember { mutableStateOf(false) }
 
                 SpecificUrlParamsRuleForm(
-                    showHints = showFormFieldHints,
+                    showHints = uiState.showFormFieldHints,
                     addedParamNames = addedParamNames,
                     ruleNameText = ruleNameText,
                     domainNameText = domainNameText,
