@@ -21,6 +21,10 @@ class RulesViewModel(
                 initialValue = RulesScreenUiState()
             )
 
+    suspend fun deleteSingleRule(baseRuleId: Long) {
+        rulesRepository.deleteByBaseRuleId(baseRuleId)
+    }
+
     suspend fun deleteAll() {
         rulesRepository.deleteAllRules()
     }

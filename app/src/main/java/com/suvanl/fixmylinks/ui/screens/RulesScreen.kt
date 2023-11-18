@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,6 +49,11 @@ fun RulesScreen(
                 viewModel.deleteAll()
             }
         },
+        onClickDeleteRule = { baseRuleId ->
+            coroutineScope.launch {
+                viewModel.deleteSingleRule(baseRuleId)
+            }
+        },
         modifier = modifier
     )
 }
@@ -56,6 +62,7 @@ fun RulesScreen(
 private fun RulesScreenBody(
     uiState: RulesScreenUiState,
     onClickDeleteAll: () -> Unit,
+    onClickDeleteRule: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -89,6 +96,12 @@ private fun RulesScreenBody(
                         text = "Last modified ${rule.dateModifiedTimestamp}",
                         style = MaterialTheme.typography.labelMedium
                     )
+
+                    FilledTonalButton(onClick = { onClickDeleteRule(rule.baseRuleId) }) {
+                        Text(text = "Delete this")
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
@@ -123,7 +136,8 @@ private fun RulesScreenPreview() {
                     )
                 )
             ),
-            onClickDeleteAll = {}
+            onClickDeleteAll = {},
+            onClickDeleteRule = {},
         )
     }
 }

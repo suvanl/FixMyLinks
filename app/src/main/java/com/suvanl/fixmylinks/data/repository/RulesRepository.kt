@@ -33,6 +33,15 @@ class RulesRepository(private val localDatabase: RuleDatabase) {
     }
 
     /**
+     * Delete the rule with the given [BaseRule].`id`, which will also delete the specific rule
+     * with the baseRuleId matching the given value.
+     */
+    suspend fun deleteByBaseRuleId(baseRuleId: Long) {
+        localDatabase.baseRuleDao().deleteById(baseRuleId)
+        // then perform logic to delete the rule remotely (if it is indeed backed up remotely)
+    }
+
+    /**
      * Deletes ALL custom rules.
      */
     suspend fun deleteAllRules() = localDatabase.baseRuleDao().deleteAll()
@@ -119,6 +128,7 @@ class RulesRepository(private val localDatabase: RuleDatabase) {
                 when (genericRule) {
                     is AllUrlParamsRule -> {
                         AllUrlParamsMutationModel(
+                            baseRuleId = baseRule.id,
                             name = baseRule.title,
                             triggerDomain = baseRule.triggerDomain,
                             dateModifiedTimestamp = baseRule.dateModified,
@@ -128,6 +138,7 @@ class RulesRepository(private val localDatabase: RuleDatabase) {
 
                     is DomainNameAndAllUrlParamsRule -> {
                         DomainNameAndAllUrlParamsMutationModel(
+                            baseRuleId = baseRule.id,
                             name = baseRule.title,
                             triggerDomain = baseRule.triggerDomain,
                             dateModifiedTimestamp = baseRule.dateModified,
@@ -141,6 +152,7 @@ class RulesRepository(private val localDatabase: RuleDatabase) {
 
                     is DomainNameAndSpecificUrlParamsRule -> {
                         DomainNameAndSpecificUrlParamsMutationModel(
+                            baseRuleId = baseRule.id,
                             name = baseRule.title,
                             triggerDomain = baseRule.triggerDomain,
                             dateModifiedTimestamp = baseRule.dateModified,
@@ -155,6 +167,7 @@ class RulesRepository(private val localDatabase: RuleDatabase) {
 
                     is DomainNameRule -> {
                         DomainNameMutationModel(
+                            baseRuleId = baseRule.id,
                             name = baseRule.title,
                             triggerDomain = baseRule.triggerDomain,
                             dateModifiedTimestamp = baseRule.dateModified,
@@ -168,6 +181,7 @@ class RulesRepository(private val localDatabase: RuleDatabase) {
 
                     is SpecificUrlParamsRule -> {
                         SpecificUrlParamsMutationModel(
+                            baseRuleId = baseRule.id,
                             name = baseRule.title,
                             triggerDomain = baseRule.triggerDomain,
                             dateModifiedTimestamp = baseRule.dateModified,

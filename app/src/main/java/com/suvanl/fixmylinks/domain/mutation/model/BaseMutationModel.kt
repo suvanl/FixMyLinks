@@ -34,6 +34,11 @@ interface BaseMutationModel {
      * server over the network for backup purposes.
      */
     val isLocalOnly: Boolean
+
+    /**
+     * The ID of the base rule related to this rule in the local database.
+     */
+    val baseRuleId: Long
 }
 
 fun BaseMutationModel.toDatabaseEntity() = BaseRule(
