@@ -24,7 +24,7 @@ body:
     attributes:
       label: Describe a possible solution
       description: |
-        How can this feature be implemented and integrated?
+        How can this feature be implemented and integrated? In most cases a high-level overview is sufficient.
     validations:
       required: true
   - type: textarea
