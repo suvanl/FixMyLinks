@@ -31,6 +31,6 @@ body:
     attributes:
       label: Additional information
       description: |
-        Anything else that may be relevant, such as if this feature request relates to any issues or discussions (link here if so).
+        Anything else that may be relevant, such as if this feature request relates to any existing issues, discussions, or pull requests (link here if so).
     validations:
       required: false
