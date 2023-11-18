@@ -8,7 +8,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,8 +24,27 @@ class AddNewRuleFlowTest {
     /**
      * Common actions in this flow before it diverges based on selections made by the user
      */
-    @Before
-    fun commonActions() {
+//    @Before
+//    fun commonActions() {
+//        // click FAB
+//        composeTestRule
+//            .onNodeWithTag("Add New Rule FAB")
+//            .assertExists()
+//            .assertIsDisplayed()
+//            .performClick()
+//
+//        // arrive on SelectRuleTypeScreen
+//        composeTestRule
+//            .onNodeWithContentDescription("Select Rule Type Screen")
+//            .assertIsDisplayed()
+//    }
+
+    /**
+     * Navigate through the "add new rule" flow to create a DOMAIN_NAME rule
+     */
+    @Test
+    @LargeTest
+    fun addNewRuleFlow_createDomainNameRule() {
         // click FAB
         composeTestRule
             .onNodeWithTag("Add New Rule FAB")
@@ -38,14 +56,7 @@ class AddNewRuleFlowTest {
         composeTestRule
             .onNodeWithContentDescription("Select Rule Type Screen")
             .assertIsDisplayed()
-    }
 
-    /**
-     * Navigate through the "add new rule" flow to create a DOMAIN_NAME rule
-     */
-    @Test
-    @LargeTest
-    fun addNewRuleFlow_createDomainNameRule() {
         // click "Change domain name" option
         composeTestRule
             .onNodeWithText("Change domain name")
@@ -78,6 +89,18 @@ class AddNewRuleFlowTest {
     @Test
     @LargeTest
     fun addNewRuleFlow_createAllUrlParamsRule() {
+        // click FAB
+        composeTestRule
+            .onNodeWithTag("Add New Rule FAB")
+            .assertExists()
+            .assertIsDisplayed()
+            .performClick()
+
+        // arrive on SelectRuleTypeScreen
+        composeTestRule
+            .onNodeWithContentDescription("Select Rule Type Screen")
+            .assertIsDisplayed()
+
         // click "Remove all URL parameters" option
         composeTestRule
             .onNodeWithText("Remove all URL parameters")
@@ -110,6 +133,18 @@ class AddNewRuleFlowTest {
     @Test
     @LargeTest
     fun addNewRuleFlow_createSpecificUrlParamsRule() {
+        // click FAB
+        composeTestRule
+            .onNodeWithTag("Add New Rule FAB")
+            .assertExists()
+            .assertIsDisplayed()
+            .performClick()
+
+        // arrive on SelectRuleTypeScreen
+        composeTestRule
+            .onNodeWithContentDescription("Select Rule Type Screen")
+            .assertIsDisplayed()
+
         // click "Remove all URL parameters" option
         composeTestRule
             .onNodeWithText("Remove specific URL parameters")
@@ -142,6 +177,18 @@ class AddNewRuleFlowTest {
     @Test
     @LargeTest
     fun addNewRuleFlow_createDomainNameAndAllUrlParamsRule() {
+        // click FAB
+        composeTestRule
+            .onNodeWithTag("Add New Rule FAB")
+            .assertExists()
+            .assertIsDisplayed()
+            .performClick()
+
+        // arrive on SelectRuleTypeScreen
+        composeTestRule
+            .onNodeWithContentDescription("Select Rule Type Screen")
+            .assertIsDisplayed()
+
         // click "Change domain name and remove all URL parameters" option
         composeTestRule
             .onNodeWithText("Change domain name and remove all URL parameters")
