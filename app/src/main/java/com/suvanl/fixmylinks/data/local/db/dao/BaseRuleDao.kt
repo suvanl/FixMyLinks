@@ -16,8 +16,19 @@ interface BaseRuleDao {
     @Update
     suspend fun update(rule: BaseRule)
 
+    /**
+     * Delete a specific BaseRule record and its associated specific rule record in its respective
+     * table.
+     */
     @Delete
     suspend fun delete(rule: BaseRule)
+
+    /**
+     * Delete a specific BaseRule record by specifying its ID. Also deletes its associated specific
+     * rule record in its respective table due to the foreign key constraint using CASCADE on delete.
+     */
+    @Query("DELETE FROM base_rule WHERE id = :id")
+    suspend fun deleteById(id: Long)
 
     /**
      * Deletes **EVERYTHING** from the local database using the SQLite truncate optimisation.
