@@ -25,10 +25,17 @@ android {
 
         testOptions {
             execution = "ANDROIDX_TEST_ORCHESTRATOR"
+
             if (project.hasProperty("skipLargeTests")) {
                 testInstrumentationRunnerArguments.putAll(
                     mapOf(
                         "notAnnotation" to "androidx.test.filters.LargeTest",
+                    )
+                )
+            } else if (project.hasProperty("onlyLargeTests")) {
+                testInstrumentationRunnerArguments.putAll(
+                    mapOf(
+                        "annotation" to "androidx.test.filters.LargeTest"
                     )
                 )
             }
