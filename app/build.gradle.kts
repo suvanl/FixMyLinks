@@ -19,12 +19,19 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments.putAll(
             mapOf(
-                "clearPackageData" to "true"
+                "clearPackageData" to "true",
             )
         )
 
         testOptions {
             execution = "ANDROIDX_TEST_ORCHESTRATOR"
+            if (project.hasProperty("skipLargeTests")) {
+                testInstrumentationRunnerArguments.putAll(
+                    mapOf(
+                        "notAnnotation" to "androidx.test.filters.LargeTest",
+                    )
+                )
+            }
         }
 
         vectorDrawables {
