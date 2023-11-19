@@ -21,6 +21,8 @@ instrumentation_test_task:
       -gpu swiftshader_indirect
       -no-snapshot
       -no-window
+  gradlew_grant_execute_permission_script:
+    chmod +x gradlew
   # assemble while emulator is starting
   assemble_instrumented_tests_script:
     ./gradlew assembleDebugAndroidTest
