@@ -1,10 +1,14 @@
 package com.suvanl.fixmylinks.viewmodel.newruleflow
 
-import androidx.lifecycle.ViewModel
+import com.suvanl.fixmylinks.data.repository.RulesRepository
+import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationInfo
+import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class AddSpecificUrlParamsRuleViewModel : ViewModel() {
+class AddSpecificUrlParamsRuleViewModel(
+    private val rulesRepository: RulesRepository
+) : AddRuleViewModel() {
 
     private val _ruleName = MutableStateFlow("")
     val ruleName = _ruleName.asStateFlow()
@@ -32,5 +36,18 @@ class AddSpecificUrlParamsRuleViewModel : ViewModel() {
         mutable.removeAt(index)
 
         _removableParams.value = mutable.toList()
+    }
+
+    override suspend fun saveRule() {
+        rulesRepository.saveRule(
+            SpecificUrlParamsMutationModel(
+                name = _ruleName.value,
+                triggerDomain = _domainName.value,
+                isLocalOnly = true,
+                mutationInfo = SpecificUrlParamsMutationInfo(
+                    removableParams = _removableParams.value
+                )
+            )
+        )
     }
 }
