@@ -23,7 +23,7 @@ instrumentation_test_task:
     - rm -rf ~/.gradle/caches/transforms-1
     - rm -rf ~/.gradle/caches/journal-1
     - rm -rf ~/.gradle/caches/jars-3/*/buildSrc.jar
-    - find ~/.gradle/caches/ -name "*.lock" -type f -delete
+#    - find ~/.gradle/caches/ -name "*.lock" -type f -delete
   create_device_script:
     echo no | avdmanager create avd --force --name "api-${API_LEVEL}" --abi "${TARGET}/${ARCH}" --package "system-images;android-${API_LEVEL};${TARGET};${ARCH}"
   start_emulator_background_script:
