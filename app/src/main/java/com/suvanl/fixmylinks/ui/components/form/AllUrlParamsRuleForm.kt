@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -24,7 +26,10 @@ fun AllUrlParamsRuleForm(
     modifier: Modifier = Modifier,
     interFieldSpacing: Dp = FormDefaults.InterFieldSpacing,
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .semantics { testTag = "AllUrlParamsRuleForm" }
+    ) {
         // "Rule name"
         RuleNameField(
             text = ruleNameText,

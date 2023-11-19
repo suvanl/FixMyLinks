@@ -1,10 +1,15 @@
 package com.suvanl.fixmylinks.viewmodel.newruleflow
 
-import androidx.lifecycle.ViewModel
+import com.suvanl.fixmylinks.data.repository.RulesRepository
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class AddDomainNameRuleViewModel : ViewModel() {
+class AddDomainNameRuleViewModel(
+    private val rulesRepository: RulesRepository
+) : AddRuleViewModel() {
 
     private val _ruleName = MutableStateFlow("")
     val ruleName = _ruleName.asStateFlow()
@@ -31,5 +36,33 @@ class AddDomainNameRuleViewModel : ViewModel() {
 
     fun setRemoveAllUrlParams(shouldRemove: Boolean) {
         _removeAllUrlParams.value = shouldRemove
+    }
+
+    override suspend fun saveRule() {
+        if (!_removeAllUrlParams.value) {
+            rulesRepository.saveRule(
+                DomainNameMutationModel(
+                    name = _ruleName.value,
+                    triggerDomain = _initialDomainName.value,
+                    isLocalOnly = true,
+                    mutationInfo = DomainNameMutationInfo(
+                        initialDomain = _initialDomainName.value,
+                        targetDomain = _targetDomainName.value,
+                    )
+                )
+            )
+        } else {
+            rulesRepository.saveRule(
+                DomainNameAndAllUrlParamsMutationModel(
+                    name = _ruleName.value,
+                    triggerDomain = _initialDomainName.value,
+                    isLocalOnly = true,
+                    mutationInfo = DomainNameMutationInfo(
+                        initialDomain = _initialDomainName.value,
+                        targetDomain = _targetDomainName.value,
+                    )
+                )
+            )
+        }
     }
 }
