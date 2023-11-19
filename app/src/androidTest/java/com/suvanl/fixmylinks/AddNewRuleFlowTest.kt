@@ -23,7 +23,7 @@ class AddNewRuleFlowTest {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     /**
-     * Common actions in this flow before it diverges based on selections made by the user
+     * Common actions in this flow before it diverges based on selections made by the user.
      */
     @Before
     fun commonActions() {
