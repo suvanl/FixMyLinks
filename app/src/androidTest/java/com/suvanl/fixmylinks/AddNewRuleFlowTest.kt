@@ -7,7 +7,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.LargeTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -44,7 +43,6 @@ class AddNewRuleFlowTest {
      * Navigate through the "add new rule" flow to create a DOMAIN_NAME rule
      */
     @Test
-    @LargeTest
     fun addNewRuleFlow_createDomainNameRule() {
         // click "Change domain name" option
         composeTestRule
@@ -76,7 +74,6 @@ class AddNewRuleFlowTest {
      * Navigate through the "add new rule" flow to create a URL_PARAMS_ALL rule
      */
     @Test
-    @LargeTest
     fun addNewRuleFlow_createAllUrlParamsRule() {
         // click "Remove all URL parameters" option
         composeTestRule
@@ -108,7 +105,6 @@ class AddNewRuleFlowTest {
      * Navigate through the "add new rule" flow to create a URL_PARAMS_SPECIFIC rule
      */
     @Test
-    @LargeTest
     fun addNewRuleFlow_createSpecificUrlParamsRule() {
         // click "Remove all URL parameters" option
         composeTestRule
@@ -140,7 +136,6 @@ class AddNewRuleFlowTest {
      * Navigate through the "add new rule" flow to create a DOMAIN_NAME_AND_URL_PARAMS_ALL rule
      */
     @Test
-    @LargeTest
     fun addNewRuleFlow_createDomainNameAndAllUrlParamsRule() {
         // click "Change domain name and remove all URL parameters" option
         composeTestRule
