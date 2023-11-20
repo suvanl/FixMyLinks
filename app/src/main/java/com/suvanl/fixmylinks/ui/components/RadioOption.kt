@@ -65,9 +65,9 @@ fun RadioOption(
         data.title ?: data.description
     )
 
-    Column {
+    Column(modifier = modifier) {
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .selectable(
                     selected = isSelected,
                     onClick = onClick,
@@ -82,7 +82,7 @@ fun RadioOption(
             )
 
             Column(
-                modifier = modifier.padding(horizontal = 8.dp)
+                modifier = Modifier.padding(horizontal = 8.dp)
             ) {
                 if (data.title != null) {
                     Text(

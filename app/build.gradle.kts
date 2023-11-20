@@ -19,7 +19,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments.putAll(
             mapOf(
-                "clearPackageData" to "true"
+                "clearPackageData" to "true",
             )
         )
 
