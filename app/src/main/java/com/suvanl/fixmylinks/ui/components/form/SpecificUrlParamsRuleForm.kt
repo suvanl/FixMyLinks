@@ -35,15 +35,23 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.components.form.common.DomainNameField
+import com.suvanl.fixmylinks.ui.components.form.common.FormFieldErrorMessage
 import com.suvanl.fixmylinks.ui.components.form.common.RuleNameField
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
+
+data class SpecificUrlParamsRuleFormState(
+    val ruleName: String = "",
+    val domainName: String = "",
+    val domainNameError: String? = null,
+    val addedParamNames: List<String> = emptyList(),
+    val addedParamNamesError: String? = null,
+    val urlParamKeyError: String? = null,
+)
 
 @Composable
 fun SpecificUrlParamsRuleForm(
     showHints: Boolean,
-    addedParamNames: List<String>,
-    ruleNameText: String,
-    domainNameText: String,
+    formState: SpecificUrlParamsRuleFormState,
     onRuleNameChange: (String) -> Unit,
     onDomainNameChange: (String) -> Unit,
     onClickAddParam: () -> Unit,
@@ -57,7 +65,7 @@ fun SpecificUrlParamsRuleForm(
     ) {
         // "Rule name"
         RuleNameField(
-            text = ruleNameText,
+            text = formState.ruleName,
             onValueChange = onRuleNameChange,
             modifier = Modifier.fillMaxWidth()
         )
@@ -66,8 +74,8 @@ fun SpecificUrlParamsRuleForm(
 
         // "Domain name"
         DomainNameField(
-            value = domainNameText,
-            errorMessage = null,
+            value = formState.domainName,
+            errorMessage = formState.domainNameError,
             showHints = showHints,
             onValueChange = onDomainNameChange,
             isLastFieldInForm = true,
@@ -96,8 +104,15 @@ fun SpecificUrlParamsRuleForm(
             }
         }
 
+        // Error message
+        if (formState.addedParamNamesError != null) {
+            FormFieldErrorMessage(
+                text = formState.addedParamNamesError
+            )
+        }
+
         ParamsChipGroup(
-            paramNames = addedParamNames,
+            paramNames = formState.addedParamNames,
             onChipDismiss = onClickDismissParam
         )
     }
@@ -149,9 +164,9 @@ private fun SpecificUrlParamsRuleFormPreview() {
         SpecificUrlParamsRuleForm(
             interFieldSpacing = 16.dp,
             showHints = true,
-            addedParamNames = listOf("param1", "ok", "cool", "t", "calm", "g", "igshid"),
-            domainNameText = "",
-            ruleNameText = "",
+            formState = SpecificUrlParamsRuleFormState(
+                addedParamNames = listOf("param1", "ok", "cool", "t", "calm", "g", "igshid")
+            ),
             onRuleNameChange = {},
             onDomainNameChange = {},
             onClickAddParam = {},

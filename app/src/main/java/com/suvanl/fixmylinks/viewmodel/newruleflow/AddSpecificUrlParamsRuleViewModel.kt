@@ -3,55 +3,90 @@ package com.suvanl.fixmylinks.viewmodel.newruleflow
 import com.suvanl.fixmylinks.data.repository.RulesRepository
 import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationInfo
 import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationModel
+import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
+import com.suvanl.fixmylinks.domain.validation.ValidateRemovableParamsListUseCase
+import com.suvanl.fixmylinks.domain.validation.ValidateUrlParamKeyUseCase
+import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleFormState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class AddSpecificUrlParamsRuleViewModel(
-    private val rulesRepository: RulesRepository
+    private val rulesRepository: RulesRepository,
+    private val validateDomainNameUseCase: ValidateDomainNameUseCase,
+    private val validateRemovableParamsListUseCase: ValidateRemovableParamsListUseCase,
+    private val validateUrlParamKeyUseCase: ValidateUrlParamKeyUseCase
 ) : AddRuleViewModel() {
 
-    private val _ruleName = MutableStateFlow("")
-    val ruleName = _ruleName.asStateFlow()
-
-    private val _domainName = MutableStateFlow("")
-    val domainName = _domainName.asStateFlow()
-
-    private val _removableParams = MutableStateFlow(emptyList<String>())
-    val removableParams = _removableParams.asStateFlow()
+    private val _formUiState = MutableStateFlow(SpecificUrlParamsRuleFormState())
+    val formUiState = _formUiState.asStateFlow()
 
     fun setRuleName(ruleName: String) {
-        _ruleName.value = ruleName
+        _formUiState.value = _formUiState.value.copy(ruleName = ruleName)
     }
 
     fun setDomainName(domainName: String) {
-        _domainName.value = domainName
+        _formUiState.value = _formUiState.value.copy(domainName = domainName)
     }
 
     fun addParam(paramName: String) {
-        _removableParams.value += paramName
+        val updatedParamList = _formUiState.value.addedParamNames.toMutableList().plus(paramName)
+
+        _formUiState.value = _formUiState.value.copy(
+            addedParamNames = updatedParamList
+        )
     }
 
     fun removeParam(index: Int) {
-        val mutable = _removableParams.value.toMutableList()
-        mutable.removeAt(index)
+        val updatedParamList = _formUiState.value.addedParamNames.toMutableList()
+        updatedParamList.removeAt(index)
 
-        _removableParams.value = mutable.toList()
+        _formUiState.value = _formUiState.value.copy(addedParamNames = updatedParamList)
     }
 
     override suspend fun saveRule() {
         rulesRepository.saveRule(
             SpecificUrlParamsMutationModel(
-                name = _ruleName.value,
-                triggerDomain = _domainName.value,
+                name = _formUiState.value.ruleName,
+                triggerDomain = _formUiState.value.domainName,
                 isLocalOnly = true,
                 mutationInfo = SpecificUrlParamsMutationInfo(
-                    removableParams = _removableParams.value
+                    removableParams = _formUiState.value.addedParamNames
                 )
             )
         )
     }
 
+    fun validateUrlParamKey(key: String): Boolean {
+        val urlParamKeyResult = validateUrlParamKeyUseCase(key)
+
+        _formUiState.value = _formUiState.value.copy(
+            urlParamKeyError = urlParamKeyResult.errorMessage
+        )
+
+        return urlParamKeyResult.isSuccessful
+    }
+
+    fun resetUrlParamKeyValidationState() {
+        _formUiState.value = _formUiState.value.copy(
+            urlParamKeyError = null
+        )
+    }
+
     override fun validateData(): Boolean {
-        TODO("Not yet implemented")
+        val domainNameResult = validateDomainNameUseCase(_formUiState.value.domainName)
+        val removableParamsListResult =
+            validateRemovableParamsListUseCase(_formUiState.value.addedParamNames)
+
+        _formUiState.value = _formUiState.value.copy(
+            domainNameError = domainNameResult.errorMessage,
+            addedParamNamesError = removableParamsListResult.errorMessage
+        )
+
+        val hasInvalidFields = listOf(
+            domainNameResult,
+            removableParamsListResult
+        ).any { !it.isSuccessful }
+
+        return !hasInvalidFields
     }
 }

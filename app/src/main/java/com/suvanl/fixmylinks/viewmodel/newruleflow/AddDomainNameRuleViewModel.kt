@@ -70,15 +70,15 @@ class AddDomainNameRuleViewModel(
         val initialDomainNameResult = validateDomainNameUseCase(initialDomainNameText)
         val targetDomainNameResult = validateDomainNameUseCase(targetDomainNameText)
 
-        val hasInvalidFields = listOf(
-            initialDomainNameResult,
-            targetDomainNameResult
-        ).any { !it.isSuccessful }
-
         _formUiState.value = _formUiState.value.copy(
             initialDomainNameError = initialDomainNameResult.errorMessage,
             targetDomainNameError = targetDomainNameResult.errorMessage,
         )
+
+        val hasInvalidFields = listOf(
+            initialDomainNameResult,
+            targetDomainNameResult
+        ).any { !it.isSuccessful }
 
         return !hasInvalidFields
     }

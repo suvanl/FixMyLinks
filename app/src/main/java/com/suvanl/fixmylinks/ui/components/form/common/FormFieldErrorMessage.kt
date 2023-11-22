@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Error
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,13 +24,19 @@ fun FormFieldErrorMessage(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.padding(bottom = 8.dp)
     ) {
-        Icon(imageVector = Icons.Outlined.Error, contentDescription = null)
+        Icon(
+            imageVector = Icons.Outlined.Error,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.error
+        )
 
         Spacer(modifier = Modifier.width(4.dp))
 
         Text(
             text = text,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.labelMedium,
         )
     }
 }
