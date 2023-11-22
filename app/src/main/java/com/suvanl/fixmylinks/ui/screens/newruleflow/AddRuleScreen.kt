@@ -96,15 +96,11 @@ fun AddRuleScreen(
                     viewModel.setRemoveAllUrlParams(true)
                 }
 
-                val ruleNameText by viewModel.ruleName.collectAsStateWithLifecycle()
-                val initialDomainNameText by viewModel.initialDomainName.collectAsStateWithLifecycle()
-                val targetDomainNameText by viewModel.targetDomainName.collectAsStateWithLifecycle()
+                val formUiState by viewModel.formUiState.collectAsStateWithLifecycle()
 
                 DomainNameRuleForm(
+                    formState = formUiState,
                     showHints = uiState.showFormFieldHints,
-                    ruleNameText = ruleNameText,
-                    initialDomainNameText = initialDomainNameText,
-                    targetDomainNameText = targetDomainNameText,
                     onRuleNameChange = viewModel::setRuleName,
                     onInitialDomainNameChange = viewModel::setInitialDomainName,
                     onTargetDomainNameChange = viewModel::setTargetDomainName,

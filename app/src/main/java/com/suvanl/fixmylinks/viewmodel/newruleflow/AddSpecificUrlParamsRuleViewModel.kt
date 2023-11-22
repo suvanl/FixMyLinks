@@ -50,4 +50,8 @@ class AddSpecificUrlParamsRuleViewModel(
             )
         )
     }
+
+    override fun validateData(): Boolean {
+        TODO("Not yet implemented")
+    }
 }

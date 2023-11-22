@@ -14,6 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleForm
 import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleForm
+import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleFormState
 import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleForm
 import com.suvanl.fixmylinks.ui.components.list.SwitchListItemState
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreenBody
@@ -72,10 +73,8 @@ class AddRuleScreenTest {
                 MutationType.DOMAIN_NAME,
                 MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
                     DomainNameRuleForm(
+                        formState = DomainNameRuleFormState(),
                         showHints = true,
-                        ruleNameText = "",
-                        initialDomainNameText = "",
-                        targetDomainNameText = "",
                         onRuleNameChange = {},
                         onInitialDomainNameChange = {},
                         onTargetDomainNameChange = {},

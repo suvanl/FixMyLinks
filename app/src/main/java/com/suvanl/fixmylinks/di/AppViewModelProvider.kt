@@ -6,6 +6,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.suvanl.fixmylinks.FmlApplication
 import com.suvanl.fixmylinks.domain.mutation.MutateUriUseCase
+import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
+import com.suvanl.fixmylinks.ui.util.AndroidDomainNameValidator
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 import com.suvanl.fixmylinks.viewmodel.ShareViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddAllUrlParamsRuleViewModel
@@ -28,7 +30,10 @@ object AppViewModelProvider {
 
         initializer {
             AddDomainNameRuleViewModel(
-                rulesRepository = application().container.rulesRepository
+                rulesRepository = application().container.rulesRepository,
+                validateDomainNameUseCase = ValidateDomainNameUseCase(
+                    validator = AndroidDomainNameValidator()
+                )
             )
         }
 
