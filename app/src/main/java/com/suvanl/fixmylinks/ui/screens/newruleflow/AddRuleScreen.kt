@@ -108,13 +108,11 @@ fun AddRuleScreen(
             }
 
             is AddAllUrlParamsRuleViewModel -> {
-                val ruleNameText by viewModel.ruleName.collectAsStateWithLifecycle()
-                val domainNameText by viewModel.domainName.collectAsStateWithLifecycle()
+                val formUiState by viewModel.formUiState.collectAsStateWithLifecycle()
 
                 AllUrlParamsRuleForm(
+                    formState = formUiState,
                     showHints = uiState.showFormFieldHints,
-                    ruleNameText = ruleNameText,
-                    domainNameText = domainNameText,
                     onRuleNameChange = viewModel::setRuleName,
                     onDomainNameChange = viewModel::setDomainName,
                 )

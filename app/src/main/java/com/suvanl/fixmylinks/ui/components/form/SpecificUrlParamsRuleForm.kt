@@ -67,6 +67,7 @@ fun SpecificUrlParamsRuleForm(
         // "Domain name"
         DomainNameField(
             value = domainNameText,
+            errorMessage = null,
             showHints = showHints,
             onValueChange = onDomainNameChange,
             isLastFieldInForm = true,

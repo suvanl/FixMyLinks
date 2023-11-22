@@ -16,11 +16,16 @@ import com.suvanl.fixmylinks.ui.components.form.common.DomainNameField
 import com.suvanl.fixmylinks.ui.components.form.common.RuleNameField
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 
+data class AllUrlParamsRuleFormState(
+    val ruleName: String = "",
+    val domainName: String = "",
+    val domainNameError: String? = null,
+)
+
 @Composable
 fun AllUrlParamsRuleForm(
+    formState: AllUrlParamsRuleFormState,
     showHints: Boolean,
-    ruleNameText: String,
-    domainNameText: String,
     onRuleNameChange: (String) -> Unit,
     onDomainNameChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -32,7 +37,7 @@ fun AllUrlParamsRuleForm(
     ) {
         // "Rule name"
         RuleNameField(
-            text = ruleNameText,
+            text = formState.ruleName,
             onValueChange = onRuleNameChange,
             modifier = Modifier.fillMaxWidth()
         )
@@ -41,7 +46,8 @@ fun AllUrlParamsRuleForm(
 
         // "Domain name"
         DomainNameField(
-            value = domainNameText,
+            value = formState.domainName,
+            errorMessage = formState.domainNameError,
             showHints = showHints,
             onValueChange = onDomainNameChange,
             isLastFieldInForm = true,
@@ -63,8 +69,7 @@ private fun AllUrlParamsRuleFormPreview() {
             interFieldSpacing = 16.dp,
             onRuleNameChange = {},
             onDomainNameChange = {},
-            ruleNameText = "",
-            domainNameText = "",
+            formState = AllUrlParamsRuleFormState(),
         )
     }
 }

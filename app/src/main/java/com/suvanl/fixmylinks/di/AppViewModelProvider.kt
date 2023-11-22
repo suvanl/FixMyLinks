@@ -24,7 +24,10 @@ object AppViewModelProvider {
 
         initializer {
             AddAllUrlParamsRuleViewModel(
-                rulesRepository = application().container.rulesRepository
+                rulesRepository = application().container.rulesRepository,
+                validateDomainNameUseCase = ValidateDomainNameUseCase(
+                    validator = AndroidDomainNameValidator()
+                )
             )
         }
 
