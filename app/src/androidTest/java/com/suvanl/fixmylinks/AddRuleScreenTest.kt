@@ -13,9 +13,11 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleForm
+import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleFormState
 import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleForm
 import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleFormState
 import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleForm
+import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleFormState
 import com.suvanl.fixmylinks.ui.components.list.SwitchListItemState
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreenBody
 import org.junit.Rule
@@ -60,9 +62,7 @@ class AddRuleScreenTest {
                 MutationType.URL_PARAMS_SPECIFIC -> {
                     SpecificUrlParamsRuleForm(
                         showHints = true,
-                        addedParamNames = listOf(),
-                        ruleNameText = "",
-                        domainNameText = "",
+                        formState = SpecificUrlParamsRuleFormState(),
                         onRuleNameChange = {},
                         onDomainNameChange = {},
                         onClickAddParam = {},
@@ -83,8 +83,7 @@ class AddRuleScreenTest {
                 MutationType.URL_PARAMS_ALL -> {
                     AllUrlParamsRuleForm(
                         showHints = true,
-                        ruleNameText = "",
-                        domainNameText = "",
+                        formState = AllUrlParamsRuleFormState(),
                         onRuleNameChange = {},
                         onDomainNameChange = {}
                     )
