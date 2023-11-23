@@ -9,7 +9,7 @@ import com.suvanl.fixmylinks.domain.mutation.MutateUriUseCase
 import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
 import com.suvanl.fixmylinks.domain.validation.ValidateRemovableParamsListUseCase
 import com.suvanl.fixmylinks.domain.validation.ValidateUrlParamKeyUseCase
-import com.suvanl.fixmylinks.ui.util.AndroidDomainNameValidator
+import com.suvanl.fixmylinks.ui.util.DomainNameValidator
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 import com.suvanl.fixmylinks.viewmodel.ShareViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddAllUrlParamsRuleViewModel
@@ -28,7 +28,7 @@ object AppViewModelProvider {
             AddAllUrlParamsRuleViewModel(
                 rulesRepository = application().container.rulesRepository,
                 validateDomainNameUseCase = ValidateDomainNameUseCase(
-                    validator = AndroidDomainNameValidator()
+                    domainNameValidator = DomainNameValidator()
                 )
             )
         }
@@ -37,7 +37,7 @@ object AppViewModelProvider {
             AddDomainNameRuleViewModel(
                 rulesRepository = application().container.rulesRepository,
                 validateDomainNameUseCase = ValidateDomainNameUseCase(
-                    validator = AndroidDomainNameValidator()
+                    domainNameValidator = DomainNameValidator()
                 )
             )
         }
@@ -46,7 +46,7 @@ object AppViewModelProvider {
             AddSpecificUrlParamsRuleViewModel(
                 rulesRepository = application().container.rulesRepository,
                 validateDomainNameUseCase = ValidateDomainNameUseCase(
-                    validator = AndroidDomainNameValidator()
+                    domainNameValidator = DomainNameValidator()
                 ),
                 validateRemovableParamsListUseCase = ValidateRemovableParamsListUseCase(),
                 validateUrlParamKeyUseCase = ValidateUrlParamKeyUseCase()

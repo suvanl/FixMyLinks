@@ -1,5 +1,5 @@
 package com.suvanl.fixmylinks.domain.validation
 
-interface DomainNameValidator {
+interface Validator {
     fun isValid(domainName: String): Boolean
 }

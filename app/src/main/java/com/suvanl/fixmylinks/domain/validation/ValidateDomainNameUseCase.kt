@@ -1,6 +1,6 @@
 package com.suvanl.fixmylinks.domain.validation
 
-class ValidateDomainNameUseCase(private val validator: DomainNameValidator) {
+class ValidateDomainNameUseCase(private val domainNameValidator: Validator) {
     operator fun invoke(domainName: String): ValidationResult {
         if (domainName.isBlank()) {
             return ValidationResult(
@@ -9,7 +9,7 @@ class ValidateDomainNameUseCase(private val validator: DomainNameValidator) {
             )
         }
 
-        if (!validator.isValid(domainName)) {
+        if (!domainNameValidator.isValid(domainName)) {
             return ValidationResult(
                 isSuccessful = false,
                 errorMessage = "That doesn't look like a valid domain name"
