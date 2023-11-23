@@ -143,7 +143,7 @@ class SelectRuleTypeScreenTest {
     }
 
     @Test
-    fun selectRuleTypeScreen_mediumOrExpanded_nextButton_isDisplayed() {
+    fun selectRuleTypeScreen_mediumOrExpanded_nextButton_doesNotExist() {
         composeTestRule.setContent {
             DefaultMediumExpandedLayout()
         }
