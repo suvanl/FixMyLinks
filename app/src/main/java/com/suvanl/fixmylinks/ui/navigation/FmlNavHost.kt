@@ -141,6 +141,8 @@ fun FmlNavHost(
                 var hintsOptionCheckedState by remember { mutableStateOf(true) }
 
                 fun handleSaveRuleClick() {
+                    if (!viewModel.validateData()) return
+
                     coroutineScope.launch {
                         viewModel.saveRule()
                         navController.popBackStack(

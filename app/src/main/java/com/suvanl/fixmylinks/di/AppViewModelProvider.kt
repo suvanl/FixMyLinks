@@ -6,6 +6,10 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.suvanl.fixmylinks.FmlApplication
 import com.suvanl.fixmylinks.domain.mutation.MutateUriUseCase
+import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
+import com.suvanl.fixmylinks.domain.validation.ValidateRemovableParamsListUseCase
+import com.suvanl.fixmylinks.domain.validation.ValidateUrlParamKeyUseCase
+import com.suvanl.fixmylinks.ui.util.DomainNameValidator
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 import com.suvanl.fixmylinks.viewmodel.ShareViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddAllUrlParamsRuleViewModel
@@ -22,19 +26,30 @@ object AppViewModelProvider {
 
         initializer {
             AddAllUrlParamsRuleViewModel(
-                rulesRepository = application().container.rulesRepository
+                rulesRepository = application().container.rulesRepository,
+                validateDomainNameUseCase = ValidateDomainNameUseCase(
+                    domainNameValidator = DomainNameValidator()
+                )
             )
         }
 
         initializer {
             AddDomainNameRuleViewModel(
-                rulesRepository = application().container.rulesRepository
+                rulesRepository = application().container.rulesRepository,
+                validateDomainNameUseCase = ValidateDomainNameUseCase(
+                    domainNameValidator = DomainNameValidator()
+                )
             )
         }
 
         initializer {
             AddSpecificUrlParamsRuleViewModel(
-                rulesRepository = application().container.rulesRepository
+                rulesRepository = application().container.rulesRepository,
+                validateDomainNameUseCase = ValidateDomainNameUseCase(
+                    domainNameValidator = DomainNameValidator()
+                ),
+                validateRemovableParamsListUseCase = ValidateRemovableParamsListUseCase(),
+                validateUrlParamKeyUseCase = ValidateUrlParamKeyUseCase()
             )
         }
 

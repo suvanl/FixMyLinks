@@ -40,6 +40,7 @@ import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleForm
 import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleForm
 import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleForm
+import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleFormState
 import com.suvanl.fixmylinks.ui.components.form.common.ParameterNameField
 import com.suvanl.fixmylinks.ui.components.list.SwitchList
 import com.suvanl.fixmylinks.ui.components.list.SwitchListItemState
@@ -96,15 +97,11 @@ fun AddRuleScreen(
                     viewModel.setRemoveAllUrlParams(true)
                 }
 
-                val ruleNameText by viewModel.ruleName.collectAsStateWithLifecycle()
-                val initialDomainNameText by viewModel.initialDomainName.collectAsStateWithLifecycle()
-                val targetDomainNameText by viewModel.targetDomainName.collectAsStateWithLifecycle()
+                val formUiState by viewModel.formUiState.collectAsStateWithLifecycle()
 
                 DomainNameRuleForm(
+                    formState = formUiState,
                     showHints = uiState.showFormFieldHints,
-                    ruleNameText = ruleNameText,
-                    initialDomainNameText = initialDomainNameText,
-                    targetDomainNameText = targetDomainNameText,
                     onRuleNameChange = viewModel::setRuleName,
                     onInitialDomainNameChange = viewModel::setInitialDomainName,
                     onTargetDomainNameChange = viewModel::setTargetDomainName,
@@ -112,30 +109,23 @@ fun AddRuleScreen(
             }
 
             is AddAllUrlParamsRuleViewModel -> {
-                val ruleNameText by viewModel.ruleName.collectAsStateWithLifecycle()
-                val domainNameText by viewModel.domainName.collectAsStateWithLifecycle()
+                val formUiState by viewModel.formUiState.collectAsStateWithLifecycle()
 
                 AllUrlParamsRuleForm(
+                    formState = formUiState,
                     showHints = uiState.showFormFieldHints,
-                    ruleNameText = ruleNameText,
-                    domainNameText = domainNameText,
                     onRuleNameChange = viewModel::setRuleName,
                     onDomainNameChange = viewModel::setDomainName,
                 )
             }
 
             is AddSpecificUrlParamsRuleViewModel -> {
-                val ruleNameText by viewModel.ruleName.collectAsStateWithLifecycle()
-                val domainNameText by viewModel.domainName.collectAsStateWithLifecycle()
-                val addedParamNames by viewModel.removableParams.collectAsStateWithLifecycle()
-
                 var openParamNameDialog by remember { mutableStateOf(false) }
+                val formUiState by viewModel.formUiState.collectAsStateWithLifecycle()
 
                 SpecificUrlParamsRuleForm(
                     showHints = uiState.showFormFieldHints,
-                    addedParamNames = addedParamNames,
-                    ruleNameText = ruleNameText,
-                    domainNameText = domainNameText,
+                    formState = formUiState,
                     onRuleNameChange = viewModel::setRuleName,
                     onDomainNameChange = viewModel::setDomainName,
                     onClickAddParam = { openParamNameDialog = true },
@@ -144,11 +134,17 @@ fun AddRuleScreen(
 
                 if (openParamNameDialog) {
                     AddParameterNameDialog(
+                        textFieldErrorMessage = formUiState.urlParamKeyError,
                         onConfirmation = {
+                            if (!viewModel.validateUrlParamKey(it)) return@AddParameterNameDialog
+
                             viewModel.addParam(it)
                             openParamNameDialog = false
                         },
-                        onDismissRequest = { openParamNameDialog = false }
+                        onDismissRequest = {
+                            viewModel.resetUrlParamKeyValidationState()
+                            openParamNameDialog = false
+                        }
                     )
                 }
             }
@@ -224,6 +220,7 @@ fun AddRuleScreenBody(
 
 @Composable
 private fun AddParameterNameDialog(
+    textFieldErrorMessage: String?,
     onConfirmation: (String) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
@@ -240,6 +237,7 @@ private fun AddParameterNameDialog(
         text = {
             ParameterNameField(
                 text = text,
+                errorMessage = textFieldErrorMessage,
                 onValueChange = { text = it },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -301,9 +299,7 @@ fun AddRuleScreenPreview() {
         ) {
             SpecificUrlParamsRuleForm(
                 showHints = true,
-                addedParamNames = listOf(),
-                ruleNameText = "",
-                domainNameText = "",
+                formState = SpecificUrlParamsRuleFormState(),
                 onRuleNameChange = {},
                 onDomainNameChange = {},
                 onClickAddParam = {},
@@ -317,6 +313,10 @@ fun AddRuleScreenPreview() {
 @Composable
 private fun AddParameterNameDialogPreview() {
     PreviewContainer {
-        AddParameterNameDialog(onConfirmation = {}, onDismissRequest = {})
+        AddParameterNameDialog(
+            textFieldErrorMessage = null,
+            onConfirmation = {},
+            onDismissRequest = {}
+        )
     }
 }
