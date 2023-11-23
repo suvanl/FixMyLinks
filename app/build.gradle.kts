@@ -89,6 +89,8 @@ dependencies {
 
 
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:4.11.0")         // v5 drops Java 8 support
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0") // v5 drops Java 8 support
     testImplementation("androidx.room:room-testing:$roomVersion")
 
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))
