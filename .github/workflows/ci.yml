@@ -80,7 +80,7 @@ jobs:
           path: app/build/reports/tests/testReleaseUnitTest/
 
   instrumentation-test:
-    needs: [unit-test]
+    needs: [lint]
     if: |
       needs.changes.outputs.androidTest == 'true' ||
       needs.changes.outputs.main == 'true' ||
