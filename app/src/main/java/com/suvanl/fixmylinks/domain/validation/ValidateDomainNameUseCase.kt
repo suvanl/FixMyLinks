@@ -1,18 +1,21 @@
 package com.suvanl.fixmylinks.domain.validation
 
+import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.util.UiText
+
 class ValidateDomainNameUseCase(private val domainNameValidator: Validator) {
     operator fun invoke(domainName: String): ValidationResult {
         if (domainName.isBlank()) {
             return ValidationResult(
                 isSuccessful = false,
-                errorMessage = "Domain name can't be blank"
+                errorMessage = UiText.StringResource(R.string.domain_name_blank_error)
             )
         }
 
         if (!domainNameValidator.isValid(domainName)) {
             return ValidationResult(
                 isSuccessful = false,
-                errorMessage = "That doesn't look like a valid domain name"
+                errorMessage = UiText.StringResource(R.string.invalid_domain_name)
             )
         }
 

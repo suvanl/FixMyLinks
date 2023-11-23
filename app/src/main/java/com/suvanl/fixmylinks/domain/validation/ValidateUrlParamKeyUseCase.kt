@@ -1,11 +1,14 @@
 package com.suvanl.fixmylinks.domain.validation
 
+import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.util.UiText
+
 class ValidateUrlParamKeyUseCase {
     operator fun invoke(urlParamKey: String): ValidationResult {
         if (urlParamKey.isBlank()) {
             return ValidationResult(
                 isSuccessful = false,
-                errorMessage = "Parameter name can't be blank"
+                errorMessage = UiText.StringResource(R.string.parameter_name_blank_error)
             )
         }
 
@@ -14,7 +17,7 @@ class ValidateUrlParamKeyUseCase {
             if (char !in allowedChars) {
                 return ValidationResult(
                     isSuccessful = false,
-                    errorMessage = "That doesn't look like a valid URL parameter name"
+                    errorMessage = UiText.StringResource(R.string.invalid_parameter_name)
                 )
             }
         }

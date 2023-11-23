@@ -38,14 +38,15 @@ import com.suvanl.fixmylinks.ui.components.form.common.DomainNameField
 import com.suvanl.fixmylinks.ui.components.form.common.FormFieldErrorMessage
 import com.suvanl.fixmylinks.ui.components.form.common.RuleNameField
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
+import com.suvanl.fixmylinks.util.UiText
 
 data class SpecificUrlParamsRuleFormState(
     val ruleName: String = "",
     val domainName: String = "",
-    val domainNameError: String? = null,
+    val domainNameError: UiText? = null,
     val addedParamNames: List<String> = emptyList(),
-    val addedParamNamesError: String? = null,
-    val urlParamKeyError: String? = null,
+    val addedParamNamesError: UiText? = null,
+    val urlParamKeyError: UiText? = null,
 )
 
 @Composable
@@ -75,7 +76,7 @@ fun SpecificUrlParamsRuleForm(
         // "Domain name"
         DomainNameField(
             value = formState.domainName,
-            errorMessage = formState.domainNameError,
+            errorMessage = formState.domainNameError?.asString(),
             showHints = showHints,
             onValueChange = onDomainNameChange,
             isLastFieldInForm = true,
@@ -107,7 +108,7 @@ fun SpecificUrlParamsRuleForm(
         // Error message
         if (formState.addedParamNamesError != null) {
             FormFieldErrorMessage(
-                text = formState.addedParamNamesError
+                text = formState.addedParamNamesError.asString()
             )
         }
 

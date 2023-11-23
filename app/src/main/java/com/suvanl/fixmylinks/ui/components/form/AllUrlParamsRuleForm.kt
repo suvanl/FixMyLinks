@@ -15,11 +15,12 @@ import androidx.compose.ui.unit.dp
 import com.suvanl.fixmylinks.ui.components.form.common.DomainNameField
 import com.suvanl.fixmylinks.ui.components.form.common.RuleNameField
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
+import com.suvanl.fixmylinks.util.UiText
 
 data class AllUrlParamsRuleFormState(
     val ruleName: String = "",
     val domainName: String = "",
-    val domainNameError: String? = null,
+    val domainNameError: UiText? = null,
 )
 
 @Composable
@@ -47,7 +48,7 @@ fun AllUrlParamsRuleForm(
         // "Domain name"
         DomainNameField(
             value = formState.domainName,
-            errorMessage = formState.domainNameError,
+            errorMessage = formState.domainNameError?.asString(),
             showHints = showHints,
             onValueChange = onDomainNameChange,
             isLastFieldInForm = true,
