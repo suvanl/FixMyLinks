@@ -13,7 +13,6 @@ import com.suvanl.fixmylinks.ui.util.DomainNameValidator
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 import com.suvanl.fixmylinks.viewmodel.ShareViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddAllUrlParamsRuleViewModel
-import com.suvanl.fixmylinks.viewmodel.newruleflow.AddDomainNameRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
 
 object AppViewModelProvider {
@@ -26,15 +25,6 @@ object AppViewModelProvider {
 
         initializer {
             AddAllUrlParamsRuleViewModel(
-                rulesRepository = application().container.rulesRepository,
-                validateDomainNameUseCase = ValidateDomainNameUseCase(
-                    domainNameValidator = DomainNameValidator()
-                )
-            )
-        }
-
-        initializer {
-            AddDomainNameRuleViewModel(
                 rulesRepository = application().container.rulesRepository,
                 validateDomainNameUseCase = ValidateDomainNameUseCase(
                     domainNameValidator = DomainNameValidator()

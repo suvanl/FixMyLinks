@@ -2,8 +2,11 @@ package com.suvanl.fixmylinks.domain.validation
 
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.util.UiText
+import javax.inject.Inject
 
-class ValidateDomainNameUseCase(private val domainNameValidator: Validator) {
+class ValidateDomainNameUseCase @Inject constructor(
+    private val domainNameValidator: Validator
+) {
     operator fun invoke(domainName: String): ValidationResult {
         if (domainName.isBlank()) {
             return ValidationResult(

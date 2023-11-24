@@ -6,10 +6,13 @@ import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationModel
 import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
 import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleFormState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class AddDomainNameRuleViewModel(
+@HiltViewModel
+class AddDomainNameRuleViewModel @Inject constructor(
     private val rulesRepository: RulesRepository,
     private val validateDomainNameUseCase: ValidateDomainNameUseCase
 ) : AddRuleViewModel() {
