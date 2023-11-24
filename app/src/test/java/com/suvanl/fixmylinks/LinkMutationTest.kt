@@ -81,7 +81,18 @@ class LinkMutationTest {
             URI("https://www.reddit.com/r/androiddev/comments/158s8lf/i_made_this_circular_scribble_pager_indicator_in/?utm_source=share&utm_medium=web2x&context=3"),
             mockCustomRules
         )
-        val expected = URI("https://reddit.com/r/androiddev/comments/158s8lf/i_made_this_circular_scribble_pager_indicator_in/")
+        val expected = URI("https://www.reddit.com/r/androiddev/comments/158s8lf/i_made_this_circular_scribble_pager_indicator_in/")
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `URL_PARAMS_ALL rule restores 'www' subdomain if original extracted URL contained it`() {
+        val actual = mutateUriUseCase(
+            URI("https://www.blog.google/test-item?s=09"),
+            mockCustomRules
+        )
+
+        val expected = URI("https://www.blog.google/test-item")
         assertEquals(expected, actual)
     }
 
