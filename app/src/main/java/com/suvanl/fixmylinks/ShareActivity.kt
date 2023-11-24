@@ -14,7 +14,9 @@ import com.suvanl.fixmylinks.ui.screens.ShareScreen
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
 import com.suvanl.fixmylinks.util.shareTextContent
 import com.suvanl.fixmylinks.viewmodel.ShareViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ShareActivity : ComponentActivity() {
 
     private val viewModel by viewModels<ShareViewModel>()
