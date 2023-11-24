@@ -33,7 +33,8 @@ class MutateUriUseCase {
             }
 
             is AllUrlParamsMutationModel -> {
-                return removeAllUrlParamsUseCase(uriToMutate)
+                // using `uri` to ensure we keep the "www" subdomain if it exists in it
+                return removeAllUrlParamsUseCase(uri)
             }
 
             is SpecificUrlParamsMutationModel -> {
