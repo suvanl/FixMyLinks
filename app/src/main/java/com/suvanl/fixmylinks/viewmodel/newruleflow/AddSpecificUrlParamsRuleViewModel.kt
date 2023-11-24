@@ -7,6 +7,7 @@ import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
 import com.suvanl.fixmylinks.domain.validation.ValidateRemovableParamsListUseCase
 import com.suvanl.fixmylinks.domain.validation.ValidateUrlParamKeyUseCase
 import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleFormState
+import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddSpecificUrlParamsRuleViewModel @Inject constructor(
-    private val rulesRepository: RulesRepository,
+    private val rulesRepository: Lazy<RulesRepository>,
     private val validateDomainNameUseCase: ValidateDomainNameUseCase,
     private val validateRemovableParamsListUseCase: ValidateRemovableParamsListUseCase,
     private val validateUrlParamKeyUseCase: ValidateUrlParamKeyUseCase
@@ -47,7 +48,7 @@ class AddSpecificUrlParamsRuleViewModel @Inject constructor(
     }
 
     override suspend fun saveRule() {
-        rulesRepository.saveRule(
+        rulesRepository.get().saveRule(
             SpecificUrlParamsMutationModel(
                 name = _formUiState.value.ruleName,
                 triggerDomain = _formUiState.value.domainName,
