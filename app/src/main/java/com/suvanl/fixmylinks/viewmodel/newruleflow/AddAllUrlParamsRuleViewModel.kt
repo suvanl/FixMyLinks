@@ -5,10 +5,12 @@ import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
 import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleFormState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
+@HiltViewModel
 class AddAllUrlParamsRuleViewModel @Inject constructor(
     private val rulesRepository: RulesRepository,
     private val validateDomainNameUseCase: ValidateDomainNameUseCase,

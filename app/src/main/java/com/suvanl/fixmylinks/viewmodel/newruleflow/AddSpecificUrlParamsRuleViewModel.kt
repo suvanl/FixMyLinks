@@ -7,10 +7,12 @@ import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
 import com.suvanl.fixmylinks.domain.validation.ValidateRemovableParamsListUseCase
 import com.suvanl.fixmylinks.domain.validation.ValidateUrlParamKeyUseCase
 import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleFormState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
+@HiltViewModel
 class AddSpecificUrlParamsRuleViewModel @Inject constructor(
     private val rulesRepository: RulesRepository,
     private val validateDomainNameUseCase: ValidateDomainNameUseCase,
