@@ -14,8 +14,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
-class ShareViewModel(
+class ShareViewModel @Inject constructor(
     private val mutateUriUseCase: MutateUriUseCase,
     private val rulesRepository: RulesRepository
 ) : ViewModel() {
