@@ -9,8 +9,9 @@ import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationMode
 import com.suvanl.fixmylinks.domain.mutation.rule.BuiltInRules
 import com.suvanl.fixmylinks.domain.util.UriUtils.removeSubdomain
 import java.net.URI
+import javax.inject.Inject
 
-class MutateUriUseCase {
+class MutateUriUseCase @Inject constructor() {
     operator fun invoke(uri: URI, customRules: List<BaseMutationModel>): URI {
         val uriUsesWwwSubdomain = uri.host.startsWith("www.")
         val uriToMutate = if (uriUsesWwwSubdomain) {
