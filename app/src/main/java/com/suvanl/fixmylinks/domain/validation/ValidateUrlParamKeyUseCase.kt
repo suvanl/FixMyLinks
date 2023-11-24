@@ -2,8 +2,9 @@ package com.suvanl.fixmylinks.domain.validation
 
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.util.UiText
+import javax.inject.Inject
 
-class ValidateUrlParamKeyUseCase {
+class ValidateUrlParamKeyUseCase @Inject constructor() {
     operator fun invoke(urlParamKey: String): ValidationResult {
         if (urlParamKey.isBlank()) {
             return ValidationResult(

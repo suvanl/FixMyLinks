@@ -7,8 +7,9 @@ import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
 import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleFormState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class AddAllUrlParamsRuleViewModel(
+class AddAllUrlParamsRuleViewModel @Inject constructor(
     private val rulesRepository: RulesRepository,
     private val validateDomainNameUseCase: ValidateDomainNameUseCase,
 ) : AddRuleViewModel() {
