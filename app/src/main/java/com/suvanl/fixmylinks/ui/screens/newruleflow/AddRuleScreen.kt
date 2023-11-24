@@ -134,7 +134,7 @@ fun AddRuleScreen(
 
                 if (openParamNameDialog) {
                     AddParameterNameDialog(
-                        textFieldErrorMessage = formUiState.urlParamKeyError,
+                        textFieldErrorMessage = formUiState.urlParamKeyError?.asString(),
                         onConfirmation = {
                             if (!viewModel.validateUrlParamKey(it)) return@AddParameterNameDialog
 

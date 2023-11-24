@@ -26,15 +26,16 @@ import com.suvanl.fixmylinks.ui.animation.TransitionDefaults
 import com.suvanl.fixmylinks.ui.components.form.common.FormFieldErrorMessage
 import com.suvanl.fixmylinks.ui.components.form.common.RuleNameField
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
+import com.suvanl.fixmylinks.util.UiText
 
 data class DomainNameRuleFormState(
     val ruleName: String = "",
 
     val initialDomainName: String = "",
-    val initialDomainNameError: String? = null,
+    val initialDomainNameError: UiText? = null,
 
     val targetDomainName: String = "",
-    val targetDomainNameError: String? = null,
+    val targetDomainNameError: UiText? = null,
 )
 
 @Composable
@@ -72,7 +73,7 @@ fun DomainNameRuleForm(
                 Column {
                     // Error message
                     if (formState.initialDomainNameError != null) {
-                        FormFieldErrorMessage(text = formState.initialDomainNameError)
+                        FormFieldErrorMessage(text = formState.initialDomainNameError.asString())
                     }
 
                     // Hint text
@@ -111,7 +112,7 @@ fun DomainNameRuleForm(
             supportingText = {
                 Column {
                     if (formState.targetDomainNameError != null) {
-                        FormFieldErrorMessage(text = formState.targetDomainNameError)
+                        FormFieldErrorMessage(text = formState.targetDomainNameError.asString())
                     }
 
                     AnimatedVisibility(

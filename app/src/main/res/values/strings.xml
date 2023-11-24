@@ -50,4 +50,9 @@
     <string name="domain_name_supporting_text">The domain name that links of should be affected by this rule.</string>
     <string name="delete">Delete</string>
     <string name="url_parameter_name">URL parameter name</string>
+    <string name="domain_name_blank_error">Domain name can\'t be blank</string>
+    <string name="invalid_domain_name">That doesn\'t look like a valid domain name</string>
+    <string name="parameter_name_blank_error">Parameter name can\'t be blank</string>
+    <string name="invalid_parameter_name">That doesn\'t look like a valid URL parameter name</string>
+    <string name="add_at_least_one_param_name">Add at least one URL parameter name</string>
 </resources>
