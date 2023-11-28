@@ -1,4 +1,4 @@
-package com.suvanl.fixmylinks
+package com.suvanl.fixmylinks.data.local.db
 
 import android.content.Context
 import androidx.room.Room
@@ -6,7 +6,6 @@ import androidx.room.withTransaction
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import com.suvanl.fixmylinks.data.local.db.RuleDatabase
 import com.suvanl.fixmylinks.data.local.db.dao.AllUrlParamsRuleDao
 import com.suvanl.fixmylinks.data.local.db.dao.BaseRuleDao
 import com.suvanl.fixmylinks.data.local.db.dao.DomainNameAndAllUrlParamsRuleDao
