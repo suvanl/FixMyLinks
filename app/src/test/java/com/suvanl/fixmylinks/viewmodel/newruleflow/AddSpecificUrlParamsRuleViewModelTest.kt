@@ -134,7 +134,7 @@ class AddSpecificUrlParamsRuleViewModelTest {
             // Get all rules from the repository
             val allRules = repository.getAllRules().first()
 
-            // Assert that the rule exists in the data source
+            // Assert that the rule doesn't exist in the data source
             val rule = allRules.find { it.name == ruleName && it.triggerDomain == domainName }
             assertNull(rule)
         }
