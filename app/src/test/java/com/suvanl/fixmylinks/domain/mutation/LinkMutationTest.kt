@@ -1,6 +1,5 @@
-package com.suvanl.fixmylinks
+package com.suvanl.fixmylinks.domain.mutation
 
-import com.suvanl.fixmylinks.domain.mutation.MutateUriUseCase
 import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndSpecificUrlParamsMutationInfo
