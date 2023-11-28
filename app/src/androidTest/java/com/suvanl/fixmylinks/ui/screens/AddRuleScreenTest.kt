@@ -1,4 +1,4 @@
-package com.suvanl.fixmylinks
+package com.suvanl.fixmylinks.ui.screens
 
 import androidx.activity.ComponentActivity
 import androidx.compose.material.icons.Icons
@@ -11,6 +11,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleForm
 import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleFormState

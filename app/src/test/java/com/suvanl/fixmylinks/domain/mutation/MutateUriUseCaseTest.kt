@@ -1,6 +1,5 @@
-package com.suvanl.fixmylinks
+package com.suvanl.fixmylinks.domain.mutation
 
-import com.suvanl.fixmylinks.domain.mutation.MutateUriUseCase
 import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndSpecificUrlParamsMutationInfo
@@ -17,7 +16,7 @@ import java.net.URI
 /**
  * Test suite for link mutation business logic
  */
-class LinkMutationTest {
+class MutateUriUseCaseTest {
 
     private lateinit var mutateUriUseCase: MutateUriUseCase
 
