@@ -20,9 +20,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.suvanl.fixmylinks.di.AppViewModelProvider
 import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
@@ -37,7 +36,7 @@ data class RulesScreenUiState(
 @Composable
 fun RulesScreen(
     modifier: Modifier = Modifier,
-    viewModel: RulesViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: RulesViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.rulesScreenUiState.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()

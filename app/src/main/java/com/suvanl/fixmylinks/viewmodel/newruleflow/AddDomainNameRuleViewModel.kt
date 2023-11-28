@@ -6,11 +6,15 @@ import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationModel
 import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
 import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleFormState
+import dagger.Lazy
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class AddDomainNameRuleViewModel(
-    private val rulesRepository: RulesRepository,
+@HiltViewModel
+class AddDomainNameRuleViewModel @Inject constructor(
+    private val rulesRepository: Lazy<RulesRepository>,
     private val validateDomainNameUseCase: ValidateDomainNameUseCase
 ) : AddRuleViewModel() {
 
@@ -36,8 +40,10 @@ class AddDomainNameRuleViewModel(
     }
 
     override suspend fun saveRule() {
+        if (!validateData()) return
+
         if (!_removeAllUrlParams.value) {
-            rulesRepository.saveRule(
+            rulesRepository.get().saveRule(
                 DomainNameMutationModel(
                     name = _formUiState.value.ruleName,
                     triggerDomain = _formUiState.value.initialDomainName,
@@ -49,7 +55,7 @@ class AddDomainNameRuleViewModel(
                 )
             )
         } else {
-            rulesRepository.saveRule(
+            rulesRepository.get().saveRule(
                 DomainNameAndAllUrlParamsMutationModel(
                     name = _formUiState.value.ruleName,
                     triggerDomain = _formUiState.value.initialDomainName,

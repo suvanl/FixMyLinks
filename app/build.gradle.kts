@@ -2,7 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.guardsquare.appsweep")
-    id("com.google.devtools.ksp") version "1.9.20-1.0.14"
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -65,6 +66,7 @@ dependencies {
     val lifecycleVersion = "2.6.2"
     val navVersion = "2.7.5"
     val roomVersion = "2.6.0"
+    val daggerHiltVersion = "2.48.1"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
@@ -86,6 +88,16 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
 
     implementation("com.google.android.material:material:1.10.0")
+
+    implementation("com.google.dagger:dagger:$daggerHiltVersion")
+    ksp("com.google.dagger:dagger-compiler:$daggerHiltVersion")
+    ksp("com.google.dagger:hilt-compiler:$daggerHiltVersion")
+
+    implementation("com.google.dagger:hilt-android:$daggerHiltVersion")
+    ksp("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
+    ksp("androidx.hilt:hilt-compiler:1.1.0")
+
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
 
     testImplementation("junit:junit:4.13.2")

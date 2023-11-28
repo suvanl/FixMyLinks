@@ -10,15 +10,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.suvanl.fixmylinks.di.AppViewModelProvider
 import com.suvanl.fixmylinks.ui.screens.ShareScreen
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
 import com.suvanl.fixmylinks.util.shareTextContent
 import com.suvanl.fixmylinks.viewmodel.ShareViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ShareActivity : ComponentActivity() {
 
-    private val viewModel: ShareViewModel by viewModels { AppViewModelProvider.Factory }
+    private val viewModel by viewModels<ShareViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

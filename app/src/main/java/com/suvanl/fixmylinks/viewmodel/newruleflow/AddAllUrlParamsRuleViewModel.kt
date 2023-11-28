@@ -5,11 +5,15 @@ import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
 import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleFormState
+import dagger.Lazy
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class AddAllUrlParamsRuleViewModel(
-    private val rulesRepository: RulesRepository,
+@HiltViewModel
+class AddAllUrlParamsRuleViewModel @Inject constructor(
+    private val rulesRepository: Lazy<RulesRepository>,
     private val validateDomainNameUseCase: ValidateDomainNameUseCase,
 ) : AddRuleViewModel() {
 
@@ -25,7 +29,9 @@ class AddAllUrlParamsRuleViewModel(
     }
 
     override suspend fun saveRule() {
-        rulesRepository.saveRule(
+        if (!validateData()) return
+
+        rulesRepository.get().saveRule(
             AllUrlParamsMutationModel(
                 name = _formUiState.value.ruleName,
                 mutationType = MutationType.URL_PARAMS_ALL,

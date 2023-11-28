@@ -1,13 +1,12 @@
 package com.suvanl.fixmylinks.ui.util
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.suvanl.fixmylinks.di.AppViewModelProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddAllUrlParamsRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddDomainNameRuleViewModel
-import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
+import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
 
 /**
  * Returns the viewModel composable associated with the given MutationType
@@ -16,27 +15,19 @@ import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
 fun getNewRuleFlowViewModel(mutationType: MutationType): AddRuleViewModel {
     return when (mutationType) {
         MutationType.DOMAIN_NAME -> {
-            viewModel<AddDomainNameRuleViewModel>(
-                factory = AppViewModelProvider.Factory
-            )
+            hiltViewModel<AddDomainNameRuleViewModel>()
         }
 
         MutationType.URL_PARAMS_ALL -> {
-            viewModel<AddAllUrlParamsRuleViewModel>(
-                factory = AppViewModelProvider.Factory
-            )
+            hiltViewModel<AddAllUrlParamsRuleViewModel>()
         }
 
         MutationType.URL_PARAMS_SPECIFIC -> {
-            viewModel<AddSpecificUrlParamsRuleViewModel>(
-                factory = AppViewModelProvider.Factory
-            )
+            hiltViewModel<AddSpecificUrlParamsRuleViewModel>()
         }
 
         MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
-            viewModel<AddDomainNameRuleViewModel>(
-                factory = AppViewModelProvider.Factory
-            )
+            hiltViewModel<AddDomainNameRuleViewModel>()
         }
 
         else -> throw IllegalArgumentException("Invalid/unselectable MutationType")

@@ -2,8 +2,9 @@ package com.suvanl.fixmylinks.domain.validation
 
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.util.UiText
+import javax.inject.Inject
 
-class ValidateRemovableParamsListUseCase {
+class ValidateRemovableParamsListUseCase @Inject constructor() {
     operator fun invoke(params: List<String>): ValidationResult {
         if (params.isEmpty()) {
             return ValidationResult(

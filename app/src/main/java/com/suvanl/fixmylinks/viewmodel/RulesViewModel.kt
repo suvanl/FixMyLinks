@@ -4,12 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.suvanl.fixmylinks.data.repository.RulesRepository
 import com.suvanl.fixmylinks.ui.screens.RulesScreenUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class RulesViewModel(
+@HiltViewModel
+class RulesViewModel @Inject constructor(
     private val rulesRepository: RulesRepository
 ) : ViewModel() {
     val rulesScreenUiState: StateFlow<RulesScreenUiState> =
@@ -27,11 +30,6 @@ class RulesViewModel(
 
     suspend fun deleteAll() {
         rulesRepository.deleteAllRules()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        println("RulesViewModel cleared")
     }
 
     companion object {
