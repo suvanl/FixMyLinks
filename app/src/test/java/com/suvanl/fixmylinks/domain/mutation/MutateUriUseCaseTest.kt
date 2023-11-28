@@ -16,7 +16,7 @@ import java.net.URI
 /**
  * Test suite for link mutation business logic
  */
-class LinkMutationTest {
+class MutateUriUseCaseTest {
 
     private lateinit var mutateUriUseCase: MutateUriUseCase
 
