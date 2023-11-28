@@ -29,6 +29,8 @@ class AddAllUrlParamsRuleViewModel @Inject constructor(
     }
 
     override suspend fun saveRule() {
+        if (!validateData()) return
+
         rulesRepository.get().saveRule(
             AllUrlParamsMutationModel(
                 name = _formUiState.value.ruleName,
