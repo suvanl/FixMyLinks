@@ -40,6 +40,8 @@ class AddDomainNameRuleViewModel @Inject constructor(
     }
 
     override suspend fun saveRule() {
+        if (!validateData()) return
+
         if (!_removeAllUrlParams.value) {
             rulesRepository.get().saveRule(
                 DomainNameMutationModel(
