@@ -33,8 +33,9 @@ class AddSpecificUrlParamsRuleViewModel @Inject constructor(
     }
 
     fun addParam(paramName: String) {
-        val updatedParamList = _formUiState.value.addedParamNames.toMutableList().plus(paramName)
+        if (!validateUrlParamKey(paramName)) return
 
+        val updatedParamList = _formUiState.value.addedParamNames.toMutableList().plus(paramName)
         _formUiState.value = _formUiState.value.copy(
             addedParamNames = updatedParamList
         )
@@ -48,6 +49,8 @@ class AddSpecificUrlParamsRuleViewModel @Inject constructor(
     }
 
     override suspend fun saveRule() {
+        if (!validateData()) return
+
         rulesRepository.get().saveRule(
             SpecificUrlParamsMutationModel(
                 name = _formUiState.value.ruleName,
