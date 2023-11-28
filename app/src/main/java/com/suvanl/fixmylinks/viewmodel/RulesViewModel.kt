@@ -32,11 +32,6 @@ class RulesViewModel @Inject constructor(
         rulesRepository.deleteAllRules()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        println("RulesViewModel cleared")
-    }
-
     companion object {
         private const val TIMEOUT_MILLIS = 5000L
     }
