@@ -136,6 +136,7 @@ fun FmlNavHost(
                     ?: MutationType.FALLBACK
 
                 val viewModel: AddRuleViewModel = getNewRuleFlowViewModel(mutationType)
+                val userPreferences by viewModel.userPreferences.collectAsStateWithLifecycle()
 
                 val isCompactLayout = windowWidthSize == WindowWidthSizeClass.Compact
                 var hintsOptionCheckedState by remember { mutableStateOf(true) }
@@ -163,8 +164,13 @@ fun FmlNavHost(
 
                     OverflowMenu {
                         HintsDropdownItem(
-                            isChecked = hintsOptionCheckedState,
-                            onCheckedChange = { hintsOptionCheckedState = it }
+                            isChecked = userPreferences.showFormFieldHints,
+                            onCheckedChange = { isChecked ->
+                                coroutineScope.launch {
+                                    viewModel.updateShowHintsPreference(isChecked)
+                                    hintsOptionCheckedState = userPreferences.showFormFieldHints
+                                }
+                            }
                         )
                     }
                 }
@@ -172,7 +178,7 @@ fun FmlNavHost(
                 AddRuleScreen(
                     uiState = AddRuleScreenUiState(
                         mutationType = mutationType,
-                        showFormFieldHints = hintsOptionCheckedState,
+                        showFormFieldHints = userPreferences.showFormFieldHints,
                         showSaveButton = isCompactLayout,
                     ),
                     viewModel = viewModel,
