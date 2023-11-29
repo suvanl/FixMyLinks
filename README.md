@@ -110,7 +110,6 @@ Currently, the only way to install FixMyLinks is to build from source. Other ins
     ./gradlew assemble
     ```
 
-    > [!NOTE]
     > You may need to grant execute permissions to `gradlew`:
     >
     > ```sh
@@ -127,7 +126,6 @@ Currently, the only way to install FixMyLinks is to build from source. Other ins
     ```sh
     adb shell am start -n "com.suvanl.fixmylinks/com.suvanl.fixmylinks.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
     ```
-    > [!NOTE]
     > Optionally, you may use the `--splashscreen-show-icon` flag.
 
 </details>
