@@ -80,13 +80,14 @@ jobs:
           path: app/build/reports/tests/testReleaseUnitTest/
 
   instrumentation-test:
-    needs: [unit-test]
+    needs: [lint]
     if: |
       needs.changes.outputs.androidTest == 'true' ||
       needs.changes.outputs.main == 'true' ||
       needs.changes.outputs.test == 'true'
     runs-on: macos-latest
     strategy:
+      fail-fast: false
       matrix:
         api-level: [29, 34]
     steps:
@@ -136,7 +137,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: ./gradlew connectedCheck
+          script: ./gradlew connectedAndroidTest
 
       - name: Upload instrumentation test summary report
         uses: actions/upload-artifact@v3

@@ -1,22 +1,53 @@
 package com.suvanl.fixmylinks.viewmodel.newruleflow
 
-import androidx.lifecycle.ViewModel
+import com.suvanl.fixmylinks.data.repository.RulesRepository
+import com.suvanl.fixmylinks.domain.mutation.MutationType
+import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
+import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
+import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleFormState
+import dagger.Lazy
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class AddAllUrlParamsRuleViewModel : ViewModel() {
+@HiltViewModel
+class AddAllUrlParamsRuleViewModel @Inject constructor(
+    private val rulesRepository: Lazy<RulesRepository>,
+    private val validateDomainNameUseCase: ValidateDomainNameUseCase,
+) : AddRuleViewModel() {
 
-    private val _ruleName = MutableStateFlow("")
-    val ruleName = _ruleName.asStateFlow()
-
-    private val _domainName = MutableStateFlow("")
-    val domainName = _domainName.asStateFlow()
+    private val _formUiState = MutableStateFlow(AllUrlParamsRuleFormState())
+    val formUiState = _formUiState.asStateFlow()
 
     fun setRuleName(ruleName: String) {
-        _ruleName.value = ruleName
+        _formUiState.value = _formUiState.value.copy(ruleName = ruleName)
     }
 
     fun setDomainName(domainName: String) {
-        _domainName.value = domainName
+        _formUiState.value = _formUiState.value.copy(domainName = domainName)
+    }
+
+    override suspend fun saveRule() {
+        if (!validateData()) return
+
+        rulesRepository.get().saveRule(
+            AllUrlParamsMutationModel(
+                name = _formUiState.value.ruleName,
+                mutationType = MutationType.URL_PARAMS_ALL,
+                triggerDomain = _formUiState.value.domainName,
+                isLocalOnly = true,
+            )
+        )
+    }
+
+    override fun validateData(): Boolean {
+        val domainNameValidationResult = validateDomainNameUseCase(_formUiState.value.domainName)
+
+        _formUiState.value = _formUiState.value.copy(
+            domainNameError = domainNameValidationResult.errorMessage
+        )
+
+        return domainNameValidationResult.isSuccessful
     }
 }

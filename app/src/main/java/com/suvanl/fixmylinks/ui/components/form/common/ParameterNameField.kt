@@ -19,6 +19,7 @@ import com.suvanl.fixmylinks.ui.util.PreviewContainer
 @Composable
 fun ParameterNameField(
     text: String,
+    errorMessage: String?,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -31,6 +32,11 @@ fun ParameterNameField(
         label = {
             Text(text = stringResource(id = R.string.url_parameter_name))
         },
+        supportingText = {
+            if (errorMessage == null) return@OutlinedTextField
+            FormFieldErrorMessage(text = errorMessage)
+        },
+        isError = errorMessage != null,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         modifier = modifier
@@ -45,6 +51,6 @@ fun ParameterNameField(
 @Composable
 private fun ParameterNameFieldPreview() {
     PreviewContainer {
-        ParameterNameField(text = "", onValueChange = {})
+        ParameterNameField(text = "", errorMessage = null, onValueChange = {})
     }
 }

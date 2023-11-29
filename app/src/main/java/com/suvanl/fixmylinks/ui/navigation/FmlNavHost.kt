@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,9 +26,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
-import com.suvanl.fixmylinks.ui.components.appbar.menu.OverflowMenu
 import com.suvanl.fixmylinks.ui.components.appbar.ProvideAppBarActions
 import com.suvanl.fixmylinks.ui.components.appbar.menu.HintsDropdownItem
+import com.suvanl.fixmylinks.ui.components.appbar.menu.OverflowMenu
 import com.suvanl.fixmylinks.ui.navigation.transition.NavigationEnterTransitionMode
 import com.suvanl.fixmylinks.ui.navigation.transition.NavigationExitTransitionMode
 import com.suvanl.fixmylinks.ui.navigation.transition.enterNavigationTransition
@@ -36,8 +37,12 @@ import com.suvanl.fixmylinks.ui.screens.HomeScreen
 import com.suvanl.fixmylinks.ui.screens.RulesScreen
 import com.suvanl.fixmylinks.ui.screens.SavedScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
+import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreenUiState
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
+import com.suvanl.fixmylinks.ui.util.getNewRuleFlowViewModel
+import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.SelectRuleTypeViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun FmlNavHost(
@@ -122,26 +127,35 @@ fun FmlNavHost(
                 route = FmlScreen.AddRule.routeWithArgs,
                 arguments = FmlScreen.AddRule.args
             ) { navBackStackEntry ->
+                val coroutineScope = rememberCoroutineScope()
+
                 val mutationTypeArg =
                     navBackStackEntry.arguments?.getString(FmlScreen.AddRule.mutationTypeArg)
 
                 val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
                     ?: MutationType.FALLBACK
 
+                val viewModel: AddRuleViewModel = getNewRuleFlowViewModel(mutationType)
+
                 val isCompactLayout = windowWidthSize == WindowWidthSizeClass.Compact
                 var hintsOptionCheckedState by remember { mutableStateOf(true) }
 
-                fun popCurrentNavGraph() {
-                    navController.popBackStack(
-                        route = NestedNavGraphParent.NewRuleFlow.route,
-                        inclusive = true
-                    )
+                fun handleSaveRuleClick() {
+                    if (!viewModel.validateData()) return
+
+                    coroutineScope.launch {
+                        viewModel.saveRule()
+                        navController.popBackStack(
+                            route = NestedNavGraphParent.NewRuleFlow.route,
+                            inclusive = true
+                        )
+                    }
                 }
 
                 ProvideAppBarActions {
                     if (!isCompactLayout) {
                         Button(
-                            onClick = { popCurrentNavGraph() }
+                            onClick = { handleSaveRuleClick() }
                         ) {
                             Text(text = stringResource(id = R.string.save))
                         }
@@ -156,10 +170,13 @@ fun FmlNavHost(
                 }
 
                 AddRuleScreen(
-                    mutationType = mutationType,
-                    showFormFieldHints = hintsOptionCheckedState,
-                    showSaveButton = isCompactLayout,
-                    onSaveClick = { popCurrentNavGraph() }
+                    uiState = AddRuleScreenUiState(
+                        mutationType = mutationType,
+                        showFormFieldHints = hintsOptionCheckedState,
+                        showSaveButton = isCompactLayout,
+                    ),
+                    viewModel = viewModel,
+                    onSaveClick = { handleSaveRuleClick() }
                 )
             }
         }

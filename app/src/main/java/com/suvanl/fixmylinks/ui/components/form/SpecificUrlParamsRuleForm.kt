@@ -29,20 +29,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.components.form.common.DomainNameField
+import com.suvanl.fixmylinks.ui.components.form.common.FormFieldErrorMessage
 import com.suvanl.fixmylinks.ui.components.form.common.RuleNameField
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
+import com.suvanl.fixmylinks.util.UiText
+
+data class SpecificUrlParamsRuleFormState(
+    val ruleName: String = "",
+    val domainName: String = "",
+    val domainNameError: UiText? = null,
+    val addedParamNames: List<String> = emptyList(),
+    val addedParamNamesError: UiText? = null,
+    val urlParamKeyError: UiText? = null,
+)
 
 @Composable
 fun SpecificUrlParamsRuleForm(
     showHints: Boolean,
-    addedParamNames: List<String>,
-    ruleNameText: String,
-    domainNameText: String,
+    formState: SpecificUrlParamsRuleFormState,
     onRuleNameChange: (String) -> Unit,
     onDomainNameChange: (String) -> Unit,
     onClickAddParam: () -> Unit,
@@ -50,10 +60,13 @@ fun SpecificUrlParamsRuleForm(
     modifier: Modifier = Modifier,
     interFieldSpacing: Dp = FormDefaults.InterFieldSpacing,
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .semantics { testTag = "SpecificUrlParamsRuleForm" }
+    ) {
         // "Rule name"
         RuleNameField(
-            text = ruleNameText,
+            text = formState.ruleName,
             onValueChange = onRuleNameChange,
             modifier = Modifier.fillMaxWidth()
         )
@@ -62,7 +75,8 @@ fun SpecificUrlParamsRuleForm(
 
         // "Domain name"
         DomainNameField(
-            value = domainNameText,
+            value = formState.domainName,
+            errorMessage = formState.domainNameError?.asString(),
             showHints = showHints,
             onValueChange = onDomainNameChange,
             isLastFieldInForm = true,
@@ -91,8 +105,15 @@ fun SpecificUrlParamsRuleForm(
             }
         }
 
+        // Error message
+        if (formState.addedParamNamesError != null) {
+            FormFieldErrorMessage(
+                text = formState.addedParamNamesError.asString()
+            )
+        }
+
         ParamsChipGroup(
-            paramNames = addedParamNames,
+            paramNames = formState.addedParamNames,
             onChipDismiss = onClickDismissParam
         )
     }
@@ -144,9 +165,9 @@ private fun SpecificUrlParamsRuleFormPreview() {
         SpecificUrlParamsRuleForm(
             interFieldSpacing = 16.dp,
             showHints = true,
-            addedParamNames = listOf("param1", "ok", "cool", "t", "calm", "g", "igshid"),
-            domainNameText = "",
-            ruleNameText = "",
+            formState = SpecificUrlParamsRuleFormState(
+                addedParamNames = listOf("param1", "ok", "cool", "t", "calm", "g", "igshid")
+            ),
             onRuleNameChange = {},
             onDomainNameChange = {},
             onClickAddParam = {},

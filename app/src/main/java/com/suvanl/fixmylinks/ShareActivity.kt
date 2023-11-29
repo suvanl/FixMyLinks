@@ -3,6 +3,7 @@ package com.suvanl.fixmylinks
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -13,10 +14,12 @@ import com.suvanl.fixmylinks.ui.screens.ShareScreen
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
 import com.suvanl.fixmylinks.util.shareTextContent
 import com.suvanl.fixmylinks.viewmodel.ShareViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ShareActivity : ComponentActivity() {
 
-    private val viewModel by viewModels<ShareViewModel> { ShareViewModel.Factory }
+    private val viewModel by viewModels<ShareViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +35,7 @@ class ShareActivity : ComponentActivity() {
                 // started from (via a Send intent).
                 val mutatedUri by viewModel.mutatedUri.collectAsStateWithLifecycle()
                 if (mutatedUri == null) {
-                    ShareScreen()
+                    ShareScreen(shareViewModel = viewModel)
                 }
             }
         }
@@ -47,6 +50,12 @@ class ShareActivity : ComponentActivity() {
         super.onResume()
 
         val intentContent = intent.getStringExtra(Intent.EXTRA_TEXT)
+        if (intentContent == null) {
+            Log.w(TAG, "Intent content is null")
+            Toast.makeText(this, "Intent content is null", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         viewModel.apply {
             updateUri(intentContent)
             generateMutatedUri(intentContent)

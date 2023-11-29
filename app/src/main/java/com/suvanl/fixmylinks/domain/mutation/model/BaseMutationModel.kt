@@ -1,5 +1,6 @@
 package com.suvanl.fixmylinks.domain.mutation.model
 
+import com.suvanl.fixmylinks.data.local.db.entity.BaseRule
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 
 // TODO: maybe make mutationInfo a property of BaseMutation rather than having every data class
@@ -7,7 +8,7 @@ import com.suvanl.fixmylinks.domain.mutation.MutationType
 //  annotations + KSP to ensure that only certain types can be used as allowed types of mutationInfo
 //  (such as a `@MutationInfo`) annotation, perhaps with a parameter that takes in the class this
 //  mutationInfo belongs to, such as `@MutationInfo(AllUrlParamsMutation::class)`.
-interface BaseMutation {
+interface BaseMutationModel {
     /**
      * The user-defined name of the rule for easy identification
      */
@@ -33,4 +34,18 @@ interface BaseMutation {
      * server over the network for backup purposes.
      */
     val isLocalOnly: Boolean
+
+    /**
+     * The ID of the base rule related to this rule in the local database.
+     */
+    val baseRuleId: Long
 }
+
+fun BaseMutationModel.toDatabaseEntity() = BaseRule(
+    title = name,
+    mutationType = mutationType,
+    triggerDomain = triggerDomain,
+    dateModified = dateModifiedTimestamp ?: (System.currentTimeMillis() / 1000),
+    isLocalOnly = isLocalOnly,
+    authorId = "local_user"
+)

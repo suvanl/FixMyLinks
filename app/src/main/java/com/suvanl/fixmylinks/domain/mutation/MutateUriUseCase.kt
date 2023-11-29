@@ -1,29 +1,31 @@
 package com.suvanl.fixmylinks.domain.mutation
 
-import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutation
-import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutation
-import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndSpecificUrlParamsMutation
-import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutation
-import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutation
+import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndSpecificUrlParamsMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.rule.BuiltInRules
 import com.suvanl.fixmylinks.domain.util.UriUtils.removeSubdomain
 import java.net.URI
+import javax.inject.Inject
 
-class MutateUriUseCase {
-    operator fun invoke(uri: URI): URI {
+class MutateUriUseCase @Inject constructor() {
+    operator fun invoke(uri: URI, customRules: List<BaseMutationModel>): URI {
         val uriUsesWwwSubdomain = uri.host.startsWith("www.")
         val uriToMutate = if (uriUsesWwwSubdomain) {
             uri.removeSubdomain("www")
         } else uri
 
-        val triggeredRule = findRule(uriToMutate) ?: return uriToMutate
+        val triggeredRule = findRule(uriToMutate, customRules) ?: return uri
 
         val removeAllUrlParamsUseCase = RemoveAllUrlParamsUseCase()
         val removeSpecificUrlParamsUseCase = RemoveSpecificUrlParamsUseCase()
         val replaceDomainNameUseCase = ReplaceDomainNameUseCase()
 
         when (triggeredRule) {
-            is DomainNameMutation -> {
+            is DomainNameMutationModel -> {
                 return replaceDomainNameUseCase(
                     uri = uriToMutate,
                     mutationInfo = triggeredRule.mutationInfo,
@@ -31,11 +33,12 @@ class MutateUriUseCase {
                 )
             }
 
-            is AllUrlParamsMutation -> {
-                return removeAllUrlParamsUseCase(uriToMutate)
+            is AllUrlParamsMutationModel -> {
+                // using `uri` to ensure we keep the "www" subdomain if it exists in it
+                return removeAllUrlParamsUseCase(uri)
             }
 
-            is SpecificUrlParamsMutation -> {
+            is SpecificUrlParamsMutationModel -> {
                 return removeSpecificUrlParamsUseCase(
                     uri = uriToMutate,
                     paramsToRemove = triggeredRule.mutationInfo.removableParams,
@@ -43,15 +46,9 @@ class MutateUriUseCase {
                 )
             }
 
-            is DomainNameAndAllUrlParamsMutation -> {
-                val uriWithMutatedDomainName = replaceDomainNameUseCase(
-                    uri = uriToMutate,
-                    mutationInfo = triggeredRule.mutationInfo,
-                    useWwwSubdomain = uriUsesWwwSubdomain
-                )
-
+            is DomainNameAndAllUrlParamsMutationModel -> {
                 // first remove url params
-                val parameterlessUri = removeAllUrlParamsUseCase(uriWithMutatedDomainName)
+                val parameterlessUri = removeAllUrlParamsUseCase(uriToMutate)
 
                 // then replace the domain name as per the rule's mutationInfo
                 return replaceDomainNameUseCase(
@@ -61,7 +58,7 @@ class MutateUriUseCase {
                 )
             }
 
-            is DomainNameAndSpecificUrlParamsMutation -> {
+            is DomainNameAndSpecificUrlParamsMutationModel -> {
                 throw NotImplementedError(
                     "DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC is not currently supported"
                 )
@@ -74,6 +71,8 @@ class MutateUriUseCase {
     /**
      * Finds a rule for the given initial [uri]
      */
-    // TODO: take in a `customRules` parameter so that we can search within these too
-    private fun findRule(uri: URI) = BuiltInRules.all.find { it.triggerDomain == uri.host }
+    private fun findRule(uri: URI, customRules: List<BaseMutationModel>): BaseMutationModel? {
+        val allRules = BuiltInRules.all + customRules
+        return allRules.find { it.triggerDomain == uri.host }
+    }
 }

@@ -1,4 +1,4 @@
-package com.suvanl.fixmylinks
+package com.suvanl.fixmylinks.ui.navigation
 
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.platform.LocalContext
@@ -8,7 +8,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.suvanl.fixmylinks.ui.navigation.FmlNavHost
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

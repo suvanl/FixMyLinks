@@ -1,6 +1,7 @@
 package com.suvanl.fixmylinks.ui.components.form.common
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Language
@@ -18,6 +19,7 @@ import com.suvanl.fixmylinks.ui.animation.TransitionDefaults
 @Composable
 fun DomainNameField(
     value: String,
+    errorMessage: String?,
     showHints: Boolean,
     isLastFieldInForm: Boolean,
     onValueChange: (String) -> Unit,
@@ -30,12 +32,19 @@ fun DomainNameField(
         label = {
             Text(text = stringResource(id = R.string.domain_name))
         },
+        isError = errorMessage != null,
         supportingText = {
-            AnimatedVisibility(
-                visible = showHints,
-                enter = TransitionDefaults.supportingTextEnterTransition
-            ) {
-                Text(text = stringResource(id = R.string.domain_name_supporting_text))
+            Column {
+                if (errorMessage != null) {
+                    FormFieldErrorMessage(text = errorMessage)
+                }
+
+                AnimatedVisibility(
+                    visible = showHints,
+                    enter = TransitionDefaults.supportingTextEnterTransition
+                ) {
+                    Text(text = stringResource(id = R.string.domain_name_supporting_text))
+                }
             }
         },
         leadingIcon = {
