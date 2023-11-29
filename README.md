@@ -110,7 +110,7 @@ Currently, the only way to install FixMyLinks is to build from source. Other ins
     ./gradlew assemble
     ```
 
-    > You may need to grant execute permissions to `gradlew`:
+    > You may need to grant execute permissions to `gradlew` first:
     >
     > ```sh
     > chmod +x gradlew
