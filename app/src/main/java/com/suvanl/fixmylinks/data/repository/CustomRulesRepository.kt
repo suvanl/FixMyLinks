@@ -121,11 +121,11 @@ class CustomRulesRepository @Inject constructor(
      *
      * **See also**: [Multimap return types](https://d.android.com/training/data-storage/room/relationships#multimap)
      *
-     * @param TSource The type of the Map's value, where the Map is a multimap returned by a
+     * @param TValue The type of the Map's value, where the Map is a multimap returned by a
      *  DAO query function.
-     *  @return A list of domain models ([BaseMutationModel]-derived objects).
+     * @return A list of domain models ([BaseMutationModel]-derived objects).
      */
-    private fun <TSource> Flow<Map<BaseRule, TSource>>.toDomainModelListFlow(): Flow<List<BaseMutationModel>> {
+    private fun <TValue> Flow<Map<BaseRule, TValue>>.toDomainModelListFlow(): Flow<List<BaseMutationModel>> {
         return this.map {
             it.map { (baseRule, genericRule) ->
                 when (genericRule) {

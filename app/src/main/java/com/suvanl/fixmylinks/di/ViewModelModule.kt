@@ -1,7 +1,10 @@
 package com.suvanl.fixmylinks.di
 
 import com.suvanl.fixmylinks.data.repository.CustomRulesRepository
+import com.suvanl.fixmylinks.data.repository.PreferencesRepository
 import com.suvanl.fixmylinks.data.repository.RulesRepository
+import com.suvanl.fixmylinks.data.repository.UserPreferences
+import com.suvanl.fixmylinks.data.repository.UserPreferencesRepository
 import com.suvanl.fixmylinks.domain.validation.Validator
 import com.suvanl.fixmylinks.ui.util.DomainNameValidator
 import dagger.Binds
@@ -28,4 +31,10 @@ abstract class ViewModelModule {
     abstract fun bindRulesRepository(
         customRulesRepository: CustomRulesRepository
     ): RulesRepository
+
+    @Binds
+    @ViewModelScoped
+    abstract fun bindPreferencesRepository(
+        userPreferencesRepository: UserPreferencesRepository
+    ): PreferencesRepository<UserPreferences>
 }

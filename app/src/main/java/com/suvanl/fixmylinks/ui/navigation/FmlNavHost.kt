@@ -89,17 +89,19 @@ fun FmlNavHost(
 
                 val isCompactLayout = windowWidthSize == WindowWidthSizeClass.Compact
 
+                fun handleNextButtonClick() {
+                    navController.navigateSingleTop(
+                        route = "${FmlScreen.AddRule.route}/${mutationType.name}",
+                        popUpToStartDestination = false
+                    )
+                }
+
                 // Show "Next" button as top app bar action on Medium and Expanded layouts
                 ProvideAppBarActions(
                     shouldShowActions = !isCompactLayout
                 ) {
                     Button(
-                        onClick = {
-                            navController.navigateSingleTop(
-                                route = FmlScreen.AddRule.route,
-                                popUpToStartDestination = false
-                            )
-                        }
+                        onClick = { handleNextButtonClick() }
                     ) {
                         Text(text = stringResource(id = R.string.next))
                     }
@@ -114,12 +116,7 @@ fun FmlNavHost(
                             selection = MutationType.valueOf(selectedOption.id)
                         )
                     },
-                    onNextButtonClick = {
-                        navController.navigateSingleTop(
-                            route = "${FmlScreen.AddRule.route}/${mutationType.name}",
-                            popUpToStartDestination = false
-                        )
-                    }
+                    onNextButtonClick = { handleNextButtonClick() }
                 )
             }
 
@@ -136,6 +133,7 @@ fun FmlNavHost(
                     ?: MutationType.FALLBACK
 
                 val viewModel: AddRuleViewModel = getNewRuleFlowViewModel(mutationType)
+                val userPreferences by viewModel.userPreferences.collectAsStateWithLifecycle()
 
                 val isCompactLayout = windowWidthSize == WindowWidthSizeClass.Compact
                 var hintsOptionCheckedState by remember { mutableStateOf(true) }
@@ -163,8 +161,13 @@ fun FmlNavHost(
 
                     OverflowMenu {
                         HintsDropdownItem(
-                            isChecked = hintsOptionCheckedState,
-                            onCheckedChange = { hintsOptionCheckedState = it }
+                            isChecked = userPreferences.showFormFieldHints,
+                            onCheckedChange = { isChecked ->
+                                coroutineScope.launch {
+                                    viewModel.updateShowHintsPreference(isChecked)
+                                    hintsOptionCheckedState = userPreferences.showFormFieldHints
+                                }
+                            }
                         )
                     }
                 }
@@ -172,7 +175,7 @@ fun FmlNavHost(
                 AddRuleScreen(
                     uiState = AddRuleScreenUiState(
                         mutationType = mutationType,
-                        showFormFieldHints = hintsOptionCheckedState,
+                        showFormFieldHints = userPreferences.showFormFieldHints,
                         showSaveButton = isCompactLayout,
                     ),
                     viewModel = viewModel,

@@ -1,7 +1,10 @@
 package com.suvanl.fixmylinks.viewmodel.newruleflow
 
+import com.suvanl.fixmylinks.data.repository.FakePreferencesRepository
 import com.suvanl.fixmylinks.data.repository.FakeRulesRepository
+import com.suvanl.fixmylinks.data.repository.PreferencesRepository
 import com.suvanl.fixmylinks.data.repository.RulesRepository
+import com.suvanl.fixmylinks.data.repository.UserPreferences
 import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
 import com.suvanl.fixmylinks.viewmodel.newruleflow.util.FakeDomainNameValidator
 import kotlinx.coroutines.flow.first
@@ -14,15 +17,18 @@ import org.junit.Test
 class AddAllUrlParamsRuleViewModelTest {
 
     private lateinit var viewModel: AddAllUrlParamsRuleViewModel
-    private lateinit var repository: RulesRepository
+    private lateinit var rulesRepository: RulesRepository
+    private lateinit var preferencesRepository: PreferencesRepository<UserPreferences>
     private lateinit var validateDomainNameUseCase: ValidateDomainNameUseCase
 
     @Before
     fun setup() {
         validateDomainNameUseCase = ValidateDomainNameUseCase(FakeDomainNameValidator())
-        repository = FakeRulesRepository()
+        rulesRepository = FakeRulesRepository()
+        preferencesRepository = FakePreferencesRepository()
         viewModel = AddAllUrlParamsRuleViewModel(
-            rulesRepository = { repository },
+            rulesRepository = { rulesRepository },
+            preferencesRepository = { preferencesRepository },
             validateDomainNameUseCase = validateDomainNameUseCase
         )
     }
@@ -39,7 +45,7 @@ class AddAllUrlParamsRuleViewModelTest {
             viewModel.saveRule()
 
             // Get all rules from the repository
-            val allRules = repository.getAllRules().first()
+            val allRules = rulesRepository.getAllRules().first()
 
             // Assert that the rule exists in the data source
             val rule = allRules.find { it.name == ruleName && it.triggerDomain == domainName }
@@ -56,7 +62,7 @@ class AddAllUrlParamsRuleViewModelTest {
             viewModel.saveRule()
 
             // Get all rules from the repository
-            val allRules = repository.getAllRules().first()
+            val allRules = rulesRepository.getAllRules().first()
 
             // Assert that the rule hasn't been saved in the data source
             val rule = allRules.find { it.name == ruleName }

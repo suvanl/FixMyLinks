@@ -67,6 +67,7 @@ dependencies {
     val navVersion = "2.7.5"
     val roomVersion = "2.6.0"
     val daggerHiltVersion = "2.48.1"
+    val preferencesDataStoreVersion = "1.0.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
@@ -78,6 +79,8 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
+
+    implementation("androidx.datastore:datastore-preferences:$preferencesDataStoreVersion")
 
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     implementation("androidx.compose.ui:ui")
@@ -110,6 +113,7 @@ dependencies {
 
     androidTestImplementation("androidx.test:runner:1.5.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("com.google.truth:truth:1.1.4")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
     androidTestUtil("androidx.test:orchestrator:1.4.2")

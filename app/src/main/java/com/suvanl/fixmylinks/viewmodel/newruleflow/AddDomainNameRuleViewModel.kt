@@ -1,6 +1,8 @@
 package com.suvanl.fixmylinks.viewmodel.newruleflow
 
+import com.suvanl.fixmylinks.data.repository.PreferencesRepository
 import com.suvanl.fixmylinks.data.repository.RulesRepository
+import com.suvanl.fixmylinks.data.repository.UserPreferences
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationModel
@@ -15,8 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 class AddDomainNameRuleViewModel @Inject constructor(
     private val rulesRepository: Lazy<RulesRepository>,
+    preferencesRepository: Lazy<PreferencesRepository<UserPreferences>>,
     private val validateDomainNameUseCase: ValidateDomainNameUseCase
-) : AddRuleViewModel() {
+) : AddRuleViewModel(preferencesRepository = preferencesRepository.get()) {
 
     private val _removeAllUrlParams = MutableStateFlow(false)
 
