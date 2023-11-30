@@ -12,7 +12,7 @@ object UriUtils {
      */
     fun URI.removeSubdomain(subdomain: String): URI {
         val hostWithoutSubdomain = host.removePrefix("${subdomain}.")
-        val hasUrlParams = rawQuery.isNotEmpty()
+        val hasUrlParams = !rawQuery.isNullOrEmpty()
 
         return MutatedUri(
             scheme = scheme,
