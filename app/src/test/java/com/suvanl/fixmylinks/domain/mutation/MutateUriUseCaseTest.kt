@@ -212,4 +212,28 @@ class MutateUriUseCaseTest {
 
         assertEquals(expected, actual)
     }
+
+    @Test
+    fun `no rule - link containing 'www' subdomain and no URL params doesn't modify original link`() {
+        val actual = mutateUriUseCase(
+            URI("https://www.framer.com/motion/guide-reduce-bundle-size/"),
+            mockCustomRules
+        )
+        // URI should not change
+        val expected = URI("https://www.framer.com/motion/guide-reduce-bundle-size/")
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `built-in rule - link containing 'www' subdomain and no URL params doesn't modify original link`() {
+        val actual = mutateUriUseCase(
+            URI("https://www.open.spotify.com/track/3PRljkcobGtC6Kc3ILLSmq"),
+            mockCustomRules
+        )
+        // URI should not change
+        val expected = URI("https://www.open.spotify.com/track/3PRljkcobGtC6Kc3ILLSmq")
+
+        assertEquals(expected, actual)
+    }
 }
