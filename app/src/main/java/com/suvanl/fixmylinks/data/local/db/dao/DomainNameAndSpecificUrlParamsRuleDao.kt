@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.suvanl.fixmylinks.data.local.db.entity.AllUrlParamsRule
 import com.suvanl.fixmylinks.data.local.db.entity.BaseRule
+import com.suvanl.fixmylinks.data.local.db.entity.DomainNameAndAllUrlParamsRule
 import com.suvanl.fixmylinks.data.local.db.entity.DomainNameAndSpecificUrlParamsRule
 import kotlinx.coroutines.flow.Flow
 
@@ -33,5 +34,5 @@ interface DomainNameAndSpecificUrlParamsRuleDao {
         "JOIN base_rule ON rule.base_rule_id = base_rule.id " +
         "WHERE rule.base_rule_id = :baseRuleId"
     )
-    fun getByBaseRuleId(baseRuleId: Long): Flow<Map<BaseRule, AllUrlParamsRule>>
+    fun getByBaseRuleId(baseRuleId: Long): Flow<Map<BaseRule, DomainNameAndAllUrlParamsRule>>
 }
