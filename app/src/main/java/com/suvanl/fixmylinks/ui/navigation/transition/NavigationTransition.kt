@@ -13,7 +13,7 @@ import com.suvanl.fixmylinks.ui.navigation.getBaseRoute
 enum class NavigationEnterTransitionMode { ENTER, POP_ENTER }
 enum class NavigationExitTransitionMode { EXIT, POP_EXIT }
 
-private val screensWithFab = listOf(FmlScreen.Home, FmlScreen.Rules)
+private val topLevelScreensWithFab = listOf(FmlScreen.Home, FmlScreen.Rules)
 
 /**
  * Returns the appropriate navigation [ExitTransition] based on the given [transitionMode] and the
@@ -30,7 +30,7 @@ fun exitNavigationTransition(
     // that has a FAB
     val isNavigatingFromFlowToTopLevelScreen =
         addNewRuleFlowScreens.any { it.route == initialDestinationRoute }
-                && screensWithFab.any { it.route == targetDestinationRoute }
+                && topLevelScreensWithFab.any { it.route == targetDestinationRoute }
 
     // If the target destination is part of the "add new rule" flow, or if we're navigating back to
     // a screen that this flow could've been started from
@@ -84,13 +84,13 @@ fun enterNavigationTransition(
     // If we're navigating from a destination with the FAB to a destination in the "add new rule"
     // flow, or if we're performing intra-flow navigation, use the slide animation
     val isNavigatingFromTopLevelDestinationToFlow =
-        screensWithFab.any { it.route == initialDestinationRoute }
+        topLevelScreensWithFab.any { it.route == initialDestinationRoute }
                 && addNewRuleFlowScreens.any { it.route == targetDestinationRoute }
 
     // Inverse of isNavigatingFromTopLevelDestinationToFlow
     val isNavigatingFromFlowToTopLevelDestination =
         addNewRuleFlowScreens.any { it.route == initialDestinationRoute }
-                && screensWithFab.any { it.route == targetDestinationRoute }
+                && topLevelScreensWithFab.any { it.route == targetDestinationRoute }
 
     return if (
         isNavigatingFromTopLevelDestinationToFlow || isNavigatingFromFlowToTopLevelDestination
