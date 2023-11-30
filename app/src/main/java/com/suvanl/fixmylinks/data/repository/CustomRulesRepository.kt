@@ -8,6 +8,7 @@ import com.suvanl.fixmylinks.data.local.db.entity.DomainNameAndAllUrlParamsRule
 import com.suvanl.fixmylinks.data.local.db.entity.DomainNameAndSpecificUrlParamsRule
 import com.suvanl.fixmylinks.data.local.db.entity.DomainNameRule
 import com.suvanl.fixmylinks.data.local.db.entity.SpecificUrlParamsRule
+import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
@@ -78,6 +79,54 @@ class CustomRulesRepository @Inject constructor(
     }
 
     /**
+     * Fetches a rule by its base rule ID.
+     * @param baseRuleId The rule's base rule ID.
+     * @param ruleType The [MutationType] of the base rule.
+     * @return Flow that emits a domain model representing a rule.
+     */
+    override fun getRuleByBaseId(
+        baseRuleId: Long,
+        ruleType: MutationType
+    ): Flow<BaseMutationModel> {
+        localDatabase.apply {
+            return when (ruleType) {
+                MutationType.URL_PARAMS_ALL -> {
+                    allUrlParamsRuleDao().getByBaseRuleId(baseRuleId)
+                        .toDomainModelFlow()
+                }
+
+                MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
+                    domainNameAndAllUrlParamsRuleDao()
+                        .getByBaseRuleId(baseRuleId)
+                        .toDomainModelFlow()
+                }
+
+                MutationType.DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC -> {
+                    domainNameAndSpecificUrlParamsRuleDao()
+                        .getByBaseRuleId(baseRuleId)
+                        .toDomainModelFlow()
+                }
+
+                MutationType.DOMAIN_NAME -> {
+                    domainNameRuleDao()
+                        .getByBaseRuleId(baseRuleId)
+                        .toDomainModelFlow()
+                }
+
+                MutationType.URL_PARAMS_SPECIFIC -> {
+                    specificUrlParamsRuleDao()
+                        .getByBaseRuleId(baseRuleId)
+                        .toDomainModelFlow()
+                }
+
+                else -> throw IllegalArgumentException(
+                    "ruleType has unexpected type (${ruleType::class.simpleName})"
+                )
+            }
+        }
+    }
+
+    /**
      * Inserts a new rule into the database. The rule will exist in the DB as the entity equivalent
      * of the type of the given domain model ([rule]).
      */
@@ -128,84 +177,106 @@ class CustomRulesRepository @Inject constructor(
     private fun <TValue> Flow<Map<BaseRule, TValue>>.toDomainModelListFlow(): Flow<List<BaseMutationModel>> {
         return this.map {
             it.map { (baseRule, genericRule) ->
-                when (genericRule) {
-                    is AllUrlParamsRule -> {
-                        AllUrlParamsMutationModel(
-                            baseRuleId = baseRule.id,
-                            name = baseRule.title,
-                            triggerDomain = baseRule.triggerDomain,
-                            dateModifiedTimestamp = baseRule.dateModified,
-                            isLocalOnly = baseRule.isLocalOnly,
-                        )
-                    }
-
-                    is DomainNameAndAllUrlParamsRule -> {
-                        DomainNameAndAllUrlParamsMutationModel(
-                            baseRuleId = baseRule.id,
-                            name = baseRule.title,
-                            triggerDomain = baseRule.triggerDomain,
-                            dateModifiedTimestamp = baseRule.dateModified,
-                            isLocalOnly = baseRule.isLocalOnly,
-                            mutationInfo = DomainNameMutationInfo(
-                                initialDomain = genericRule.initialDomainName,
-                                targetDomain = genericRule.targetDomainName
-                            )
-                        )
-                    }
-
-                    is DomainNameAndSpecificUrlParamsRule -> {
-                        DomainNameAndSpecificUrlParamsMutationModel(
-                            baseRuleId = baseRule.id,
-                            name = baseRule.title,
-                            triggerDomain = baseRule.triggerDomain,
-                            dateModifiedTimestamp = baseRule.dateModified,
-                            isLocalOnly = baseRule.isLocalOnly,
-                            mutationInfo = DomainNameAndSpecificUrlParamsMutationInfo(
-                                initialDomainName = genericRule.initialDomainName,
-                                targetDomainName = genericRule.targetDomainName,
-                                removableParams = genericRule.removableParams
-                            )
-                        )
-                    }
-
-                    is DomainNameRule -> {
-                        DomainNameMutationModel(
-                            baseRuleId = baseRule.id,
-                            name = baseRule.title,
-                            triggerDomain = baseRule.triggerDomain,
-                            dateModifiedTimestamp = baseRule.dateModified,
-                            isLocalOnly = baseRule.isLocalOnly,
-                            mutationInfo = DomainNameMutationInfo(
-                                initialDomain = genericRule.initialDomainName,
-                                targetDomain = genericRule.targetDomainName
-                            )
-                        )
-                    }
-
-                    is SpecificUrlParamsRule -> {
-                        SpecificUrlParamsMutationModel(
-                            baseRuleId = baseRule.id,
-                            name = baseRule.title,
-                            triggerDomain = baseRule.triggerDomain,
-                            dateModifiedTimestamp = baseRule.dateModified,
-                            isLocalOnly = baseRule.isLocalOnly,
-                            mutationInfo = SpecificUrlParamsMutationInfo(
-                                removableParams = genericRule.removableParams
-                            )
-                        )
-                    }
-
-                    is BaseRule -> {
-                        throw IllegalArgumentException(
-                            "Type of multimap value should not be BaseRule"
-                        )
-                    }
-
-                    else -> throw IllegalArgumentException(
-                        "Multimap value has unexpected type (${genericRule!!::class.simpleName})"
-                    )
-                }
+                mapEntityToDomainModel(baseRule, genericRule)
             }
+        }
+    }
+
+    /**
+     * Converts this multimap Flow returned by a DAO function to a domain model object
+     * implementing [BaseMutationModel].
+     *
+     * @param TValue The type of the Map's value, where the Map is a multimap returned by a
+     *  DAO query function.
+     * @return A domain model ([BaseMutationModel]-derived objects).
+     */
+    private fun <TValue> Flow<Map<BaseRule, TValue>>.toDomainModelFlow(): Flow<BaseMutationModel> {
+        return this.map { multimap ->
+            val (baseRule, genericRule) = multimap.entries.first().toPair()
+            mapEntityToDomainModel(baseRule, genericRule)
+        }
+    }
+
+    /**
+     * Returns a domain model instance based on the type of [T].
+     */
+    private fun <T> mapEntityToDomainModel(baseRule: BaseRule, genericRule: T): BaseMutationModel {
+        return when (genericRule) {
+            is AllUrlParamsRule -> {
+                AllUrlParamsMutationModel(
+                    baseRuleId = baseRule.id,
+                    name = baseRule.title,
+                    triggerDomain = baseRule.triggerDomain,
+                    dateModifiedTimestamp = baseRule.dateModified,
+                    isLocalOnly = baseRule.isLocalOnly,
+                )
+            }
+
+            is DomainNameAndAllUrlParamsRule -> {
+                DomainNameAndAllUrlParamsMutationModel(
+                    baseRuleId = baseRule.id,
+                    name = baseRule.title,
+                    triggerDomain = baseRule.triggerDomain,
+                    dateModifiedTimestamp = baseRule.dateModified,
+                    isLocalOnly = baseRule.isLocalOnly,
+                    mutationInfo = DomainNameMutationInfo(
+                        initialDomain = genericRule.initialDomainName,
+                        targetDomain = genericRule.targetDomainName
+                    )
+                )
+            }
+
+            is DomainNameAndSpecificUrlParamsRule -> {
+                DomainNameAndSpecificUrlParamsMutationModel(
+                    baseRuleId = baseRule.id,
+                    name = baseRule.title,
+                    triggerDomain = baseRule.triggerDomain,
+                    dateModifiedTimestamp = baseRule.dateModified,
+                    isLocalOnly = baseRule.isLocalOnly,
+                    mutationInfo = DomainNameAndSpecificUrlParamsMutationInfo(
+                        initialDomainName = genericRule.initialDomainName,
+                        targetDomainName = genericRule.targetDomainName,
+                        removableParams = genericRule.removableParams
+                    )
+                )
+            }
+
+            is DomainNameRule -> {
+                DomainNameMutationModel(
+                    baseRuleId = baseRule.id,
+                    name = baseRule.title,
+                    triggerDomain = baseRule.triggerDomain,
+                    dateModifiedTimestamp = baseRule.dateModified,
+                    isLocalOnly = baseRule.isLocalOnly,
+                    mutationInfo = DomainNameMutationInfo(
+                        initialDomain = genericRule.initialDomainName,
+                        targetDomain = genericRule.targetDomainName
+                    )
+                )
+            }
+
+            is SpecificUrlParamsRule -> {
+                SpecificUrlParamsMutationModel(
+                    baseRuleId = baseRule.id,
+                    name = baseRule.title,
+                    triggerDomain = baseRule.triggerDomain,
+                    dateModifiedTimestamp = baseRule.dateModified,
+                    isLocalOnly = baseRule.isLocalOnly,
+                    mutationInfo = SpecificUrlParamsMutationInfo(
+                        removableParams = genericRule.removableParams
+                    )
+                )
+            }
+
+            is BaseRule -> {
+                throw IllegalArgumentException(
+                    "Type of multimap value should not be BaseRule"
+                )
+            }
+
+            else -> throw IllegalArgumentException(
+                "Multimap value has unexpected type (${genericRule!!::class.simpleName})"
+            )
         }
     }
 }

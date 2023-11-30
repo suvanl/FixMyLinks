@@ -36,6 +36,7 @@ import com.suvanl.fixmylinks.ui.navigation.transition.exitNavigationTransition
 import com.suvanl.fixmylinks.ui.screens.HomeScreen
 import com.suvanl.fixmylinks.ui.screens.RulesScreen
 import com.suvanl.fixmylinks.ui.screens.SavedScreen
+import com.suvanl.fixmylinks.ui.screens.details.RuleDetailsScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreenUiState
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
@@ -72,11 +73,41 @@ fun FmlNavHost(
         }
 
         composable(route = FmlScreen.Rules.route) {
-            RulesScreen()
+            RulesScreen(
+                onClickRuleItem = { mutationType, baseRuleId ->
+                    navController.navigateSingleTop(
+                        route = "${FmlScreen.RuleDetails.route}/${mutationType.name}/${baseRuleId}",
+                        popUpToStartDestination = false
+                    )
+                }
+            )
         }
 
         composable(route = FmlScreen.Saved.route) {
             SavedScreen()
+        }
+
+        composable(
+            route = FmlScreen.RuleDetails.routeWithArgs,
+            arguments = FmlScreen.RuleDetails.args
+        ) { navBackStackEntry ->
+            // vm
+
+            val mutationTypeArg =
+                navBackStackEntry.arguments?.getString(FmlScreen.RuleDetails.mutationTypeArg)
+
+            val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
+                ?: MutationType.FALLBACK
+
+            val baseRuleIdArg =
+                navBackStackEntry.arguments?.getLong(FmlScreen.RuleDetails.baseRuleIdArg)
+                    ?: throw NullPointerException("Expected base_rule_id to be non-null")
+
+            RuleDetailsScreen(
+                mutationType = mutationType,
+                baseRuleId = baseRuleIdArg,
+                onClickEdit = { /*TODO*/ }
+            )
         }
 
         navigation(
