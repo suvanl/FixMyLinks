@@ -61,8 +61,8 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
     // The screens on which the Floating Action Button (FAB) should be displayed
     val displayFabOn = listOf(FmlScreen.Home, FmlScreen.Rules)
 
-    // The screens on which the Navigation Bar should be hidden
-    val hideNavBarOn = listOf(FmlScreen.SelectRuleType, FmlScreen.AddRule)
+    // The screens on which the Navigation Bar should be shown
+    val showNavBarOn = listOf(FmlScreen.Home, FmlScreen.Rules, FmlScreen.Saved)
 
     val topAppBarSize = when (windowSize.widthSizeClass) {
         WindowWidthSizeClass.Compact -> TopAppBarSize.LARGE
@@ -78,14 +78,14 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
         WindowWidthSizeClass.Medium -> true
         WindowWidthSizeClass.Expanded -> true
         else -> false
-    } && hideNavBarOn.none { it.route == currentBaseRoute }
+    } && showNavBarOn.any { it.route == currentBaseRoute }
 
     val shouldShowNavBar = when (windowSize.widthSizeClass) {
         WindowWidthSizeClass.Compact -> true
         else -> false
-    } && hideNavBarOn.none { it.route == currentBaseRoute }
+    } && showNavBarOn.any { it.route == currentBaseRoute }
 
-    val shouldShowTopAppBar = hideNavBarOn.any { it.route == currentBaseRoute }
+    val shouldShowTopAppBar = showNavBarOn.none { it.route == currentBaseRoute }
     val shouldShowFab = displayFabOn.any { it.route == currentBaseRoute }
 
     FixMyLinksTheme {
