@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.suvanl.fixmylinks.data.local.db.entity.AllUrlParamsRule
 import com.suvanl.fixmylinks.data.local.db.entity.BaseRule
 import com.suvanl.fixmylinks.data.local.db.entity.SpecificUrlParamsRule
 import kotlinx.coroutines.flow.Flow
