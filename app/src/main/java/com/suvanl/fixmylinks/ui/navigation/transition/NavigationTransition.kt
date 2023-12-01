@@ -6,14 +6,13 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.navigation.NavBackStackEntry
-import com.suvanl.fixmylinks.ui.navigation.FmlScreen
 import com.suvanl.fixmylinks.ui.navigation.addNewRuleFlowScreens
 import com.suvanl.fixmylinks.ui.navigation.getBaseRoute
+import com.suvanl.fixmylinks.ui.util.topLevelScreensWithFab
 
 enum class NavigationEnterTransitionMode { ENTER, POP_ENTER }
 enum class NavigationExitTransitionMode { EXIT, POP_EXIT }
 
-private val topLevelScreensWithFab = listOf(FmlScreen.Home, FmlScreen.Rules)
 
 /**
  * Returns the appropriate navigation [ExitTransition] based on the given [transitionMode] and the

@@ -35,18 +35,15 @@ import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationBar
 import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationRail
 import com.suvanl.fixmylinks.ui.components.appbar.FmlTopAppBar
 import com.suvanl.fixmylinks.ui.components.appbar.TopAppBarSize
+import com.suvanl.fixmylinks.ui.components.button.EditFab
 import com.suvanl.fixmylinks.ui.navigation.FmlNavHost
 import com.suvanl.fixmylinks.ui.navigation.FmlScreen
 import com.suvanl.fixmylinks.ui.navigation.allFmlScreens
 import com.suvanl.fixmylinks.ui.navigation.getBaseRoute
 import com.suvanl.fixmylinks.ui.navigation.navigateSingleTop
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
-
-private val topLevelNavItems = listOf(
-    FmlScreen.Home,
-    FmlScreen.Rules,
-    FmlScreen.Saved,
-)
+import com.suvanl.fixmylinks.ui.util.topLevelScreens
+import com.suvanl.fixmylinks.ui.util.topLevelScreensWithFab
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -57,9 +54,6 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
     val currentDestination = navBackStackEntry?.destination
     val currentBaseRoute = getBaseRoute(currentDestination?.route)
     val currentScreen = allFmlScreens.find { currentBaseRoute == it.route }
-
-    // The screens on which the Floating Action Button (FAB) should be displayed
-    val displayFabOn = listOf(FmlScreen.Home, FmlScreen.Rules)
 
     // The screens on which the Navigation Bar should be shown
     val showNavBarOn = listOf(FmlScreen.Home, FmlScreen.Rules, FmlScreen.Saved)
@@ -86,7 +80,8 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
     } && showNavBarOn.any { it.route == currentBaseRoute }
 
     val shouldShowTopAppBar = showNavBarOn.none { it.route == currentBaseRoute }
-    val shouldShowFab = displayFabOn.any { it.route == currentBaseRoute }
+    val shouldShowAddNewRuleFab = topLevelScreensWithFab.any { it.route == currentBaseRoute }
+    val shouldShowEditRuleFab = currentBaseRoute.startsWith(FmlScreen.RuleDetails.route)
 
     FixMyLinksTheme {
         Scaffold(
@@ -104,7 +99,7 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
             bottomBar = {
                 if (shouldShowNavBar) {
                     FmlNavigationBar(
-                        navItems = topLevelNavItems,
+                        navItems = topLevelScreens,
                         onNavItemClick = { screen ->
                             navController.navigateSingleTop(screen.route)
                         },
@@ -115,13 +110,19 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
             floatingActionButton = {
                 // Don't show the FAB if shouldShowNavRail is true as the navigation rail will contain
                 // a FAB within it
-                if (!shouldShowNavRail && shouldShowFab) {
-                    AddNewRuleFab(onClick = {
-                        navController.navigateSingleTop(
-                            route = FmlScreen.SelectRuleType.route,
-                            popUpToStartDestination = false
-                        )
-                    })
+                if (!shouldShowNavRail && shouldShowAddNewRuleFab) {
+                    AddNewRuleFab(
+                        onClick = {
+                            navController.navigateSingleTop(
+                                route = FmlScreen.SelectRuleType.route,
+                                popUpToStartDestination = false
+                            )
+                        }
+                    )
+                } else if (shouldShowEditRuleFab) {
+                    EditFab(
+                        onClick = { /*TODO*/ }
+                    )
                 }
             },
             contentWindowInsets = WindowInsets(
@@ -155,7 +156,7 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         )
                     ) {
                         FmlNavigationRail(
-                            navItems = topLevelNavItems,
+                            navItems = topLevelScreens,
                             currentDestination = currentDestination,
                             onFabClick = {
                                 navController.navigateSingleTop(
