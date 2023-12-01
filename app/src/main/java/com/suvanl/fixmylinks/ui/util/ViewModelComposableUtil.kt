@@ -9,7 +9,7 @@ import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddSpecificUrlParamsRuleViewModel
 
 /**
- * Returns the viewModel composable associated with the given MutationType
+ * Returns the [hiltViewModel] composable associated with the given MutationType
  */
 @Composable
 fun getNewRuleFlowViewModel(mutationType: MutationType): AddRuleViewModel {
