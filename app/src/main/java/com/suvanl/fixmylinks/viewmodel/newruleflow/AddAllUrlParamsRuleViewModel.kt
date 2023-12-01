@@ -31,6 +31,17 @@ class AddAllUrlParamsRuleViewModel @Inject constructor(
         _formUiState.value = _formUiState.value.copy(domainName = domainName)
     }
 
+    override suspend fun setInitialFormUiState(mutationType: MutationType, baseRuleId: Long) {
+        rulesRepository.get().getRuleByBaseId(baseRuleId, mutationType).collect { rule ->
+            if (rule !is AllUrlParamsMutationModel) return@collect
+
+            _formUiState.value = AllUrlParamsRuleFormState(
+                ruleName = rule.name,
+                domainName = rule.triggerDomain,
+            )
+        }
+    }
+
     override suspend fun saveRule() {
         if (!validateData()) return
 

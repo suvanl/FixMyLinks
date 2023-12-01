@@ -3,6 +3,7 @@ package com.suvanl.fixmylinks.viewmodel.newruleflow
 import com.suvanl.fixmylinks.data.repository.PreferencesRepository
 import com.suvanl.fixmylinks.data.repository.RulesRepository
 import com.suvanl.fixmylinks.data.repository.UserPreferences
+import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationInfo
 import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
@@ -49,6 +50,18 @@ class AddSpecificUrlParamsRuleViewModel @Inject constructor(
         updatedParamList.removeAt(index)
 
         _formUiState.value = _formUiState.value.copy(addedParamNames = updatedParamList)
+    }
+
+    override suspend fun setInitialFormUiState(mutationType: MutationType, baseRuleId: Long) {
+        rulesRepository.get().getRuleByBaseId(baseRuleId, mutationType).collect { rule ->
+            if (rule !is SpecificUrlParamsMutationModel) return@collect
+
+            _formUiState.value = SpecificUrlParamsRuleFormState(
+                ruleName = rule.name,
+                domainName = rule.triggerDomain,
+                addedParamNames = rule.mutationInfo.removableParams,
+            )
+        }
     }
 
     override suspend fun saveRule() {

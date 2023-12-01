@@ -168,6 +168,17 @@ fun FmlNavHost(
                 val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
                     ?: MutationType.FALLBACK
 
+                val actionArg = navBackStackEntry.arguments?.getString(FmlScreen.AddRule.actionArg)
+                val action = FmlScreen.AddRule.Action.entries.find { it.name == actionArg }
+                    ?: FmlScreen.AddRule.Action.ADD
+
+                val baseRuleId =
+                    navBackStackEntry.arguments?.getLong(FmlScreen.AddRule.baseRuleIdArg) ?: 0
+
+                if (action == FmlScreen.AddRule.Action.EDIT && baseRuleId == 0L) {
+                    throw IllegalStateException("base_rule_id nav arg cannot be 0 while action is Action.EDIT")
+                }
+
                 val viewModel: AddRuleViewModel = getNewRuleFlowViewModel(mutationType)
                 val userPreferences by viewModel.userPreferences.collectAsStateWithLifecycle()
 
@@ -215,7 +226,9 @@ fun FmlNavHost(
                         showSaveButton = isCompactLayout,
                     ),
                     viewModel = viewModel,
-                    onSaveClick = { handleSaveRuleClick() }
+                    onSaveClick = { handleSaveRuleClick() },
+                    action = action,
+                    baseRuleId = baseRuleId,
                 )
             }
         }

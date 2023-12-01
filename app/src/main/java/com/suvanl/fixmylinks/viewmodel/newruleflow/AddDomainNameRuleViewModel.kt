@@ -3,6 +3,7 @@ package com.suvanl.fixmylinks.viewmodel.newruleflow
 import com.suvanl.fixmylinks.data.repository.PreferencesRepository
 import com.suvanl.fixmylinks.data.repository.RulesRepository
 import com.suvanl.fixmylinks.data.repository.UserPreferences
+import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationModel
@@ -40,6 +41,27 @@ class AddDomainNameRuleViewModel @Inject constructor(
 
     fun setRemoveAllUrlParams(shouldRemove: Boolean) {
         _removeAllUrlParams.value = shouldRemove
+    }
+
+    override suspend fun setInitialFormUiState(mutationType: MutationType, baseRuleId: Long) {
+        rulesRepository.get().getRuleByBaseId(baseRuleId, mutationType).collect { rule ->
+            // Note: while the code itself may look identical in each execution path, notice that
+            // the smart cast on `rule` is different in each path due to the type being narrowed to
+            // a different type in each path.
+            if (!_removeAllUrlParams.value && rule is DomainNameMutationModel) {
+                _formUiState.value = DomainNameRuleFormState(
+                    ruleName = rule.name,
+                    initialDomainName = rule.mutationInfo.initialDomain,
+                    targetDomainName = rule.mutationInfo.targetDomain,
+                )
+            } else if (rule is DomainNameAndAllUrlParamsMutationModel) {
+                _formUiState.value = DomainNameRuleFormState(
+                    ruleName = rule.name,
+                    initialDomainName = rule.mutationInfo.initialDomain,
+                    targetDomainName = rule.mutationInfo.targetDomain,
+                )
+            }
+        }
     }
 
     override suspend fun saveRule() {

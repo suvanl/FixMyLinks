@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.suvanl.fixmylinks.data.repository.PreferencesRepository
 import com.suvanl.fixmylinks.data.repository.UserPreferences
 import com.suvanl.fixmylinks.data.repository.UserPreferencesRepository
+import com.suvanl.fixmylinks.domain.mutation.MutationType
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -21,6 +22,12 @@ abstract class AddRuleViewModel(
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = TIMEOUT_MILLIS),
             initialValue = UserPreferences()
         )
+
+    /**
+     * Sets the initial form UI state with non-default values.
+     * Use this function to prepopulate the form with data from an existing rule.
+     */
+    abstract suspend fun setInitialFormUiState(mutationType: MutationType, baseRuleId: Long)
 
     /**
      * Saves the rule locally and optionally remotely based on user preferences.
