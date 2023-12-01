@@ -79,10 +79,21 @@ sealed class FmlScreen(
         label = R.string.add_new_rule
     ), FmlScreenWithArgs {
         const val mutationTypeArg = "mutation_type"
+        const val actionArg = "action"
+        const val baseRuleIdArg = "base_rule_id"
+
         override val args = listOf(
-            navArgument(mutationTypeArg) { type = NavType.StringType }
+            navArgument(mutationTypeArg) { type = NavType.StringType },
+            navArgument(actionArg) { type = NavType.StringType },
+            navArgument(baseRuleIdArg) { type = NavType.LongType },
         )
-        override val routeWithArgs = "$route/{$mutationTypeArg}"
+        override val routeWithArgs = "$route/{$mutationTypeArg}/{$actionArg}/{$baseRuleIdArg}"
+
+        /**
+         * An action that can be performed on the AddRule screen (i.e., adding a new rule or
+         * editing an existing rule).
+         */
+        enum class Action { ADD, EDIT }
     }
 }
 

@@ -91,22 +91,20 @@ fun FmlNavHost(
             route = FmlScreen.RuleDetails.routeWithArgs,
             arguments = FmlScreen.RuleDetails.args
         ) { navBackStackEntry ->
-            // vm
-
             val mutationTypeArg =
                 navBackStackEntry.arguments?.getString(FmlScreen.RuleDetails.mutationTypeArg)
 
             val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
                 ?: MutationType.FALLBACK
 
-            val baseRuleIdArg =
+            val baseRuleId =
                 navBackStackEntry.arguments?.getLong(FmlScreen.RuleDetails.baseRuleIdArg)
                     ?: throw NullPointerException("Expected base_rule_id to be non-null")
 
             RuleDetailsScreen(
                 mutationType = mutationType,
-                baseRuleId = baseRuleIdArg,
-                onClickEdit = { /*TODO*/ }
+                baseRuleId = baseRuleId,
+                onClickEdit = {}
             )
         }
 
@@ -121,8 +119,15 @@ fun FmlNavHost(
                 val isCompactLayout = windowWidthSize == WindowWidthSizeClass.Compact
 
                 fun handleNextButtonClick() {
+                    // The route used for adding a new rule:
+                    //  - action is Action.ADD
+                    //  - baseRuleId is 0 since one doesn't exist yet. A non-zero value should only
+                    //    be passed as this argument if the action arg is Action.EDIT
+                    val addActionRoute =
+                        "${FmlScreen.AddRule.route}/${mutationType.name}/${FmlScreen.AddRule.Action.ADD}/${0L}"
+
                     navController.navigateSingleTop(
-                        route = "${FmlScreen.AddRule.route}/${mutationType.name}",
+                        route = addActionRoute,
                         popUpToStartDestination = false
                     )
                 }

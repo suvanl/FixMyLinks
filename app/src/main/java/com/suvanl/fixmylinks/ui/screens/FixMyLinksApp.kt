@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.ui.components.button.AddNewRuleFab
 import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationBar
 import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationRail
@@ -120,9 +121,31 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         }
                     )
                 } else if (shouldShowEditRuleFab) {
-                    EditFab(
-                        onClick = { /*TODO*/ }
-                    )
+                    if (currentDestination != null
+                        && currentDestination.route == FmlScreen.RuleDetails.routeWithArgs) {
+                        val mutationTypeArg =
+                            navBackStackEntry?.arguments?.getString(FmlScreen.RuleDetails.mutationTypeArg)
+
+                        val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
+                            ?: MutationType.FALLBACK
+
+                        val baseRuleId =
+                            navBackStackEntry?.arguments?.getLong(FmlScreen.RuleDetails.baseRuleIdArg)
+                                ?: throw NullPointerException("Expected base_rule_id to be non-null")
+
+                        fun handleEditFabClick() {
+                            val editActionRoute =
+                                "${FmlScreen.AddRule.route}/${mutationType.name}/${FmlScreen.AddRule.Action.EDIT}/$baseRuleId"
+
+                            navController.navigateSingleTop(
+                                route = editActionRoute,
+                                popUpToStartDestination = false
+                            )
+                        }
+
+                        EditFab(onClick = { handleEditFabClick() })
+                    }
+
                 }
             },
             contentWindowInsets = WindowInsets(
