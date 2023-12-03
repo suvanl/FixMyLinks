@@ -26,6 +26,8 @@ abstract class AddRuleViewModel(
     /**
      * Sets the initial form UI state with non-default values.
      * Use this function to prepopulate the form with data from an existing rule.
+     * @param mutationType The existing rule's [MutationType].
+     * @param baseRuleId The existing rule's base rule ID.
      */
     abstract suspend fun setInitialFormUiState(mutationType: MutationType, baseRuleId: Long)
 
@@ -33,6 +35,11 @@ abstract class AddRuleViewModel(
      * Saves the rule locally and optionally remotely based on user preferences.
      */
     abstract suspend fun saveRule()
+
+    /**
+     * Updates a rule that has already been saved (locally and remotely if applicable).
+     */
+    abstract suspend fun updateExistingRule()
 
     /**
      * Validates form data.

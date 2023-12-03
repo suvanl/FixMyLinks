@@ -189,7 +189,14 @@ fun FmlNavHost(
                     if (!viewModel.validateData()) return
 
                     coroutineScope.launch {
-                        viewModel.saveRule()
+                        val isEditing = action == FmlScreen.AddRule.Action.EDIT && baseRuleId != 0L
+
+                        if (isEditing) {
+                            viewModel.updateExistingRule()
+                        } else {
+                            viewModel.saveRule()
+                        }
+
                         navController.popBackStack(
                             route = NestedNavGraphParent.NewRuleFlow.route,
                             inclusive = true

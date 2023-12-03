@@ -55,6 +55,10 @@ class AddAllUrlParamsRuleViewModel @Inject constructor(
         )
     }
 
+    override suspend fun updateExistingRule() {
+        TODO("Not yet implemented")
+    }
+
     override fun validateData(): Boolean {
         val domainNameValidationResult = validateDomainNameUseCase(_formUiState.value.domainName)
 

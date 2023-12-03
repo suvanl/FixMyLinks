@@ -79,6 +79,10 @@ class AddSpecificUrlParamsRuleViewModel @Inject constructor(
         )
     }
 
+    override suspend fun updateExistingRule() {
+        TODO("Not yet implemented")
+    }
+
     fun validateUrlParamKey(key: String): Boolean {
         val urlParamKeyResult = validateUrlParamKeyUseCase(key)
 

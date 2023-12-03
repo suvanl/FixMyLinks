@@ -94,6 +94,11 @@ class AddDomainNameRuleViewModel @Inject constructor(
         }
     }
 
+
+    override suspend fun updateExistingRule() {
+        TODO("Not yet implemented")
+    }
+
     override fun validateData(): Boolean {
         val initialDomainNameText = _formUiState.value.initialDomainName
         val targetDomainNameText = _formUiState.value.targetDomainName
