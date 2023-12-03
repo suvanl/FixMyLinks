@@ -19,8 +19,26 @@ data class DomainNameAndSpecificUrlParamsMutationModel(
     val mutationInfo: DomainNameAndSpecificUrlParamsMutationInfo,
 ) : BaseMutationModel
 
+/**
+ * Transforms this domain model to a database entity.
+ * @param baseRuleId The ID of the rule's related BaseRule.
+ */
 fun DomainNameAndSpecificUrlParamsMutationModel.toDatabaseEntity(baseRuleId: Long) =
     DomainNameAndSpecificUrlParamsRule(
+        baseRuleId = baseRuleId,
+        initialDomainName = mutationInfo.initialDomainName,
+        targetDomainName = mutationInfo.targetDomainName,
+        removableParams = mutationInfo.removableParams,
+    )
+
+/**
+ * Transforms this domain model to a database entity.
+ * @param baseRuleId The ID of the rule's related BaseRule.
+ * @param ruleId The ID of the rule (its primary key).
+ */
+fun DomainNameAndSpecificUrlParamsMutationModel.toDatabaseEntity(baseRuleId: Long, ruleId: Long) =
+    DomainNameAndSpecificUrlParamsRule(
+        id = ruleId,
         baseRuleId = baseRuleId,
         initialDomainName = mutationInfo.initialDomainName,
         targetDomainName = mutationInfo.targetDomainName,

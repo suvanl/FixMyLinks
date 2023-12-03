@@ -21,6 +21,7 @@ import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationMode
 import com.suvanl.fixmylinks.domain.mutation.model.toDatabaseEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -31,9 +32,17 @@ class CustomRulesRepository @Inject constructor(
      * Save a rule locally (and optionally remotely based on user preferences).
      */
     override suspend fun saveRule(rule: BaseMutationModel) {
-        insertRule(rule)
+        insertLocalRule(rule)
 
         // then perform logic for saving a rule remotely (if requested by user)
+    }
+
+    /**
+     * Updates an existing rule locally (and optionally remotely based on user preferences).
+     */
+    override suspend fun updateRule(baseRuleId: Long, newData: BaseMutationModel) {
+        updateLocalRule(baseRuleId, newData)
+        // then update remotely if required
     }
 
     /**
@@ -127,10 +136,10 @@ class CustomRulesRepository @Inject constructor(
     }
 
     /**
-     * Inserts a new rule into the database. The rule will exist in the DB as the entity equivalent
-     * of the type of the given domain model ([rule]).
+     * Inserts a new rule into the local database. The rule will exist in the DB as the entity
+     * equivalent of the type of the given domain model ([rule]).
      */
-    private suspend fun insertRule(rule: BaseMutationModel) = localDatabase.apply {
+    private suspend fun insertLocalRule(rule: BaseMutationModel) = localDatabase.apply {
         withTransaction {
             val baseRuleId = baseRuleDao().insert(rule.toDatabaseEntity())
 
@@ -143,12 +152,12 @@ class CustomRulesRepository @Inject constructor(
                     domainNameRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
                 }
 
-                is DomainNameAndSpecificUrlParamsMutationModel -> {
-                    domainNameAndSpecificUrlParamsRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
-                }
-
                 is DomainNameAndAllUrlParamsMutationModel -> {
                     domainNameAndAllUrlParamsRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
+                }
+
+                is DomainNameAndSpecificUrlParamsMutationModel -> {
+                    domainNameAndSpecificUrlParamsRuleDao().insert(rule.toDatabaseEntity(baseRuleId))
                 }
 
                 is SpecificUrlParamsMutationModel -> {
@@ -159,6 +168,94 @@ class CustomRulesRepository @Inject constructor(
                     throw IllegalArgumentException(
                         "rule is not of a supported type that extends BaseMutationModel"
                     )
+                }
+            }
+        }
+    }
+
+    /**
+     * Updates an existing rule in the local database.
+     * @param baseRuleId The ID of the existing BaseRule entity.
+     * @param newData The new (non-base rule) data that should replace the old/existing data.
+     */
+    private suspend fun updateLocalRule(baseRuleId: Long, newData: BaseMutationModel) {
+        localDatabase.apply {
+            withTransaction {
+                // update base rule
+                baseRuleDao().update(newData.toDatabaseEntity())
+
+                // update associated (specific) rule
+                when (newData) {
+                    is AllUrlParamsMutationModel -> {
+                        val ruleToUpdate = allUrlParamsRuleDao().getByBaseRuleId(baseRuleId).first()
+                        val pkId = ruleToUpdate.entries.first().value.id
+
+                        allUrlParamsRuleDao().update(
+                            newData.toDatabaseEntity(
+                                baseRuleId = newData.baseRuleId,
+                                ruleId = pkId
+                            )
+                        )
+                    }
+
+                    is DomainNameMutationModel -> {
+                        val ruleToUpdate = domainNameRuleDao().getByBaseRuleId(baseRuleId).first()
+                        val pkId = ruleToUpdate.entries.first().value.id
+
+                        domainNameRuleDao().update(
+                            newData.toDatabaseEntity(
+                                baseRuleId = newData.baseRuleId,
+                                ruleId = pkId
+                            )
+                        )
+                    }
+
+                    is DomainNameAndAllUrlParamsMutationModel -> {
+                        val ruleToUpdate =
+                            domainNameAndAllUrlParamsRuleDao().getByBaseRuleId(baseRuleId).first()
+                        val pkId = ruleToUpdate.entries.first().value.id
+
+                        domainNameAndAllUrlParamsRuleDao().update(
+                            newData.toDatabaseEntity(
+                                baseRuleId = newData.baseRuleId,
+                                ruleId = pkId
+                            )
+                        )
+                    }
+
+                    is DomainNameAndSpecificUrlParamsMutationModel -> {
+                        val ruleToUpdate =
+                            domainNameAndSpecificUrlParamsRuleDao()
+                                .getByBaseRuleId(baseRuleId)
+                                .first()
+                        val pkId = ruleToUpdate.entries.first().value.id
+
+                        domainNameAndSpecificUrlParamsRuleDao().update(
+                            newData.toDatabaseEntity(
+                                baseRuleId = newData.baseRuleId,
+                                ruleId = pkId
+                            )
+                        )
+                    }
+
+                    is SpecificUrlParamsMutationModel -> {
+                        val ruleToUpdate =
+                            specificUrlParamsRuleDao().getByBaseRuleId(baseRuleId).first()
+                        val pkId = ruleToUpdate.entries.first().value.id
+
+                        specificUrlParamsRuleDao().update(
+                            newData.toDatabaseEntity(
+                                baseRuleId = newData.baseRuleId,
+                                ruleId = pkId
+                            )
+                        )
+                    }
+
+                    else -> {
+                        throw IllegalArgumentException(
+                            "rule is not of a supported type that extends BaseMutationModel"
+                        )
+                    }
                 }
             }
         }
