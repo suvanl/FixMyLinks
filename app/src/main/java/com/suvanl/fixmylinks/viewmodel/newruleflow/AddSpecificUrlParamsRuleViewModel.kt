@@ -79,8 +79,20 @@ class AddSpecificUrlParamsRuleViewModel @Inject constructor(
         )
     }
 
-    override suspend fun updateExistingRule() {
-        TODO("Not yet implemented")
+    override suspend fun updateExistingRule(baseRuleId: Long) {
+        if (!validateData()) return
+
+        val newData = SpecificUrlParamsMutationModel(
+            name = _formUiState.value.ruleName,
+            triggerDomain = _formUiState.value.domainName,
+            isLocalOnly = true,
+            baseRuleId = baseRuleId,
+            mutationInfo = SpecificUrlParamsMutationInfo(
+                removableParams = _formUiState.value.addedParamNames
+            )
+        )
+
+        rulesRepository.get().updateRule(baseRuleId, newData)
     }
 
     fun validateUrlParamKey(key: String): Boolean {

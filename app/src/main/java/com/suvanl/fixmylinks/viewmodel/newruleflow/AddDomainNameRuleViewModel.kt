@@ -67,7 +67,9 @@ class AddDomainNameRuleViewModel @Inject constructor(
     override suspend fun saveRule() {
         if (!validateData()) return
 
-        if (!_removeAllUrlParams.value) {
+        val shouldRemoveAllUrlParams = _removeAllUrlParams.value
+        // "domain name" rule
+        if (!shouldRemoveAllUrlParams) {
             rulesRepository.get().saveRule(
                 DomainNameMutationModel(
                     name = _formUiState.value.ruleName,
@@ -79,24 +81,56 @@ class AddDomainNameRuleViewModel @Inject constructor(
                     )
                 )
             )
-        } else {
-            rulesRepository.get().saveRule(
-                DomainNameAndAllUrlParamsMutationModel(
-                    name = _formUiState.value.ruleName,
-                    triggerDomain = _formUiState.value.initialDomainName,
-                    isLocalOnly = true,
-                    mutationInfo = DomainNameMutationInfo(
-                        initialDomain = _formUiState.value.initialDomainName,
-                        targetDomain = _formUiState.value.targetDomainName,
-                    )
+            return
+        }
+
+        // "domain name and all url parameters" rule
+        rulesRepository.get().saveRule(
+            DomainNameAndAllUrlParamsMutationModel(
+                name = _formUiState.value.ruleName,
+                triggerDomain = _formUiState.value.initialDomainName,
+                isLocalOnly = true,
+                mutationInfo = DomainNameMutationInfo(
+                    initialDomain = _formUiState.value.initialDomainName,
+                    targetDomain = _formUiState.value.targetDomainName,
                 )
             )
-        }
+        )
     }
 
 
-    override suspend fun updateExistingRule() {
-        TODO("Not yet implemented")
+    override suspend fun updateExistingRule(baseRuleId: Long) {
+        if (!validateData()) return
+
+        val shouldRemoveAllUrlParams = _removeAllUrlParams.value
+        // "domain name" rule
+        if (!shouldRemoveAllUrlParams) {
+            val newData = DomainNameMutationModel(
+                name = _formUiState.value.ruleName,
+                triggerDomain = _formUiState.value.initialDomainName,
+                isLocalOnly = true,
+                mutationInfo = DomainNameMutationInfo(
+                    initialDomain = _formUiState.value.initialDomainName,
+                    targetDomain = _formUiState.value.targetDomainName,
+                ),
+                baseRuleId = baseRuleId
+            )
+            rulesRepository.get().updateRule(baseRuleId, newData)
+            return
+        }
+
+        // "domain name and all url parameters" rule
+        val newData = DomainNameAndAllUrlParamsMutationModel(
+            name = _formUiState.value.ruleName,
+            triggerDomain = _formUiState.value.initialDomainName,
+            isLocalOnly = true,
+            mutationInfo = DomainNameMutationInfo(
+                initialDomain = _formUiState.value.initialDomainName,
+                targetDomain = _formUiState.value.targetDomainName,
+            ),
+            baseRuleId = baseRuleId
+        )
+        rulesRepository.get().updateRule(baseRuleId, newData)
     }
 
     override fun validateData(): Boolean {

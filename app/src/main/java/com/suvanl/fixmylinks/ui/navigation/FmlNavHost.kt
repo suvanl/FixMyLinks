@@ -192,7 +192,7 @@ fun FmlNavHost(
                         val isEditing = action == FmlScreen.AddRule.Action.EDIT && baseRuleId != 0L
 
                         if (isEditing) {
-                            viewModel.updateExistingRule()
+                            viewModel.updateExistingRule(baseRuleId)
                         } else {
                             viewModel.saveRule()
                         }

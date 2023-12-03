@@ -55,8 +55,16 @@ class AddAllUrlParamsRuleViewModel @Inject constructor(
         )
     }
 
-    override suspend fun updateExistingRule() {
-        TODO("Not yet implemented")
+    override suspend fun updateExistingRule(baseRuleId: Long) {
+        if (!validateData()) return
+
+        val newData = AllUrlParamsMutationModel(
+            name = _formUiState.value.ruleName,
+            triggerDomain = _formUiState.value.domainName,
+            isLocalOnly = true,
+            baseRuleId = baseRuleId
+        )
+        rulesRepository.get().updateRule(baseRuleId, newData)
     }
 
     override fun validateData(): Boolean {

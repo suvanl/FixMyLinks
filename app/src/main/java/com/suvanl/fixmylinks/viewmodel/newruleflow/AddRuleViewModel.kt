@@ -38,8 +38,9 @@ abstract class AddRuleViewModel(
 
     /**
      * Updates a rule that has already been saved (locally and remotely if applicable).
+     * @param baseRuleId The ID of the existing BaseRule entity.
      */
-    abstract suspend fun updateExistingRule()
+    abstract suspend fun updateExistingRule(baseRuleId: Long)
 
     /**
      * Validates form data.
