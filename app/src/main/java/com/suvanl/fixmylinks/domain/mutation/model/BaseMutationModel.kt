@@ -42,6 +42,7 @@ interface BaseMutationModel {
 }
 
 fun BaseMutationModel.toDatabaseEntity() = BaseRule(
+    id = baseRuleId,
     title = name,
     mutationType = mutationType,
     triggerDomain = triggerDomain,
