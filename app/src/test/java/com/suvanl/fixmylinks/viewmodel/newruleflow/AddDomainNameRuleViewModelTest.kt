@@ -1,7 +1,10 @@
 package com.suvanl.fixmylinks.viewmodel.newruleflow
 
+import com.suvanl.fixmylinks.data.repository.FakePreferencesRepository
 import com.suvanl.fixmylinks.data.repository.FakeRulesRepository
+import com.suvanl.fixmylinks.data.repository.PreferencesRepository
 import com.suvanl.fixmylinks.data.repository.RulesRepository
+import com.suvanl.fixmylinks.data.repository.UserPreferences
 import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
 import com.suvanl.fixmylinks.viewmodel.newruleflow.util.FakeDomainNameValidator
 import kotlinx.coroutines.flow.first
@@ -15,13 +18,19 @@ class AddDomainNameRuleViewModelTest {
 
     private lateinit var viewModel: AddDomainNameRuleViewModel
     private lateinit var rulesRepository: RulesRepository
+    private lateinit var preferencesRepository: PreferencesRepository<UserPreferences>
     private lateinit var validateDomainNameUseCase: ValidateDomainNameUseCase
 
     @Before
     fun setup() {
         rulesRepository = FakeRulesRepository()
+        preferencesRepository = FakePreferencesRepository()
         validateDomainNameUseCase = ValidateDomainNameUseCase(FakeDomainNameValidator())
-        viewModel = AddDomainNameRuleViewModel({ rulesRepository }, validateDomainNameUseCase)
+        viewModel = AddDomainNameRuleViewModel(
+            rulesRepository = { rulesRepository },
+            preferencesRepository = { preferencesRepository },
+            validateDomainNameUseCase = validateDomainNameUseCase
+        )
     }
 
     @Test
