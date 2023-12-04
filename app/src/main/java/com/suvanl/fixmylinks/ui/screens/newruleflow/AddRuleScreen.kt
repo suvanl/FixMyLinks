@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +45,7 @@ import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleFormState
 import com.suvanl.fixmylinks.ui.components.form.common.ParameterNameField
 import com.suvanl.fixmylinks.ui.components.list.SwitchList
 import com.suvanl.fixmylinks.ui.components.list.SwitchListItemState
+import com.suvanl.fixmylinks.ui.navigation.FmlScreen
 import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddAllUrlParamsRuleViewModel
@@ -60,9 +62,11 @@ data class AddRuleScreenUiState(
 @Composable
 fun AddRuleScreen(
     uiState: AddRuleScreenUiState,
-    viewModel: AddRuleViewModel?,
+    viewModel: AddRuleViewModel,
     onSaveClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    action: FmlScreen.AddRule.Action = FmlScreen.AddRule.Action.ADD,
+    baseRuleId: Long = 0,
 ) {
     var isRuleEnabled by rememberSaveable { mutableStateOf(true) }
     var isBackupEnabled by rememberSaveable { mutableStateOf(false) }
@@ -91,6 +95,11 @@ fun AddRuleScreen(
         onSaveClick = onSaveClick,
         modifier = modifier
     ) {
+        LaunchedEffect(action, baseRuleId) {
+            if (action != FmlScreen.AddRule.Action.EDIT || baseRuleId == 0L) return@LaunchedEffect
+            viewModel.setInitialFormUiState(uiState.mutationType, baseRuleId)
+        }
+
         when (viewModel) {
             is AddDomainNameRuleViewModel -> {
                 if (uiState.mutationType == MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL) {

@@ -26,4 +26,11 @@ interface DomainNameRuleDao {
         "JOIN base_rule ON rule.base_rule_id = base_rule.id"
     )
     fun getAll(): Flow<Map<BaseRule, DomainNameRule>>
+
+    @Query(
+        "SELECT * FROM domain_name_rule AS rule " +
+        "JOIN base_rule ON rule.base_rule_id = base_rule.id " +
+        "WHERE rule.base_rule_id = :baseRuleId"
+    )
+    fun getByBaseRuleId(baseRuleId: Long): Flow<Map<BaseRule, DomainNameRule>>
 }

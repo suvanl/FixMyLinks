@@ -3,6 +3,7 @@ package com.suvanl.fixmylinks.ui.screens
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -22,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
@@ -35,6 +37,7 @@ data class RulesScreenUiState(
 
 @Composable
 fun RulesScreen(
+    onClickRuleItem: (MutationType, Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RulesViewModel = hiltViewModel()
 ) {
@@ -43,6 +46,9 @@ fun RulesScreen(
 
     RulesScreenBody(
         uiState = uiState,
+        onClickItem = { mutationType, baseRuleId ->
+            onClickRuleItem(mutationType, baseRuleId)
+        },
         onClickDeleteAll = {
             coroutineScope.launch {
                 viewModel.deleteAll()
@@ -60,6 +66,7 @@ fun RulesScreen(
 @Composable
 private fun RulesScreenBody(
     uiState: RulesScreenUiState,
+    onClickItem: (MutationType, Long) -> Unit,
     onClickDeleteAll: () -> Unit,
     onClickDeleteRule: (Long) -> Unit,
     modifier: Modifier = Modifier
@@ -96,8 +103,17 @@ private fun RulesScreenBody(
                         style = MaterialTheme.typography.labelMedium
                     )
 
-                    FilledTonalButton(onClick = { onClickDeleteRule(rule.baseRuleId) }) {
-                        Text(text = "Delete this")
+                    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                        FilledTonalButton(onClick = { onClickDeleteRule(rule.baseRuleId) }) {
+                            Text(text = "Delete this")
+                        }
+                        FilledTonalButton(
+                            onClick = {
+                                onClickItem(rule.mutationType, rule.baseRuleId)
+                            }
+                        ) {
+                            Text(text = "View this")
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -135,6 +151,7 @@ private fun RulesScreenPreview() {
                     )
                 )
             ),
+            onClickItem = { _, _ -> /* do nothing */ },
             onClickDeleteAll = {},
             onClickDeleteRule = {},
         )

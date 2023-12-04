@@ -5,15 +5,21 @@ import com.suvanl.fixmylinks.data.repository.FakeRulesRepository
 import com.suvanl.fixmylinks.data.repository.PreferencesRepository
 import com.suvanl.fixmylinks.data.repository.RulesRepository
 import com.suvanl.fixmylinks.data.repository.UserPreferences
+import com.suvanl.fixmylinks.domain.mutation.MutationType
+import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationInfo
+import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
 import com.suvanl.fixmylinks.domain.validation.ValidateRemovableParamsListUseCase
 import com.suvanl.fixmylinks.domain.validation.ValidateUrlParamKeyUseCase
+import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleFormState
 import com.suvanl.fixmylinks.viewmodel.newruleflow.util.FakeDomainNameValidator
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -166,6 +172,56 @@ class AddSpecificUrlParamsRuleViewModelTest {
             // Assert that the rule exists in the data source
             val rule = allRules.find { it.name == ruleName && it.triggerDomain == domainName }
             assertNotNull(rule)
+        }
+    }
+
+    @Test
+    fun `updating an existing rule results in it being replaced with new data`() {
+        val baseRuleId = 6L
+        val formUiState = SpecificUrlParamsRuleFormState(
+            ruleName = "YouTube - remove playlist association and timestamp",
+            domainName = "youtube.com",
+            addedParamNames = listOf("list", "t"),
+        )
+        val newData = SpecificUrlParamsMutationModel(
+            baseRuleId = baseRuleId,
+            name = formUiState.ruleName,
+            triggerDomain = formUiState.domainName,
+            isLocalOnly = true,
+            mutationInfo = SpecificUrlParamsMutationInfo(
+                removableParams = formUiState.addedParamNames
+            )
+        )
+
+        runBlocking {
+            (rulesRepository as FakeRulesRepository).insertFakeData()
+            rulesRepository.updateRule(baseRuleId, newData)
+
+            val updated = rulesRepository.getRuleByBaseId(baseRuleId, MutationType.URL_PARAMS_SPECIFIC).first()
+            assertTrue(updated is SpecificUrlParamsMutationModel)
+            assertEquals(newData, updated)
+        }
+    }
+
+    @Test
+    fun `updating a rule that doesn't exist throws an exception`() {
+        val baseRuleId = 16L
+        val formUiState = SpecificUrlParamsRuleFormState()
+        val newData = SpecificUrlParamsMutationModel(
+            baseRuleId = baseRuleId,
+            name = formUiState.ruleName,
+            triggerDomain = formUiState.domainName,
+            isLocalOnly = true,
+            mutationInfo = SpecificUrlParamsMutationInfo(
+                removableParams = formUiState.addedParamNames
+            )
+        )
+
+        assertThrows(IllegalArgumentException::class.java) {
+            runBlocking {
+                (rulesRepository as FakeRulesRepository).insertFakeData()
+                rulesRepository.updateRule(baseRuleId, newData)
+            }
         }
     }
 }

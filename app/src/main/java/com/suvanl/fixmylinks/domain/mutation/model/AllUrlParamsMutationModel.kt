@@ -12,5 +12,17 @@ data class AllUrlParamsMutationModel(
     override val baseRuleId: Long = 0,
 ) : BaseMutationModel
 
+/**
+ * Transforms this domain model to a database entity.
+ * @param baseRuleId The ID of the rule's related BaseRule.
+ */
 fun AllUrlParamsMutationModel.toDatabaseEntity(baseRuleId: Long) =
     AllUrlParamsRule(baseRuleId = baseRuleId)
+
+/**
+ * Transforms this domain model to a database entity.
+ * @param baseRuleId The ID of the rule's related BaseRule.
+ * @param ruleId The ID of the rule (its primary key).
+ */
+fun AllUrlParamsMutationModel.toDatabaseEntity(baseRuleId: Long, ruleId: Long) =
+    AllUrlParamsRule(id = ruleId, baseRuleId = baseRuleId)

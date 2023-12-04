@@ -18,7 +18,23 @@ data class DomainNameMutationModel(
     val mutationInfo: DomainNameMutationInfo,
 ) : BaseMutationModel
 
+/**
+ * Transforms this domain model to a database entity.
+ * @param baseRuleId The ID of the rule's related BaseRule.
+ */
 fun DomainNameMutationModel.toDatabaseEntity(baseRuleId: Long) = DomainNameRule(
+    baseRuleId = baseRuleId,
+    initialDomainName = mutationInfo.initialDomain,
+    targetDomainName = mutationInfo.targetDomain,
+)
+
+/**
+ * Transforms this domain model to a database entity.
+ * @param baseRuleId The ID of the rule's related BaseRule.
+ * @param ruleId The ID of the rule (its primary key).
+ */
+fun DomainNameMutationModel.toDatabaseEntity(baseRuleId: Long, ruleId: Long) = DomainNameRule(
+    id = ruleId,
     baseRuleId = baseRuleId,
     initialDomainName = mutationInfo.initialDomain,
     targetDomainName = mutationInfo.targetDomain,

@@ -26,4 +26,11 @@ interface SpecificUrlParamsRuleDao {
         "JOIN base_rule ON rule.base_rule_id = base_rule.id"
     )
     fun getAll(): Flow<Map<BaseRule, SpecificUrlParamsRule>>
+
+    @Query(
+        "SELECT * FROM specific_url_params_rule AS rule " +
+        "JOIN base_rule ON rule.base_rule_id = base_rule.id " +
+        "WHERE rule.base_rule_id = :baseRuleId"
+    )
+    fun getByBaseRuleId(baseRuleId: Long): Flow<Map<BaseRule, SpecificUrlParamsRule>>
 }

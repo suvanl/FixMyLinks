@@ -438,7 +438,7 @@ class RuleDatabaseTest {
                 title = "twitter.com to x.com",  // said no one ever (other than Husk)
                 authorId = DEFAULT_AUTHOR_ID,
                 mutationType = MutationType.DOMAIN_NAME,
-                triggerDomain = "x.com",
+                triggerDomain = "twitter.com",
                 isLocalOnly = true
             ),
             DomainNameRule(

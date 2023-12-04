@@ -36,6 +36,7 @@ import com.suvanl.fixmylinks.ui.navigation.transition.exitNavigationTransition
 import com.suvanl.fixmylinks.ui.screens.HomeScreen
 import com.suvanl.fixmylinks.ui.screens.RulesScreen
 import com.suvanl.fixmylinks.ui.screens.SavedScreen
+import com.suvanl.fixmylinks.ui.screens.details.RuleDetailsScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreenUiState
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
@@ -72,11 +73,39 @@ fun FmlNavHost(
         }
 
         composable(route = FmlScreen.Rules.route) {
-            RulesScreen()
+            RulesScreen(
+                onClickRuleItem = { mutationType, baseRuleId ->
+                    navController.navigateSingleTop(
+                        route = "${FmlScreen.RuleDetails.route}/${mutationType.name}/${baseRuleId}",
+                        popUpToStartDestination = false
+                    )
+                }
+            )
         }
 
         composable(route = FmlScreen.Saved.route) {
             SavedScreen()
+        }
+
+        composable(
+            route = FmlScreen.RuleDetails.routeWithArgs,
+            arguments = FmlScreen.RuleDetails.args
+        ) { navBackStackEntry ->
+            val mutationTypeArg =
+                navBackStackEntry.arguments?.getString(FmlScreen.RuleDetails.mutationTypeArg)
+
+            val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
+                ?: MutationType.FALLBACK
+
+            val baseRuleId =
+                navBackStackEntry.arguments?.getLong(FmlScreen.RuleDetails.baseRuleIdArg)
+                    ?: throw NullPointerException("Expected base_rule_id to be non-null")
+
+            RuleDetailsScreen(
+                mutationType = mutationType,
+                baseRuleId = baseRuleId,
+                onClickEdit = {}
+            )
         }
 
         navigation(
@@ -90,8 +119,15 @@ fun FmlNavHost(
                 val isCompactLayout = windowWidthSize == WindowWidthSizeClass.Compact
 
                 fun handleNextButtonClick() {
+                    // The route used for adding a new rule:
+                    //  - action is Action.ADD
+                    //  - baseRuleId is 0 since one doesn't exist yet. A non-zero value should only
+                    //    be passed as this argument if the action arg is Action.EDIT
+                    val addActionRoute =
+                        "${FmlScreen.AddRule.route}/${mutationType.name}/${FmlScreen.AddRule.Action.ADD}/${0L}"
+
                     navController.navigateSingleTop(
-                        route = "${FmlScreen.AddRule.route}/${mutationType.name}",
+                        route = addActionRoute,
                         popUpToStartDestination = false
                     )
                 }
@@ -132,6 +168,17 @@ fun FmlNavHost(
                 val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
                     ?: MutationType.FALLBACK
 
+                val actionArg = navBackStackEntry.arguments?.getString(FmlScreen.AddRule.actionArg)
+                val action = FmlScreen.AddRule.Action.entries.find { it.name == actionArg }
+                    ?: FmlScreen.AddRule.Action.ADD
+
+                val baseRuleId =
+                    navBackStackEntry.arguments?.getLong(FmlScreen.AddRule.baseRuleIdArg) ?: 0
+
+                if (action == FmlScreen.AddRule.Action.EDIT && baseRuleId == 0L) {
+                    throw IllegalStateException("base_rule_id nav arg cannot be 0 while action is Action.EDIT")
+                }
+
                 val viewModel: AddRuleViewModel = getNewRuleFlowViewModel(mutationType)
                 val userPreferences by viewModel.userPreferences.collectAsStateWithLifecycle()
 
@@ -142,7 +189,14 @@ fun FmlNavHost(
                     if (!viewModel.validateData()) return
 
                     coroutineScope.launch {
-                        viewModel.saveRule()
+                        val isEditing = action == FmlScreen.AddRule.Action.EDIT && baseRuleId != 0L
+
+                        if (isEditing) {
+                            viewModel.updateExistingRule(baseRuleId)
+                        } else {
+                            viewModel.saveRule()
+                        }
+
                         navController.popBackStack(
                             route = NestedNavGraphParent.NewRuleFlow.route,
                             inclusive = true
@@ -179,7 +233,9 @@ fun FmlNavHost(
                         showSaveButton = isCompactLayout,
                     ),
                     viewModel = viewModel,
-                    onSaveClick = { handleSaveRuleClick() }
+                    onSaveClick = { handleSaveRuleClick() },
+                    action = action,
+                    baseRuleId = baseRuleId,
                 )
             }
         }

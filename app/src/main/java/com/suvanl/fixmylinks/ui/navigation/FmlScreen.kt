@@ -3,13 +3,13 @@ package com.suvanl.fixmylinks.ui.navigation
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmarks
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LibraryBooks
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Bookmarks
+import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.LibraryBooks
-import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
@@ -19,8 +19,8 @@ import com.suvanl.fixmylinks.R
 sealed class FmlScreen(
     val route: String,
     @StringRes val label: Int,
-    val selectedIcon: ImageVector = Icons.Filled.Star,
-    val unselectedIcon: ImageVector = Icons.Outlined.StarOutline
+    val selectedIcon: ImageVector = Icons.Filled.Circle,
+    val unselectedIcon: ImageVector = Icons.Outlined.Circle
 ) {
     private interface FmlScreenWithArgs {
         /**
@@ -56,21 +56,44 @@ sealed class FmlScreen(
         unselectedIcon = Icons.Outlined.Bookmarks
     )
 
+    data object RuleDetails : FmlScreen(
+        route = "rule_details",
+        label = R.string.rule_details
+    ), FmlScreenWithArgs {
+        const val mutationTypeArg = "mutation_type"
+        const val baseRuleIdArg = "base_rule_id"
+        override val args = listOf(
+            navArgument(mutationTypeArg) { type = NavType.StringType },
+            navArgument(baseRuleIdArg) { type = NavType.LongType }
+        )
+        override val routeWithArgs = "$route/{$mutationTypeArg}/{$baseRuleIdArg}"
+    }
+
     data object SelectRuleType : FmlScreen(
         route = "select_rule_type",
         label = R.string.select_rule_type
     )
 
     data object AddRule : FmlScreen(
-        route = "add_rule", label = R.string.add_new_rule
+        route = "add_rule",
+        label = R.string.add_new_rule
     ), FmlScreenWithArgs {
         const val mutationTypeArg = "mutation_type"
+        const val actionArg = "action"
+        const val baseRuleIdArg = "base_rule_id"
 
-        override val args: List<NamedNavArgument> = listOf(
-            navArgument(mutationTypeArg) { type = NavType.StringType }
+        override val args = listOf(
+            navArgument(mutationTypeArg) { type = NavType.StringType },
+            navArgument(actionArg) { type = NavType.StringType },
+            navArgument(baseRuleIdArg) { type = NavType.LongType },
         )
+        override val routeWithArgs = "$route/{$mutationTypeArg}/{$actionArg}/{$baseRuleIdArg}"
 
-        override val routeWithArgs: String = "$route/{$mutationTypeArg}"
+        /**
+         * An action that can be performed on the AddRule screen (i.e., adding a new rule or
+         * editing an existing rule).
+         */
+        enum class Action { ADD, EDIT }
     }
 }
 
@@ -79,7 +102,8 @@ val allFmlScreens = setOf(
     FmlScreen.Rules,
     FmlScreen.Saved,
     FmlScreen.SelectRuleType,
-    FmlScreen.AddRule
+    FmlScreen.AddRule,
+    FmlScreen.RuleDetails,
 )
 
 /**
