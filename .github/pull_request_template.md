@@ -9,7 +9,7 @@ Closes [issue link/number]
 
 
 
-## 🧑‍💻 Implementation / changelog
+## 🧑‍💻 Implementation/changelog
 <!-- How does this PR solve the problem? What technical approach and steps were taken to solve it? -->
 
 
