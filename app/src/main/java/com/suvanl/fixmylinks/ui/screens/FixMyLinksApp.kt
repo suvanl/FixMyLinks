@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -106,9 +107,10 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         scrollBehavior = topAppBarScrollBehavior,
                         currentBackStackEntryFlow = navController.currentBackStackEntryFlow
                     )
-                } else if (shouldShowSearchBar) {
+                } else if (shouldShowSearchBar && !shouldShowDockedSearchBar) {
+                    // Show the standard (non-docked) search bar
                     RulesSearchBar(
-                        docked = shouldShowDockedSearchBar,
+                        docked = false,
                         horizontalPadding = 16.dp,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -218,10 +220,18 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         )
                     }
 
-                    FmlNavHost(
-                        navController = navController,
-                        windowWidthSize = windowSize.widthSizeClass
-                    )
+                    Box {
+                        if (shouldShowSearchBar && shouldShowDockedSearchBar) {
+                            RulesSearchBar(
+                                docked = true
+                            )
+                        }
+
+                        FmlNavHost(
+                            navController = navController,
+                            windowWidthSize = windowSize.widthSizeClass
+                        )
+                    }
                 }
             }
         }

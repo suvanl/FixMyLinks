@@ -7,6 +7,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
@@ -25,9 +27,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.suvanl.fixmylinks.R
@@ -48,12 +53,31 @@ fun RulesSearchBar(
 ) {
     val searchBarState by viewModel.searchBarState.collectAsStateWithLifecycle()
 
+    if (docked) {
+        Box(
+            modifier = Modifier
+                .zIndex(1F)
+                .semantics { isTraversalGroup = true }
+        ) {
+            DockedRulesSearchBar(
+                query = searchBarState.query,
+                onQueryChange = viewModel::setQuery,
+                onSearch = { /* TODO */ },
+                active = searchBarState.active,
+                onActiveChange = { isActive ->
+                    if (isActive) viewModel.setIsActive(true) else viewModel.resetState()
+                }
+            ) {}
+        }
+        return
+    }
+
     val searchPadding: Dp by animateDpAsState(
         targetValue = if (!searchBarState.active) horizontalPadding else 0.dp,
         label = "searchbar padding"
     )
 
-    StandardSearchBar(
+    StandardRulesSearchBar(
         query = searchBarState.query,
         onQueryChange = viewModel::setQuery,
         onSearch = { /* TODO */ },
@@ -75,7 +99,7 @@ fun RulesSearchBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun StandardSearchBar(
+private fun StandardRulesSearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
     onSearch: (String) -> Unit,
@@ -85,6 +109,94 @@ private fun StandardSearchBar(
     content: @Composable (ColumnScope.() -> Unit)
 ) {
     SearchBar(
+        query = query,
+        onQueryChange = onQueryChange,
+        onSearch = onSearch,
+        active = active,
+        onActiveChange = onActiveChange,
+        placeholder = {
+            Text(
+                text = stringResource(id = R.string.search_rules)
+            )
+        },
+        leadingIcon = {
+            AnimatedVisibility(
+                visible = !active,
+                enter = scaleIn(),
+                exit = scaleOut(),
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Search,
+                    contentDescription = null
+                )
+            }
+
+            AnimatedVisibility(
+                visible = active,
+                enter = scaleIn(),
+                exit = scaleOut(),
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.ArrowBack,
+                    contentDescription = stringResource(id = R.string.navigate_up),
+                    modifier = Modifier.clickable { onActiveChange(false) }
+                )
+            }
+        },
+        trailingIcon = {
+            if (!active) {
+                Icon(
+                    imageVector = Icons.Outlined.AccountCircle,
+                    contentDescription = stringResource(id = R.string.account_and_settings),
+                    modifier = Modifier.clickable { /* TODO: show account menu */ }
+                )
+            } else {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    val hasQuery = query.isNotBlank()
+                    if (hasQuery) {
+                        Icon(
+                            imageVector = Icons.Outlined.Close,
+                            contentDescription = "Clear text",
+                            modifier = Modifier.clickable { onQueryChange("") }
+                        )
+                    }
+
+                    Icon(
+                        imageVector = Icons.Outlined.Mic,
+                        contentDescription = "Start voice search",
+                        modifier = Modifier
+                            .clickable { /* TODO: implement voice search */ }
+                            .then(
+                                if (hasQuery) {
+                                    Modifier.padding(end = 12.dp)
+                                } else {
+                                    Modifier
+                                }
+                            )
+                    )
+                }
+            }
+        },
+        modifier = modifier,
+        content = content,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DockedRulesSearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onSearch: (String) -> Unit,
+    active: Boolean,
+    onActiveChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable (ColumnScope.() -> Unit)
+) {
+    DockedSearchBar(
         query = query,
         onQueryChange = onQueryChange,
         onSearch = onSearch,
@@ -174,7 +286,7 @@ private fun StandardSearchBar(
 @Composable
 private fun StandardSearchBarPreview() {
     PreviewContainer {
-        StandardSearchBar(
+        StandardRulesSearchBar(
             query = "",
             onQueryChange = {},
             onSearch = {},
@@ -197,7 +309,7 @@ private fun StandardSearchBarPreview() {
 @Composable
 private fun StandardSearchBarActivePreview() {
     PreviewContainer {
-        StandardSearchBar(
+        StandardRulesSearchBar(
             query = "",
             onQueryChange = {},
             onSearch = {},
@@ -220,11 +332,34 @@ private fun StandardSearchBarActivePreview() {
 @Composable
 private fun StandardSearchBarActiveWithQueryPreview() {
     PreviewContainer {
-        StandardSearchBar(
+        StandardRulesSearchBar(
             query = "hellooo",
             onQueryChange = {},
             onSearch = {},
             active = true,
+            onActiveChange = {},
+        ) {}
+    }
+}
+
+@Preview(
+    showBackground = true,
+    widthDp = 320
+)
+@Preview(
+    name = "Dark",
+    showBackground = true,
+    widthDp = 320,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun DockedSearchBarPreview() {
+    PreviewContainer {
+        DockedRulesSearchBar(
+            query = "",
+            onQueryChange = {},
+            onSearch = {},
+            active = false,
             onActiveChange = {},
         ) {}
     }
