@@ -59,4 +59,5 @@
     <string name="edit">Edit</string>
     <string name="search_rules">Search rules</string>
     <string name="account_and_settings">Account and settings</string>
+    <string name="no_rules_added_yet">No rules added yet</string>
 </resources>
