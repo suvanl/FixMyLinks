@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -28,16 +29,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
-import com.suvanl.fixmylinks.ui.components.button.AddNewRuleFab
-import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationBar
-import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationRail
 import com.suvanl.fixmylinks.ui.components.appbar.FmlTopAppBar
 import com.suvanl.fixmylinks.ui.components.appbar.TopAppBarSize
+import com.suvanl.fixmylinks.ui.components.button.AddNewRuleFab
 import com.suvanl.fixmylinks.ui.components.button.EditFab
+import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationBar
+import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationRail
+import com.suvanl.fixmylinks.ui.components.search.RulesSearchBar
 import com.suvanl.fixmylinks.ui.navigation.FmlNavHost
 import com.suvanl.fixmylinks.ui.navigation.FmlScreen
 import com.suvanl.fixmylinks.ui.navigation.allFmlScreens
@@ -60,6 +63,9 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
     // The screens on which the Navigation Bar should be shown
     val showNavBarOn = listOf(FmlScreen.Home, FmlScreen.Rules, FmlScreen.Saved)
 
+    // The screens on which the search bar (or docked search bar) should be shown
+    val showSearchBarOn = listOf(FmlScreen.Home, FmlScreen.Rules, FmlScreen.Saved)
+
     val topAppBarSize = when (windowSize.widthSizeClass) {
         WindowWidthSizeClass.Compact -> TopAppBarSize.LARGE
         else -> TopAppBarSize.SMALL
@@ -81,6 +87,10 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
         else -> false
     } && showNavBarOn.any { it.route == currentBaseRoute }
 
+    val shouldShowSearchBar = showSearchBarOn.any { it.route == currentBaseRoute }
+    val shouldShowDockedSearchBar = shouldShowSearchBar
+            && windowSize.widthSizeClass != WindowWidthSizeClass.Compact
+
     val shouldShowTopAppBar = showNavBarOn.none { it.route == currentBaseRoute }
     val shouldShowAddNewRuleFab = topLevelScreensWithFab.any { it.route == currentBaseRoute }
     val shouldShowEditRuleFab = currentBaseRoute.startsWith(FmlScreen.RuleDetails.route)
@@ -95,6 +105,12 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         size = topAppBarSize,
                         scrollBehavior = topAppBarScrollBehavior,
                         currentBackStackEntryFlow = navController.currentBackStackEntryFlow
+                    )
+                } else if (shouldShowSearchBar) {
+                    RulesSearchBar(
+                        docked = shouldShowDockedSearchBar,
+                        horizontalPadding = 16.dp,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             },
@@ -122,8 +138,10 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         }
                     )
                 } else if (shouldShowEditRuleFab) {
-                    if (currentDestination != null
-                        && currentDestination.route == FmlScreen.RuleDetails.routeWithArgs) {
+                    if (
+                        currentDestination != null
+                        && currentDestination.route == FmlScreen.RuleDetails.routeWithArgs
+                    ) {
                         val mutationTypeArg =
                             navBackStackEntry?.arguments?.getString(FmlScreen.RuleDetails.mutationTypeArg)
 
