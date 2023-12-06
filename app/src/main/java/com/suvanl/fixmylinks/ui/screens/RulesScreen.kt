@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material3.Button
@@ -38,6 +37,7 @@ import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
+import com.suvanl.fixmylinks.ui.graphics.CustomShapes.ScallopShape
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 import kotlinx.coroutines.launch
@@ -174,7 +174,7 @@ private fun EmptyRulesBody(
             modifier = Modifier
                 .background(
                     color = MaterialTheme.colorScheme.secondaryContainer,
-                    shape = CircleShape
+                    shape = ScallopShape
                 )
                 .padding(48.dp)
         ) {
