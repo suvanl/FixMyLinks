@@ -6,8 +6,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.theme.TextStyleDefaults
+import com.suvanl.fixmylinks.ui.util.PreviewContainer
 
 @Composable
 fun HintsDropdownItem(
@@ -31,4 +33,15 @@ fun HintsDropdownItem(
         },
         modifier = modifier
     )
+}
+
+@Preview(widthDp = 150)
+@Composable
+private fun HintsDropdownItemPreview() {
+    PreviewContainer {
+        HintsDropdownItem(
+            isChecked = true,
+            onCheckedChange = {}
+        )
+    }
 }
