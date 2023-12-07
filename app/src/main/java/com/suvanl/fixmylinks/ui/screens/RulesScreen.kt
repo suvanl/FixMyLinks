@@ -1,9 +1,7 @@
 package com.suvanl.fixmylinks.ui.screens
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +35,8 @@ import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
-import com.suvanl.fixmylinks.ui.graphics.CustomShapes.ScallopShape
+import com.suvanl.fixmylinks.ui.components.layout.PolygonShape
+import com.suvanl.fixmylinks.ui.graphics.CustomShapes.ScallopPolygon
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 import kotlinx.coroutines.launch
@@ -169,20 +168,19 @@ private fun EmptyRulesBody(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
+        PolygonShape(
+            polygon = ScallopPolygon,
+            color = MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier
-                .background(
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    shape = ScallopShape
-                )
-                .padding(48.dp)
+                .size(208.dp)
         ) {
             Icon(
                 imageVector = Icons.Outlined.Link,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier = Modifier.size(100.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(48.dp)
             )
         }
 
