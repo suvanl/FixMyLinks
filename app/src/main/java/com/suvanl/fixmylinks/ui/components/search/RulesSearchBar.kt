@@ -36,6 +36,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.viewmodel.search.RulesSearchBarViewModel
 
@@ -114,71 +115,14 @@ private fun StandardRulesSearchBar(
         onSearch = onSearch,
         active = active,
         onActiveChange = onActiveChange,
-        placeholder = {
-            Text(
-                text = stringResource(id = R.string.search_rules)
-            )
-        },
-        leadingIcon = {
-            AnimatedVisibility(
-                visible = !active,
-                enter = scaleIn(),
-                exit = scaleOut(),
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Search,
-                    contentDescription = null
-                )
-            }
-
-            AnimatedVisibility(
-                visible = active,
-                enter = scaleIn(),
-                exit = scaleOut(),
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.ArrowBack,
-                    contentDescription = stringResource(id = R.string.navigate_up),
-                    modifier = Modifier.clickable { onActiveChange(false) }
-                )
-            }
-        },
+        placeholder = { Placeholder() },
+        leadingIcon = { LeadingIcon(active = active, onActiveChange = onActiveChange) },
         trailingIcon = {
-            if (!active) {
-                Icon(
-                    imageVector = Icons.Outlined.AccountCircle,
-                    contentDescription = stringResource(id = R.string.account_and_settings),
-                    modifier = Modifier.clickable { /* TODO: show account menu */ }
-                )
-            } else {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    val hasQuery = query.isNotBlank()
-                    if (hasQuery) {
-                        Icon(
-                            imageVector = Icons.Outlined.Close,
-                            contentDescription = "Clear text",
-                            modifier = Modifier.clickable { onQueryChange("") }
-                        )
-                    }
-
-                    Icon(
-                        imageVector = Icons.Outlined.Mic,
-                        contentDescription = "Start voice search",
-                        modifier = Modifier
-                            .clickable { /* TODO: implement voice search */ }
-                            .then(
-                                if (hasQuery) {
-                                    Modifier.padding(end = 12.dp)
-                                } else {
-                                    Modifier
-                                }
-                            )
-                    )
-                }
-            }
+            TrailingIcon(
+                query = query,
+                onQueryChange = onQueryChange,
+                active = active
+            )
         },
         modifier = modifier,
         content = content,
@@ -202,75 +146,102 @@ private fun DockedRulesSearchBar(
         onSearch = onSearch,
         active = active,
         onActiveChange = onActiveChange,
-        placeholder = {
-            Text(
-                text = stringResource(id = R.string.search_rules)
-            )
-        },
-        leadingIcon = {
-            AnimatedVisibility(
-                visible = !active,
-                enter = scaleIn(),
-                exit = scaleOut(),
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Search,
-                    contentDescription = null
-                )
-            }
-
-            AnimatedVisibility(
-                visible = active,
-                enter = scaleIn(),
-                exit = scaleOut(),
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.ArrowBack,
-                    contentDescription = stringResource(id = R.string.navigate_up),
-                    modifier = Modifier.clickable { onActiveChange(false) }
-                )
-            }
-        },
+        placeholder = { Placeholder() },
+        leadingIcon = { LeadingIcon(active = active, onActiveChange = onActiveChange) },
         trailingIcon = {
-            if (!active) {
-                Icon(
-                    imageVector = Icons.Outlined.AccountCircle,
-                    contentDescription = stringResource(id = R.string.account_and_settings),
-                    modifier = Modifier.clickable { /* TODO: show account menu */ }
-                )
-            } else {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    val hasQuery = query.isNotBlank()
-                    if (hasQuery) {
-                        Icon(
-                            imageVector = Icons.Outlined.Close,
-                            contentDescription = "Clear text",
-                            modifier = Modifier.clickable { onQueryChange("") }
-                        )
-                    }
-
-                    Icon(
-                        imageVector = Icons.Outlined.Mic,
-                        contentDescription = "Start voice search",
-                        modifier = Modifier
-                            .clickable { /* TODO: implement voice search */ }
-                            .then(
-                                if (hasQuery) {
-                                    Modifier.padding(end = 12.dp)
-                                } else {
-                                    Modifier
-                                }
-                            )
-                    )
-                }
-            }
+            TrailingIcon(
+                query = query,
+                onQueryChange = onQueryChange,
+                active = active
+            )
         },
         modifier = modifier,
         content = content,
     )
+}
+
+// Composables that are common between the standard and docked search bars
+@Composable
+private fun Placeholder(modifier: Modifier = Modifier) {
+    Text(
+        text = stringResource(id = R.string.search_rules),
+        letterSpacing = LetterSpacingDefaults.Tighter,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun LeadingIcon(
+    active: Boolean,
+    onActiveChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    AnimatedVisibility(
+        visible = !active,
+        enter = scaleIn(),
+        exit = scaleOut(),
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.Search,
+            contentDescription = null
+        )
+    }
+
+    AnimatedVisibility(
+        visible = active,
+        enter = scaleIn(),
+        exit = scaleOut(),
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.ArrowBack,
+            contentDescription = stringResource(id = R.string.navigate_up),
+            modifier = modifier.clickable { onActiveChange(false) }
+        )
+    }
+}
+
+@Composable
+private fun TrailingIcon(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    active: Boolean,
+    modifier: Modifier = Modifier
+) {
+    if (!active) {
+        Icon(
+            imageVector = Icons.Outlined.AccountCircle,
+            contentDescription = stringResource(id = R.string.account_and_settings),
+            modifier = modifier.clickable { /* TODO: show account menu */ }
+        )
+    } else {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            val hasQuery = query.isNotBlank()
+            if (hasQuery) {
+                Icon(
+                    imageVector = Icons.Outlined.Close,
+                    contentDescription = "Clear text",
+                    modifier = modifier.clickable { onQueryChange("") }
+                )
+            }
+
+            Icon(
+                imageVector = Icons.Outlined.Mic,
+                contentDescription = "Start voice search",
+                modifier = Modifier
+                    .clickable { /* TODO: implement voice search */ }
+                    .then(
+                        if (hasQuery) {
+                            Modifier.padding(end = 12.dp)
+                        } else {
+                            Modifier
+                        }
+                    )
+            )
+        }
+    }
 }
 
 @Preview(
