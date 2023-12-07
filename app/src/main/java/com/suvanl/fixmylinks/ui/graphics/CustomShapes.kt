@@ -6,38 +6,21 @@ import androidx.graphics.shapes.RoundedPolygon
  * Custom Material 3-style shapes, such as 'scallop', 'clover', wavy circle' etc.
  */
 object CustomShapes {
-    val ScallopPolygon = Scallop.polygon
-    val ScallopShape = Scallop.shape
+    val ScallopPolygon = genPolygon(PolygonParams.ScallopParams, ShapeParameters.ShapeId.Star)
+    val ScallopShape = RoundedPolygonShape(ScallopPolygon)
 }
 
-private interface CustomShape {
-    val shape: RoundedPolygonShape
-        get() = genShape()
-
-    val polygon: RoundedPolygon
-        get() = genPolygon()
-
-    fun genPolygon(): RoundedPolygon
-
-    fun genShape(): RoundedPolygonShape
+private object PolygonParams {
+    val ScallopParams = ShapeParameters(sides = 12, innerRadius = 0.928F, roundness = 0.1F)
 }
 
-private object Scallop : CustomShape {
-    override fun genPolygon(): RoundedPolygon {
-        val shapeParams = ShapeParameters(
-            sides = 12,
-            innerRadius = 0.928F,
-            roundness = 0.1F,
-        )
-
-        val shapeItem = shapeParams.getShapeItemById(ShapeParameters.ShapeId.Star)
-        val roundedPolygon = shapeParams.genShape(shapeItem).also { polygon ->
-            val matrix = calculateMatrix(polygon.bounds, 1F, 1F)
-            polygon.transform(matrix)
-        }
-
-        return roundedPolygon
+private fun genPolygon(
+    shapeParams: ShapeParameters,
+    shapeId: ShapeParameters.ShapeId
+): RoundedPolygon {
+    val shapeItem = shapeParams.getShapeItemById(shapeId)
+    return shapeParams.genShape(shapeItem).also { polygon ->
+        val matrix = calculateMatrix(polygon.bounds, 1F, 1F)
+        polygon.transform(matrix)
     }
-
-    override fun genShape(): RoundedPolygonShape = RoundedPolygonShape(polygon)
 }
