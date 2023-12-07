@@ -3,6 +3,7 @@ package com.suvanl.fixmylinks.ui.navigation
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -40,7 +42,9 @@ import com.suvanl.fixmylinks.ui.screens.details.RuleDetailsScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreenUiState
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
+import com.suvanl.fixmylinks.ui.theme.TextStyleDefaults
 import com.suvanl.fixmylinks.ui.util.getNewRuleFlowViewModel
+import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.SelectRuleTypeViewModel
 import kotlinx.coroutines.launch
@@ -72,40 +76,74 @@ fun FmlNavHost(
             HomeScreen()
         }
 
-        composable(route = FmlScreen.Rules.route) {
-            RulesScreen(
-                onClickRuleItem = { mutationType, baseRuleId ->
-                    navController.navigateSingleTop(
-                        route = "${FmlScreen.RuleDetails.route}/${mutationType.name}/${baseRuleId}",
-                        popUpToStartDestination = false
-                    )
-                }
-            )
-        }
-
         composable(route = FmlScreen.Saved.route) {
             SavedScreen()
         }
 
-        composable(
-            route = FmlScreen.RuleDetails.routeWithArgs,
-            arguments = FmlScreen.RuleDetails.args
-        ) { navBackStackEntry ->
-            val mutationTypeArg =
-                navBackStackEntry.arguments?.getString(FmlScreen.RuleDetails.mutationTypeArg)
+        navigation(
+            startDestination = FmlScreen.Rules.route,
+            route = NestedNavGraphParent.RuleDetailsFlow.route
+        ) {
+            composable(route = FmlScreen.Rules.route) { navBackStackEntry ->
+                val viewModel = navBackStackEntry.sharedViewModel<RulesViewModel>(navController)
+                val uiState by viewModel.rulesScreenUiState.collectAsStateWithLifecycle()
 
-            val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
-                ?: MutationType.FALLBACK
+                RulesScreen(
+                    uiState = uiState,
+                    onClickRuleItem = { rule ->
+                        viewModel.setSelectedRule(rule)
+                        navController.navigateSingleTop(
+                            route = FmlScreen.RuleDetails.route,
+                            popUpToStartDestination = false
+                        )
+                    }
+                )
+            }
 
-            val baseRuleId =
-                navBackStackEntry.arguments?.getLong(FmlScreen.RuleDetails.baseRuleIdArg)
-                    ?: throw NullPointerException("Expected base_rule_id to be non-null")
+            composable(
+                route = FmlScreen.RuleDetails.route
+            ) { navBackStackEntry ->
+                val viewModel = navBackStackEntry.sharedViewModel<RulesViewModel>(navController)
+                val selectedRule by viewModel.selectedRule.collectAsStateWithLifecycle()
+                val deleteConfirmationRequired by viewModel.deleteConfirmationRequired.collectAsStateWithLifecycle()
 
-            RuleDetailsScreen(
-                mutationType = mutationType,
-                baseRuleId = baseRuleId,
-                onClickEdit = {}
-            )
+                val coroutineScope = rememberCoroutineScope()
+
+                ProvideAppBarActions {
+                    OverflowMenu {
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = stringResource(id = R.string.delete),
+                                    style = TextStyleDefaults.dropdownItemStyle,
+                                )
+                            },
+                            onClick = {
+                                if (selectedRule != null) {
+                                    viewModel.setDeleteConfirmationRequired(true)
+                                }
+                            }
+                        )
+                    }
+                }
+
+                RuleDetailsScreen(
+                    rule = selectedRule,
+                    showDeleteConfirmation = deleteConfirmationRequired,
+                    onDismissDeleteConfirmation = {
+                        viewModel.setDeleteConfirmationRequired(false)
+                    },
+                    onDelete = {
+                        coroutineScope.launch {
+                            viewModel.deleteSingleRule(selectedRule!!.baseRuleId)
+                            navController.popBackStack(
+                                route = FmlScreen.Rules.route,
+                                inclusive = false
+                            )
+                        }
+                    }
+                )
+            }
         }
 
         navigation(
@@ -275,7 +313,7 @@ fun NavHostController.navigateSingleTop(route: String, popUpToStartDestination: 
 private inline fun <reified VM : ViewModel> NavBackStackEntry.sharedViewModel(
     navController: NavController
 ): VM {
-    val navGraphRoute = destination.parent?.route ?: return viewModel()
+    val navGraphRoute = destination.parent?.route ?: return hiltViewModel()
     val parentEntry = remember(this) {
         navController.getBackStackEntry(navGraphRoute)
     }
@@ -283,5 +321,5 @@ private inline fun <reified VM : ViewModel> NavBackStackEntry.sharedViewModel(
     // Scope VM to nested nav graph parent entry to ensure that the VM won't be cleared if a single
     // screen within the nested nav graph is popped, but rather only if the whole nested nav graph
     // gets popped off the back stack
-    return viewModel(parentEntry)
+    return hiltViewModel(parentEntry)
 }

@@ -47,7 +47,7 @@ private fun getShapeForRule(ruleType: MutationType): Shape = when (ruleType) {
 @Composable
 fun RulesListItem(
     rule: BaseMutationModel,
-    onClick: (MutationType, Long) -> Unit,
+    onClick: (BaseMutationModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -91,7 +91,7 @@ fun RulesListItem(
             modifier = Modifier
                 .padding(4.dp)
                 .clickable {
-                    onClick(rule.mutationType, rule.baseRuleId)
+                    onClick(rule)
                 }
         )
     }
@@ -103,7 +103,7 @@ private fun ItemPreview() {
     PreviewContainer {
         RulesListItem(
             rule = PreviewData.previewRules[1],
-            onClick = { _, _ -> /* do nothing */ },
+            onClick = { /* do nothing */ },
             modifier = Modifier.padding(8.dp)
         )
     }

@@ -14,7 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,17 +21,13 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.suvanl.fixmylinks.R
-import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
 import com.suvanl.fixmylinks.ui.components.list.RulesList
-import com.suvanl.fixmylinks.ui.layout.Polygon
 import com.suvanl.fixmylinks.ui.graphics.CustomShapes.ScallopPolygon
+import com.suvanl.fixmylinks.ui.layout.Polygon
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.ui.util.PreviewData
-import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 
 data class RulesScreenUiState(
     val rules: List<BaseMutationModel> = listOf()
@@ -40,16 +35,14 @@ data class RulesScreenUiState(
 
 @Composable
 fun RulesScreen(
-    onClickRuleItem: (MutationType, Long) -> Unit,
+    uiState: RulesScreenUiState,
+    onClickRuleItem: (BaseMutationModel) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: RulesViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.rulesScreenUiState.collectAsStateWithLifecycle()
-
     RulesScreenBody(
         uiState = uiState,
-        onClickItem = { mutationType, baseRuleId ->
-            onClickRuleItem(mutationType, baseRuleId)
+        onClickItem = { rule ->
+            onClickRuleItem(rule)
         },
         modifier = modifier
     )
@@ -58,7 +51,7 @@ fun RulesScreen(
 @Composable
 private fun RulesScreenBody(
     uiState: RulesScreenUiState,
-    onClickItem: (MutationType, Long) -> Unit,
+    onClickItem: (BaseMutationModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val hasRules = uiState.rules.isNotEmpty()
@@ -132,7 +125,7 @@ private fun RulesScreenPreview() {
     PreviewContainer {
         RulesScreenBody(
             uiState = RulesScreenUiState(rules = PreviewData.previewRules),
-            onClickItem = { _, _ -> /* do nothing */ },
+            onClickItem = { /* do nothing */ },
         )
     }
 }
