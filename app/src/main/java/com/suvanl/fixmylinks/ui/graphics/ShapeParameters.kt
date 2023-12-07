@@ -1,6 +1,7 @@
 package com.suvanl.fixmylinks.ui.graphics
 
 import android.graphics.Matrix
+import android.graphics.PointF
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.RoundedPolygon
@@ -48,7 +49,7 @@ class ShapeParameters(
      * Primitive shapes that can be drawn
      */
     private val shapes = listOf(
-        ShapeItem(ShapeId.Star) {
+        ShapeItem(id = ShapeId.Star) {
             RoundedPolygon.star(
                 numVerticesPerRadius = sidesState.floatValue.roundToInt(),
                 innerRadius = innerRadiusState.floatValue,
@@ -60,6 +61,59 @@ class ShapeParameters(
                     innerRoundnessState.floatValue,
                     innerSmoothState.floatValue
                 )
+            )
+        },
+
+        ShapeItem(
+            id = ShapeId.Polygon,
+            usesInnerRatio = false,
+            usesInnerParameters = false
+        ) {
+            RoundedPolygon(
+                numVertices = sidesState.floatValue.roundToInt(),
+                rounding = CornerRounding(roundnessState.floatValue)
+            )
+        },
+
+        ShapeItem(
+            id = ShapeId.Triangle,
+            usesSides = false,
+            usesInnerParameters = false
+        ) {
+            val points = listOf(
+                radialToCartesian(1F, 270F.toRadians()),
+                radialToCartesian(1F, 30F.toRadians()),
+                radialToCartesian(innerRadiusState.floatValue, 90F.toRadians()),
+                radialToCartesian(1F, 150F.toRadians()),
+            )
+
+            RoundedPolygon(
+                vertices = points,
+                rounding = CornerRounding(roundnessState.floatValue, smoothState.floatValue),
+                center = PointZero
+            )
+        },
+
+        ShapeItem(
+            id = ShapeId.Blob,
+            usesSides = false,
+            usesInnerParameters = false
+        ) {
+            // scale
+            val sx = innerRadiusState.floatValue.coerceAtLeast(0.55F)
+            val sy = roundnessState.floatValue.coerceAtLeast(0.1F)
+
+            val vertices = listOf(
+                PointF(-sx, -sy),
+                PointF(sx, -sy),
+                PointF(sx, sy),
+                PointF(-sx, sy),
+            )
+
+            RoundedPolygon(
+                vertices = vertices,
+                rounding = CornerRounding(roundnessState.floatValue, smoothState.floatValue),
+                center = PointZero
             )
         }
     )
