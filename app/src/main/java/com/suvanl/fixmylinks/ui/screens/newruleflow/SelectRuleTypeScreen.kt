@@ -26,8 +26,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
-import com.suvanl.fixmylinks.ui.components.RadioGroup
-import com.suvanl.fixmylinks.ui.components.RadioOptionData
+import com.suvanl.fixmylinks.ui.components.radio.RadioGroup
+import com.suvanl.fixmylinks.ui.components.radio.RadioOptionData
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.ui.util.StringResourceUtil
 

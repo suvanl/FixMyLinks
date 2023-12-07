@@ -1,4 +1,4 @@
-package com.suvanl.fixmylinks.ui.components
+package com.suvanl.fixmylinks.ui.components.radio
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
