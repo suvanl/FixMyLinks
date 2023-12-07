@@ -27,13 +27,13 @@ import com.suvanl.fixmylinks.ui.util.PreviewContainer
  */
 @Composable
 fun Polygon(
-    polygon: RoundedPolygon,
+    shape: RoundedPolygon,
     modifier: Modifier = Modifier,
     color: Color = Color.Transparent,
     bounds: RectF = RectF(0F, 0F, 1F, 1F),
     content: @Composable (BoxScope.() -> Unit)? = null,
 ) {
-    val sizedPolygonCache = remember(polygon) { mutableMapOf<Size, RoundedPolygon>() }
+    val sizedPolygonCache = remember(shape) { mutableMapOf<Size, RoundedPolygon>() }
 
     Box(
         contentAlignment = Alignment.Center,
@@ -41,7 +41,7 @@ fun Polygon(
             .drawWithContent {
                 val sizedPolygon = sizedPolygonCache.getOrPut(size) {
                     val matrix = calculateMatrix(bounds, size.width, size.height)
-                    RoundedPolygon(polygon).apply { transform(matrix) }
+                    RoundedPolygon(shape).apply { transform(matrix) }
                 }
                 drawPath(sizedPolygon.toPath().asComposePath(), color)
                 // Draw content after drawing the polygon shape to ensure children (content)
@@ -63,7 +63,7 @@ fun Polygon(
 private fun PolygonPreview() {
     PreviewContainer {
         Polygon(
-            polygon = ScallopPolygon,
+            shape = ScallopPolygon,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.aspectRatio(1F)
         )
@@ -78,7 +78,7 @@ private fun PolygonPreview() {
 private fun PolygonWithContentPreview() {
     PreviewContainer {
         Polygon(
-            polygon = ScallopPolygon,
+            shape = ScallopPolygon,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.aspectRatio(1F)
         ) {

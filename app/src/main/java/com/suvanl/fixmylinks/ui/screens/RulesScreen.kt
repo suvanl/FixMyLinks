@@ -169,7 +169,7 @@ private fun EmptyRulesBody(
         modifier = modifier
     ) {
         Polygon(
-            polygon = ScallopPolygon,
+            shape = ScallopPolygon,
             color = MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier
                 .size(208.dp)
