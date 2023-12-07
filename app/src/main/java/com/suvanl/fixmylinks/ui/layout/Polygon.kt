@@ -1,4 +1,4 @@
-package com.suvanl.fixmylinks.ui.components.layout
+package com.suvanl.fixmylinks.ui.layout
 
 import android.graphics.RectF
 import androidx.compose.foundation.layout.Box
@@ -26,7 +26,7 @@ import com.suvanl.fixmylinks.ui.util.PreviewContainer
  * overlaid within it.
  */
 @Composable
-fun PolygonShape(
+fun Polygon(
     polygon: RoundedPolygon,
     modifier: Modifier = Modifier,
     color: Color = Color.Transparent,
@@ -62,7 +62,7 @@ fun PolygonShape(
 @Composable
 private fun PolygonPreview() {
     PreviewContainer {
-        PolygonShape(
+        Polygon(
             polygon = ScallopPolygon,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.aspectRatio(1F)
@@ -77,7 +77,7 @@ private fun PolygonPreview() {
 @Composable
 private fun PolygonWithContentPreview() {
     PreviewContainer {
-        PolygonShape(
+        Polygon(
             polygon = ScallopPolygon,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.aspectRatio(1F)

@@ -35,7 +35,7 @@ import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
-import com.suvanl.fixmylinks.ui.components.layout.PolygonShape
+import com.suvanl.fixmylinks.ui.layout.Polygon
 import com.suvanl.fixmylinks.ui.graphics.CustomShapes.ScallopPolygon
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
@@ -168,7 +168,7 @@ private fun EmptyRulesBody(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
     ) {
-        PolygonShape(
+        Polygon(
             polygon = ScallopPolygon,
             color = MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier
