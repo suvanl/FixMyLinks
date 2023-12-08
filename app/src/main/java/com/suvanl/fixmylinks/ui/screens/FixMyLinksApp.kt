@@ -4,12 +4,14 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -28,16 +30,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
-import com.suvanl.fixmylinks.ui.components.button.AddNewRuleFab
-import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationBar
-import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationRail
 import com.suvanl.fixmylinks.ui.components.appbar.FmlTopAppBar
 import com.suvanl.fixmylinks.ui.components.appbar.TopAppBarSize
+import com.suvanl.fixmylinks.ui.components.button.AddNewRuleFab
 import com.suvanl.fixmylinks.ui.components.button.EditFab
+import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationBar
+import com.suvanl.fixmylinks.ui.components.nav.FmlNavigationRail
+import com.suvanl.fixmylinks.ui.components.search.RulesSearchBar
 import com.suvanl.fixmylinks.ui.navigation.FmlNavHost
 import com.suvanl.fixmylinks.ui.navigation.FmlScreen
 import com.suvanl.fixmylinks.ui.navigation.allFmlScreens
@@ -60,6 +64,9 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
     // The screens on which the Navigation Bar should be shown
     val showNavBarOn = listOf(FmlScreen.Home, FmlScreen.Rules, FmlScreen.Saved)
 
+    // The screens on which the search bar (or docked search bar) should be shown
+    val showSearchBarOn = listOf(FmlScreen.Home, FmlScreen.Rules, FmlScreen.Saved)
+
     val topAppBarSize = when (windowSize.widthSizeClass) {
         WindowWidthSizeClass.Compact -> TopAppBarSize.LARGE
         else -> TopAppBarSize.SMALL
@@ -81,6 +88,10 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
         else -> false
     } && showNavBarOn.any { it.route == currentBaseRoute }
 
+    val shouldShowSearchBar = showSearchBarOn.any { it.route == currentBaseRoute }
+    val shouldShowDockedSearchBar = shouldShowSearchBar
+            && windowSize.widthSizeClass != WindowWidthSizeClass.Compact
+
     val shouldShowTopAppBar = showNavBarOn.none { it.route == currentBaseRoute }
     val shouldShowAddNewRuleFab = topLevelScreensWithFab.any { it.route == currentBaseRoute }
     val shouldShowEditRuleFab = currentBaseRoute.startsWith(FmlScreen.RuleDetails.route)
@@ -96,6 +107,13 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         scrollBehavior = topAppBarScrollBehavior,
                         currentBackStackEntryFlow = navController.currentBackStackEntryFlow
                     )
+                } else if (shouldShowSearchBar && !shouldShowDockedSearchBar) {
+                    // Show the standard (non-docked) search bar
+                    RulesSearchBar(
+                        docked = false,
+                        horizontalPadding = 16.dp,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             },
             bottomBar = {
@@ -110,6 +128,9 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                 }
             },
             floatingActionButton = {
+                val destinationIsRuleDetailsScreen = currentDestination != null
+                        && currentDestination.route == FmlScreen.RuleDetails.routeWithArgs
+
                 // Don't show the FAB if shouldShowNavRail is true as the navigation rail will contain
                 // a FAB within it
                 if (!shouldShowNavRail && shouldShowAddNewRuleFab) {
@@ -121,34 +142,31 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                             )
                         }
                     )
-                } else if (shouldShowEditRuleFab) {
-                    if (currentDestination != null
-                        && currentDestination.route == FmlScreen.RuleDetails.routeWithArgs) {
-                        val mutationTypeArg =
-                            navBackStackEntry?.arguments?.getString(FmlScreen.RuleDetails.mutationTypeArg)
+                } else if (shouldShowEditRuleFab && destinationIsRuleDetailsScreen) {
+                    val mutationTypeArg =
+                        navBackStackEntry?.arguments?.getString(FmlScreen.RuleDetails.mutationTypeArg)
 
-                        val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
-                            ?: MutationType.FALLBACK
+                    val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
+                        ?: MutationType.FALLBACK
 
-                        val baseRuleId =
-                            navBackStackEntry?.arguments?.getLong(FmlScreen.RuleDetails.baseRuleIdArg)
-                                ?: throw NullPointerException("Expected base_rule_id to be non-null")
+                    val baseRuleId =
+                        navBackStackEntry?.arguments?.getLong(FmlScreen.RuleDetails.baseRuleIdArg)
+                            ?: throw NullPointerException("Expected base_rule_id to be non-null")
 
-                        fun handleEditFabClick() {
-                            val editActionRoute =
-                                "${FmlScreen.AddRule.route}/${mutationType.name}/${FmlScreen.AddRule.Action.EDIT}/$baseRuleId"
+                    fun handleEditFabClick() {
+                        val editActionRoute =
+                            "${FmlScreen.AddRule.route}/${mutationType.name}/${FmlScreen.AddRule.Action.EDIT}/$baseRuleId"
 
-                            navController.navigateSingleTop(
-                                route = editActionRoute,
-                                popUpToStartDestination = false
-                            )
-                        }
-
-                        EditFab(
-                            onClick = { handleEditFabClick() },
-                            modifier = Modifier.navigationBarsPadding()
+                        navController.navigateSingleTop(
+                            route = editActionRoute,
+                            popUpToStartDestination = false
                         )
                     }
+
+                    EditFab(
+                        onClick = { handleEditFabClick() },
+                        modifier = Modifier.navigationBarsPadding()
+                    )
 
                 }
             },
@@ -200,10 +218,18 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         )
                     }
 
-                    FmlNavHost(
-                        navController = navController,
-                        windowWidthSize = windowSize.widthSizeClass
-                    )
+                    Box {
+                        if (shouldShowSearchBar && shouldShowDockedSearchBar) {
+                            RulesSearchBar(
+                                docked = true
+                            )
+                        }
+
+                        FmlNavHost(
+                            navController = navController,
+                            windowWidthSize = windowSize.widthSizeClass
+                        )
+                    }
                 }
             }
         }

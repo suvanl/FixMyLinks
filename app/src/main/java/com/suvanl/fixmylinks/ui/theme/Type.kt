@@ -54,7 +54,8 @@ val Typography = Typography(
 
     // Title
     titleLarge = defaultTypography.titleLarge.copy(
-        fontFamily = defaultCustomFont()
+        fontFamily = defaultCustomFont(),
+        letterSpacing = LetterSpacingDefaults.Tighter
     ),
     titleMedium = defaultTypography.titleMedium.copy(
         fontFamily = defaultCustomFont(

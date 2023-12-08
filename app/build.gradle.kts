@@ -65,8 +65,9 @@ android {
 dependencies {
     val lifecycleVersion = "2.6.2"
     val navVersion = "2.7.5"
-    val roomVersion = "2.6.0"
+    val roomVersion = "2.6.1"
     val daggerHiltVersion = "2.48.1"
+    val androidxHiltVersion = "1.1.0"
     val preferencesDataStoreVersion = "1.0.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -75,6 +76,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
     implementation("androidx.navigation:navigation-compose:$navVersion")
     implementation("androidx.activity:activity-compose:1.8.1")
+    implementation("androidx.graphics:graphics-shapes:1.0.0-alpha03")
 
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
@@ -95,13 +97,10 @@ dependencies {
     implementation("com.google.dagger:dagger:$daggerHiltVersion")
     ksp("com.google.dagger:dagger-compiler:$daggerHiltVersion")
     ksp("com.google.dagger:hilt-compiler:$daggerHiltVersion")
-
     implementation("com.google.dagger:hilt-android:$daggerHiltVersion")
     ksp("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
-    ksp("androidx.hilt:hilt-compiler:1.1.0")
-
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-
+    ksp("androidx.hilt:hilt-compiler:$androidxHiltVersion")
+    implementation("androidx.hilt:hilt-navigation-compose:$androidxHiltVersion")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:4.11.0")         // v5 drops Java 8 support
