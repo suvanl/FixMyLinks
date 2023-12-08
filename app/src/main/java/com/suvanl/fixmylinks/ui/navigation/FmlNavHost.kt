@@ -7,6 +7,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +48,8 @@ import com.suvanl.fixmylinks.ui.util.getNewRuleFlowViewModel
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.SelectRuleTypeViewModel
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @Composable
@@ -88,26 +91,39 @@ fun FmlNavHost(
                 val viewModel = navBackStackEntry.sharedViewModel<RulesViewModel>(navController)
                 val uiState by viewModel.rulesScreenUiState.collectAsStateWithLifecycle()
 
+                val coroutineScope = rememberCoroutineScope()
+
                 RulesScreen(
                     uiState = uiState,
                     onClickRuleItem = { rule ->
-                        viewModel.setSelectedRule(rule)
-                        navController.navigateSingleTop(
-                            route = FmlScreen.RuleDetails.route,
-                            popUpToStartDestination = false
-                        )
+                        coroutineScope.launch {
+                            viewModel.setSelectedRule(rule)
+
+                            // first non-null emission
+                            val selectedRule = viewModel.selectedRule.filter { it != null }.first()
+
+                            navController.navigateSingleTop(
+                                route = "${FmlScreen.RuleDetails.route}/${selectedRule?.mutationType}/${selectedRule?.baseRuleId}",
+                                popUpToStartDestination = false
+                            )
+                        }
                     }
                 )
             }
 
             composable(
-                route = FmlScreen.RuleDetails.route
+                route = FmlScreen.RuleDetails.routeWithArgs,
+                arguments = FmlScreen.RuleDetails.args
             ) { navBackStackEntry ->
                 val viewModel = navBackStackEntry.sharedViewModel<RulesViewModel>(navController)
                 val selectedRule by viewModel.selectedRule.collectAsStateWithLifecycle()
                 val deleteConfirmationRequired by viewModel.deleteConfirmationRequired.collectAsStateWithLifecycle()
 
                 val coroutineScope = rememberCoroutineScope()
+
+                LaunchedEffect(key1 = Unit) {
+                    viewModel.refreshSelectedRule()
+                }
 
                 ProvideAppBarActions {
                     OverflowMenu {

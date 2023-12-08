@@ -42,6 +42,17 @@ class RulesViewModel @Inject constructor(
         _deleteConfirmationRequired.value = isRequired
     }
 
+    suspend fun refreshSelectedRule() {
+        if (_selectedRule.value == null) return
+
+        rulesRepository.getRuleByBaseId(
+            _selectedRule.value!!.baseRuleId,
+            _selectedRule.value!!.mutationType
+        ).collect { rule ->
+            _selectedRule.value = rule
+        }
+    }
+
     suspend fun deleteSingleRule(baseRuleId: Long) {
         setSelectedRule(null)
         rulesRepository.deleteByBaseRuleId(baseRuleId)
