@@ -128,6 +128,9 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                 }
             },
             floatingActionButton = {
+                val destinationIsRuleDetailsScreen = currentDestination != null
+                        && currentDestination.route == FmlScreen.RuleDetails.routeWithArgs
+
                 // Don't show the FAB if shouldShowNavRail is true as the navigation rail will contain
                 // a FAB within it
                 if (!shouldShowNavRail && shouldShowAddNewRuleFab) {
@@ -139,36 +142,31 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                             )
                         }
                     )
-                } else if (shouldShowEditRuleFab) {
-                    if (
-                        currentDestination != null
-                        && currentDestination.route == FmlScreen.RuleDetails.routeWithArgs
-                    ) {
-                        val mutationTypeArg =
-                            navBackStackEntry?.arguments?.getString(FmlScreen.RuleDetails.mutationTypeArg)
+                } else if (shouldShowEditRuleFab && destinationIsRuleDetailsScreen) {
+                    val mutationTypeArg =
+                        navBackStackEntry?.arguments?.getString(FmlScreen.RuleDetails.mutationTypeArg)
 
-                        val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
-                            ?: MutationType.FALLBACK
+                    val mutationType = MutationType.entries.find { it.name == mutationTypeArg }
+                        ?: MutationType.FALLBACK
 
-                        val baseRuleId =
-                            navBackStackEntry?.arguments?.getLong(FmlScreen.RuleDetails.baseRuleIdArg)
-                                ?: throw NullPointerException("Expected base_rule_id to be non-null")
+                    val baseRuleId =
+                        navBackStackEntry?.arguments?.getLong(FmlScreen.RuleDetails.baseRuleIdArg)
+                            ?: throw NullPointerException("Expected base_rule_id to be non-null")
 
-                        fun handleEditFabClick() {
-                            val editActionRoute =
-                                "${FmlScreen.AddRule.route}/${mutationType.name}/${FmlScreen.AddRule.Action.EDIT}/$baseRuleId"
+                    fun handleEditFabClick() {
+                        val editActionRoute =
+                            "${FmlScreen.AddRule.route}/${mutationType.name}/${FmlScreen.AddRule.Action.EDIT}/$baseRuleId"
 
-                            navController.navigateSingleTop(
-                                route = editActionRoute,
-                                popUpToStartDestination = false
-                            )
-                        }
-
-                        EditFab(
-                            onClick = { handleEditFabClick() },
-                            modifier = Modifier.navigationBarsPadding()
+                        navController.navigateSingleTop(
+                            route = editActionRoute,
+                            popUpToStartDestination = false
                         )
                     }
+
+                    EditFab(
+                        onClick = { handleEditFabClick() },
+                        modifier = Modifier.navigationBarsPadding()
+                    )
 
                 }
             },
