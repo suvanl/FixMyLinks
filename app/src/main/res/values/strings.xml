@@ -60,4 +60,13 @@
     <string name="search_rules">Search rules</string>
     <string name="account_and_settings">Account and settings</string>
     <string name="no_rules_added_yet">No rules added yet</string>
+    <string name="backed_up">Backed up</string>
+    <string name="not_backed_up">Not backed up</string>
+    <string name="collapse_details">Collapse details</string>
+    <string name="expand_details">Expand details</string>
+    <string name="content_desc_rule_name">Rule name</string>
+    <string name="content_desc_domain_name">Domain name</string>
+    <string name="content_desc_backup_off">Backup off</string>
+    <string name="content_desc_backup_on">Backup on</string>
+    <string name="content_desc_last_modified">Last modified</string>
 </resources>
