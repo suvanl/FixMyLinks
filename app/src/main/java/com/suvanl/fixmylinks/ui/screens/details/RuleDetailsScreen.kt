@@ -40,6 +40,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -50,7 +51,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
 import com.suvanl.fixmylinks.ui.components.list.RuleDetailsList
 import com.suvanl.fixmylinks.ui.components.list.RuleDetailsListItemState
@@ -95,6 +98,7 @@ fun RuleDetailsScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Rule type description
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -121,8 +125,24 @@ fun RuleDetailsScreen(
             Column(
                 modifier = Modifier.weight(1F)
             ) {
-                Text(text = "This rule", style = MaterialTheme.typography.bodyMedium)
-                Text(text = rule.mutationType.name.lowercase(), maxLines = 1)
+                val ruleTypeInfo = getRuleTypeInPresentSimpleTense(ruleType = rule.mutationType)
+                var lineCount by remember { mutableIntStateOf(0) }
+
+                if (lineCount < 2) {
+                    Text(text = "This rule", style = MaterialTheme.typography.bodyMedium)
+                }
+
+                Text(
+                    text = ruleTypeInfo,
+                    maxLines = 2,
+                    letterSpacing = when (ruleTypeInfo.length) {
+                        in 20..29 -> LetterSpacingDefaults.Tight
+                        in 30..39 -> LetterSpacingDefaults.Tighter
+                        in 40..Int.MAX_VALUE -> LetterSpacingDefaults.ExtraTight
+                        else -> 0.sp
+                    },
+                    onTextLayout = { lineCount = it.lineCount }
+                )
             }
         }
 
@@ -311,6 +331,33 @@ private fun DeleteConfirmationDialog(
         onDismissRequest = onDismissRequest,
         modifier = modifier
     )
+}
+
+@Composable
+private fun getRuleTypeInPresentSimpleTense(ruleType: MutationType) = when (ruleType) {
+    MutationType.DOMAIN_NAME -> {
+        stringResource(id = R.string.mt_domain_name_present_simple_tense)
+    }
+
+    MutationType.URL_PARAMS_ALL -> {
+        stringResource(id = R.string.mt_url_params_all_present_simple_tense)
+    }
+
+    MutationType.URL_PARAMS_SPECIFIC -> {
+        stringResource(id = R.string.mt_url_params_specific_present_simple_tense)
+    }
+
+    MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
+        stringResource(id = R.string.mt_domain_name_and_url_params_all_present_simple_tense)
+    }
+
+    MutationType.DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC -> {
+        TODO("Not user-selectable yet")
+    }
+
+    MutationType.FALLBACK -> {
+        throw IllegalArgumentException("MutationType.FALLBACK should not be user-selectable")
+    }
 }
 
 @Preview(

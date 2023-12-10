@@ -17,15 +17,19 @@
 
     <!-- mt = mutation type -->
     <string name="mt_domain_name">Change domain name</string>
+    <string name="mt_domain_name_present_simple_tense">Changes the given domain name</string>
     <string name="mt_domain_name_desc">Modify the domain name and keep the rest of the link the same</string>
 
     <string name="mt_url_params_all">Remove all URL parameters</string>
+    <string name="mt_url_params_all_present_simple_tense">Removes all URL parameters</string>
     <string name="mt_url_params_all_desc">Strip every parameter out of the link</string>
 
     <string name="mt_url_params_specific">Remove specific URL parameters</string>
+    <string name="mt_url_params_specific_present_simple_tense">Removes specific URL parameters</string>
     <string name="mt_url_params_specific_desc">Only remove certain parameters from the link</string>
 
     <string name="mt_domain_name_and_url_params_all">Change domain name and remove all URL parameters</string>
+    <string name="mt_domain_name_and_url_params_all_present_simple_tense">Changes the given domain name and removes all URL parameters</string>
     <string name="mt_domain_name_and_url_params_all_desc">Modify the domain name and strip every parameter out of the link</string>
 
     <string name="empty" />
