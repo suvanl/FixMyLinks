@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Backup
 import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Segment
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -69,6 +70,7 @@ fun AddRuleScreen(
     baseRuleId: Long = 0,
 ) {
     var isRuleEnabled by rememberSaveable { mutableStateOf(true) }
+    var isKeepContentEnabled by rememberSaveable { mutableStateOf(false) }
     var isBackupEnabled by rememberSaveable { mutableStateOf(false) }
 
     val ruleOptions = listOf(
@@ -80,7 +82,15 @@ fun AddRuleScreen(
             onSwitchCheckedChange = { isRuleEnabled = it },
         ),
         SwitchListItemState(
-            headlineText = stringResource(R.string.backup_to_cloud),
+            headlineText = stringResource(R.string.keep_content),
+            supportingText = stringResource(R.string.keep_content_supporting_text),
+            leadingIcon = Icons.Outlined.Segment,
+            isSwitchChecked = isKeepContentEnabled,
+            onSwitchCheckedChange = { isKeepContentEnabled = it },
+            comingSoon = true,
+        ),
+        SwitchListItemState(
+            headlineText = "Keep content",
             supportingText = stringResource(R.string.backup_to_cloud_supporting_text),
             leadingIcon = Icons.Outlined.Backup,
             isSwitchChecked = isBackupEnabled,
@@ -291,6 +301,14 @@ fun AddRuleScreenPreview() {
                 leadingIcon = Icons.Outlined.CheckCircle,
                 isSwitchChecked = true,
                 onSwitchCheckedChange = {},
+            ),
+            SwitchListItemState(
+                headlineText = stringResource(R.string.keep_content),
+                supportingText = stringResource(R.string.keep_content_supporting_text),
+                leadingIcon = Icons.Outlined.Segment,
+                isSwitchChecked = false,
+                onSwitchCheckedChange = {},
+                comingSoon = true,
             ),
             SwitchListItemState(
                 headlineText = stringResource(R.string.backup_to_cloud),

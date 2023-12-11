@@ -73,4 +73,6 @@
     <string name="content_desc_backup_off">Backup off</string>
     <string name="content_desc_backup_on">Backup on</string>
     <string name="content_desc_last_modified">Last modified</string>
+    <string name="keep_content">Keep content</string>
+    <string name="keep_content_supporting_text">Retain the original shared content</string>
 </resources>
