@@ -27,6 +27,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -58,7 +60,27 @@ data class AddRuleScreenUiState(
     val showSaveButton: Boolean,
     val showFormFieldHints: Boolean,
     val mutationType: MutationType,
+    val ruleOptions: RuleOptionsState,
 )
+
+data class RuleOptionsState(
+    val ruleEnabled: Boolean = true,
+    val keepContent: Boolean = false,
+    val backupEnabled: Boolean = false,
+) {
+    companion object {
+        val saver: Saver<RuleOptionsState, *> = listSaver(
+            save = { listOf(it.ruleEnabled, it.keepContent, it.backupEnabled) },
+            restore = {
+                RuleOptionsState(
+                    ruleEnabled = it[0],
+                    keepContent = it[1],
+                    backupEnabled = it[2],
+                )
+            }
+        )
+    }
+}
 
 @Composable
 fun AddRuleScreen(
@@ -69,40 +91,9 @@ fun AddRuleScreen(
     action: FmlScreen.AddRule.Action = FmlScreen.AddRule.Action.ADD,
     baseRuleId: Long = 0,
 ) {
-    var isRuleEnabled by rememberSaveable { mutableStateOf(true) }
-    var isKeepContentEnabled by rememberSaveable { mutableStateOf(false) }
-    var isBackupEnabled by rememberSaveable { mutableStateOf(false) }
-
-    val ruleOptions = listOf(
-        SwitchListItemState(
-            headlineText = stringResource(id = R.string.enable),
-            supportingText = stringResource(R.string.enable_rule_supporting_text),
-            leadingIcon = Icons.Outlined.CheckCircle,
-            isSwitchChecked = isRuleEnabled,
-            onSwitchCheckedChange = { isRuleEnabled = it },
-        ),
-        SwitchListItemState(
-            headlineText = stringResource(R.string.keep_content),
-            supportingText = stringResource(R.string.keep_content_supporting_text),
-            leadingIcon = Icons.Outlined.Segment,
-            isSwitchChecked = isKeepContentEnabled,
-            onSwitchCheckedChange = { isKeepContentEnabled = it },
-            comingSoon = true,
-        ),
-        SwitchListItemState(
-            headlineText = "Keep content",
-            supportingText = stringResource(R.string.backup_to_cloud_supporting_text),
-            leadingIcon = Icons.Outlined.Backup,
-            isSwitchChecked = isBackupEnabled,
-            onSwitchCheckedChange = { isBackupEnabled = it },
-            comingSoon = true,
-        ),
-    )
-
     AddRuleScreenBody(
         mutationType = uiState.mutationType,
         showSaveButton = uiState.showSaveButton,
-        ruleOptions = ruleOptions,
         onSaveClick = onSaveClick,
         modifier = modifier
     ) {
@@ -182,11 +173,40 @@ fun AddRuleScreen(
 fun AddRuleScreenBody(
     mutationType: MutationType,
     showSaveButton: Boolean,
-    ruleOptions: List<SwitchListItemState>,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
     form: @Composable () -> Unit,
 ) {
+    var ruleOptions by rememberSaveable(stateSaver = RuleOptionsState.saver) {
+        mutableStateOf(RuleOptionsState())
+    }
+
+    val switchListItems = listOf(
+        SwitchListItemState(
+            headlineText = stringResource(id = R.string.enable),
+            supportingText = stringResource(R.string.enable_rule_supporting_text),
+            leadingIcon = Icons.Outlined.CheckCircle,
+            isSwitchChecked = ruleOptions.ruleEnabled,
+            onSwitchCheckedChange = { ruleOptions = ruleOptions.copy(ruleEnabled = it) },
+        ),
+        SwitchListItemState(
+            headlineText = stringResource(R.string.keep_content),
+            supportingText = stringResource(R.string.keep_content_supporting_text),
+            leadingIcon = Icons.Outlined.Segment,
+            isSwitchChecked = ruleOptions.keepContent,
+            onSwitchCheckedChange = { ruleOptions = ruleOptions.copy(keepContent = it) },
+            comingSoon = true,
+        ),
+        SwitchListItemState(
+            headlineText = "Keep content",
+            supportingText = stringResource(R.string.backup_to_cloud_supporting_text),
+            leadingIcon = Icons.Outlined.Backup,
+            isSwitchChecked = ruleOptions.backupEnabled,
+            onSwitchCheckedChange = { ruleOptions = ruleOptions.copy(backupEnabled = it) },
+            comingSoon = true,
+        ),
+    )
+
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
@@ -210,7 +230,7 @@ fun AddRuleScreenBody(
         Spacer(modifier = Modifier.height(32.dp))
 
         SwitchList(
-            items = ruleOptions,
+            items = switchListItems,
             modifier = Modifier
                 .then(
                     if (!showSaveButton) Modifier.padding(bottom = 32.dp) else Modifier
@@ -294,36 +314,9 @@ private fun AddParameterNameDialog(
 @Composable
 fun AddRuleScreenPreview() {
     PreviewContainer {
-        val ruleOptions = listOf(
-            SwitchListItemState(
-                headlineText = stringResource(id = R.string.enable),
-                supportingText = stringResource(R.string.enable_rule_supporting_text),
-                leadingIcon = Icons.Outlined.CheckCircle,
-                isSwitchChecked = true,
-                onSwitchCheckedChange = {},
-            ),
-            SwitchListItemState(
-                headlineText = stringResource(R.string.keep_content),
-                supportingText = stringResource(R.string.keep_content_supporting_text),
-                leadingIcon = Icons.Outlined.Segment,
-                isSwitchChecked = false,
-                onSwitchCheckedChange = {},
-                comingSoon = true,
-            ),
-            SwitchListItemState(
-                headlineText = stringResource(R.string.backup_to_cloud),
-                supportingText = stringResource(R.string.backup_to_cloud_supporting_text),
-                leadingIcon = Icons.Outlined.Backup,
-                isSwitchChecked = false,
-                onSwitchCheckedChange = {},
-                comingSoon = true,
-            )
-        )
-
         AddRuleScreenBody(
             mutationType = MutationType.URL_PARAMS_SPECIFIC,
             showSaveButton = true,
-            ruleOptions = ruleOptions,
             onSaveClick = {}
         ) {
             SpecificUrlParamsRuleForm(

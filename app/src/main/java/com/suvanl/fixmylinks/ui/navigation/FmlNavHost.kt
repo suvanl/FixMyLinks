@@ -42,6 +42,7 @@ import com.suvanl.fixmylinks.ui.screens.SavedScreen
 import com.suvanl.fixmylinks.ui.screens.details.RuleDetailsScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreenUiState
+import com.suvanl.fixmylinks.ui.screens.newruleflow.RuleOptionsState
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
 import com.suvanl.fixmylinks.ui.theme.TextStyleDefaults
 import com.suvanl.fixmylinks.ui.util.getNewRuleFlowViewModel
@@ -285,6 +286,7 @@ fun FmlNavHost(
                         mutationType = mutationType,
                         showFormFieldHints = userPreferences.showFormFieldHints,
                         showSaveButton = isCompactLayout,
+                        ruleOptions = RuleOptionsState(),
                     ),
                     viewModel = viewModel,
                     onSaveClick = { handleSaveRuleClick() },
