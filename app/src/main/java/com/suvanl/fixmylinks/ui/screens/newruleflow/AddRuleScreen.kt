@@ -85,6 +85,7 @@ fun AddRuleScreen(
             leadingIcon = Icons.Outlined.Backup,
             isSwitchChecked = isBackupEnabled,
             onSwitchCheckedChange = { isBackupEnabled = it },
+            comingSoon = true,
         ),
     )
 
@@ -297,6 +298,7 @@ fun AddRuleScreenPreview() {
                 leadingIcon = Icons.Outlined.Backup,
                 isSwitchChecked = false,
                 onSwitchCheckedChange = {},
+                comingSoon = true,
             )
         )
 
