@@ -48,6 +48,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -88,6 +91,7 @@ fun RuleDetailsScreen(
         modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
+            .semantics { contentDescription = "Rule Details Screen" }
     ) {
         if (showDeleteConfirmation) {
             DeleteConfirmationDialog(
@@ -329,7 +333,7 @@ private fun DeleteConfirmationDialog(
             }
         },
         onDismissRequest = onDismissRequest,
-        modifier = modifier
+        modifier = modifier.semantics { testTag = "Delete Confirmation Dialog" }
     )
 }
 
