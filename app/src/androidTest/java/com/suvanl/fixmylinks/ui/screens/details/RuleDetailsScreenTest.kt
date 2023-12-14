@@ -4,10 +4,11 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
 import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationModel
@@ -30,6 +31,8 @@ class RuleDetailsScreenTest {
     private lateinit var domainNamePstString: String
     private lateinit var specificUrlParamsPstString: String
 
+    private lateinit var cancelString: String
+
     @Before
     fun setup() {
         composeTestRule.apply {
@@ -45,6 +48,8 @@ class RuleDetailsScreenTest {
 
             specificUrlParamsPstString =
                 activity.getString(R.string.mt_url_params_specific_present_simple_tense)
+
+            cancelString = activity.getString(android.R.string.cancel)
         }
     }
 
@@ -189,6 +194,31 @@ class RuleDetailsScreenTest {
 
         // Assert that the correct text is displayed
         composeTestRule.onNodeWithText(specificUrlParamsPstString)
+            .assertExists()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun ruleDetailsScreen_showDeleteConfirmation_alertDialog_isDisplayed() {
+        composeTestRule.setContent {
+            RuleDetailsScreen(
+                rule = SpecificUrlParamsMutationModel(
+                    name = "My rule",
+                    triggerDomain = "youtube.com",
+                    dateModifiedTimestamp = 0,
+                    isLocalOnly = true,
+                    baseRuleId = 1,
+                    mutationInfo = SpecificUrlParamsMutationInfo(
+                        removableParams = listOf("list", "t")
+                    )
+                ),
+                showDeleteConfirmation = true,
+                onDismissDeleteConfirmation = {},
+                onDelete = {},
+            )
+        }
+
+        composeTestRule.onNodeWithTag("Delete Confirmation Dialog")
             .assertExists()
             .assertIsDisplayed()
     }
