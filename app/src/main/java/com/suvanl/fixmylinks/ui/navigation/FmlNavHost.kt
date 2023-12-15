@@ -46,6 +46,7 @@ import com.suvanl.fixmylinks.ui.screens.newruleflow.RuleOptionsState
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
 import com.suvanl.fixmylinks.ui.theme.TextStyleDefaults
 import com.suvanl.fixmylinks.ui.util.getNewRuleFlowViewModel
+import com.suvanl.fixmylinks.viewmodel.MainViewModel
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.SelectRuleTypeViewModel
@@ -57,7 +58,8 @@ import kotlinx.coroutines.launch
 fun FmlNavHost(
     navController: NavHostController,
     windowWidthSize: WindowWidthSizeClass,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    mainViewModel: MainViewModel = hiltViewModel(),
 ) {
     NavHost(
         navController = navController,
@@ -94,6 +96,10 @@ fun FmlNavHost(
 
                 val coroutineScope = rememberCoroutineScope()
 
+                LaunchedEffect(key1 = Unit) {
+                    mainViewModel.resetState()
+                }
+
                 RulesScreen(
                     uiState = uiState,
                     onClickRuleItem = { rule ->
@@ -108,7 +114,10 @@ fun FmlNavHost(
                                 popUpToStartDestination = false
                             )
                         }
-                    }
+                    },
+                    onUpdateSelectedItems = {
+                        mainViewModel.updateMultiSelectedRules(it)
+                    },
                 )
             }
 

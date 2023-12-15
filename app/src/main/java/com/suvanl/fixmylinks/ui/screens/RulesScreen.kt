@@ -38,13 +38,13 @@ data class RulesScreenUiState(
 fun RulesScreen(
     uiState: RulesScreenUiState,
     onClickRuleItem: (BaseMutationModel) -> Unit,
+    onUpdateSelectedItems: (Set<BaseMutationModel>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     RulesScreenBody(
         uiState = uiState,
-        onClickItem = { rule ->
-            onClickRuleItem(rule)
-        },
+        onClickItem = onClickRuleItem,
+        onUpdateSelectedItems = onUpdateSelectedItems,
         modifier = modifier
     )
 }
@@ -53,6 +53,7 @@ fun RulesScreen(
 private fun RulesScreenBody(
     uiState: RulesScreenUiState,
     onClickItem: (BaseMutationModel) -> Unit,
+    onUpdateSelectedItems: (Set<BaseMutationModel>) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val hasRules = uiState.rules.isNotEmpty()
@@ -74,7 +75,8 @@ private fun RulesScreenBody(
 
         RulesList(
             uiState = uiState,
-            onClickItem = onClickItem
+            onClickItem = onClickItem,
+            onUpdateSelectedItems = onUpdateSelectedItems,
         )
     }
 }
@@ -126,7 +128,8 @@ private fun RulesScreenPreview() {
     PreviewContainer {
         RulesScreenBody(
             uiState = RulesScreenUiState(rules = PreviewData.previewRules),
-            onClickItem = { /* do nothing */ },
+            onClickItem = {},
+            onUpdateSelectedItems = {},
         )
     }
 }

@@ -1,7 +1,6 @@
 package com.suvanl.fixmylinks.ui.components.list
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,12 +30,16 @@ import com.suvanl.fixmylinks.ui.util.getShapeForRule
 @Composable
 fun RulesListItem(
     rule: BaseMutationModel,
-    onClick: (BaseMutationModel) -> Unit,
+    isSelected: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = if (!isSelected) {
+                MaterialTheme.colorScheme.surfaceVariant
+            } else {
+                MaterialTheme.colorScheme.tertiaryContainer
+            }
         ),
         shape = RoundedCornerShape(20.dp),
         modifier = modifier
@@ -64,7 +67,11 @@ fun RulesListItem(
                     modifier = Modifier
                         .background(
                             shape = getShapeForRule(rule.mutationType),
-                            color = MaterialTheme.colorScheme.secondary
+                            color = if (!isSelected) {
+                                MaterialTheme.colorScheme.secondary
+                            } else {
+                                MaterialTheme.colorScheme.tertiary
+                            }
                         )
                         .size(40.dp)
                 )
@@ -74,9 +81,6 @@ fun RulesListItem(
             ),
             modifier = Modifier
                 .padding(4.dp)
-                .clickable {
-                    onClick(rule)
-                }
                 .semantics {
                     testTag = "Rules List Item ${rule.baseRuleId}"
                 }
@@ -90,7 +94,7 @@ private fun ItemPreview() {
     PreviewContainer {
         RulesListItem(
             rule = PreviewData.previewRules[1],
-            onClick = { /* do nothing */ },
+            isSelected = false,
             modifier = Modifier.padding(8.dp)
         )
     }
