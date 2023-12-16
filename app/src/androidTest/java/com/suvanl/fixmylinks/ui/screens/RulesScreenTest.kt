@@ -63,6 +63,7 @@ class RulesScreenTest {
             RulesScreen(
                 uiState = RulesScreenUiState(),
                 onClickRuleItem = {},
+                selectedItems = setOf(),
                 onUpdateSelectedItems = {},
             )
         }
@@ -72,6 +73,7 @@ class RulesScreenTest {
             RulesScreen(
                 uiState = RulesScreenUiState(rules = fakeRules),
                 onClickRuleItem = {},
+                selectedItems = setOf(),
                 onUpdateSelectedItems = {},
             )
         }
