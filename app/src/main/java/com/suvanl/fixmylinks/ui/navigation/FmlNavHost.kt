@@ -52,7 +52,7 @@ import com.suvanl.fixmylinks.ui.screens.newruleflow.RuleOptionsState
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
 import com.suvanl.fixmylinks.ui.theme.TextStyleDefaults
 import com.suvanl.fixmylinks.ui.util.getNewRuleFlowViewModel
-import com.suvanl.fixmylinks.viewmodel.MainViewModel
+import com.suvanl.fixmylinks.viewmodel.AppLevelViewModel
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.SelectRuleTypeViewModel
@@ -65,7 +65,7 @@ fun FmlNavHost(
     navController: NavHostController,
     windowWidthSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier,
-    mainViewModel: MainViewModel = hiltViewModel(),
+    mainViewModel: AppLevelViewModel = hiltViewModel(),
 ) {
     NavHost(
         navController = navController,

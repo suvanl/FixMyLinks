@@ -1,6 +1,5 @@
 package com.suvanl.fixmylinks.viewmodel
 
-import androidx.lifecycle.ViewModel
 import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,19 +11,15 @@ import javax.inject.Inject
  * between the app-level composable and the NavHost.
  */
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
+class MainViewModel @Inject constructor() : AppLevelViewModel() {
     private val _multiSelectedRules = MutableStateFlow(setOf<BaseMutationModel>())
-    val multiSelectedRules = _multiSelectedRules.asStateFlow()
+    override val multiSelectedRules = _multiSelectedRules.asStateFlow()
 
-    fun updateMultiSelectedRules(updatedSet: Set<BaseMutationModel>) {
+    override fun updateMultiSelectedRules(updatedSet: Set<BaseMutationModel>) {
         _multiSelectedRules.value = updatedSet
     }
 
-    fun clearMultiSelectedRules() {
+    override fun clearMultiSelectedRules() {
         _multiSelectedRules.value = setOf()
-    }
-
-    fun resetState() {
-        clearMultiSelectedRules()
     }
 }
