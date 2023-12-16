@@ -20,7 +20,11 @@ class MainViewModel @Inject constructor() : ViewModel() {
         _multiSelectedRules.value = updatedSet
     }
 
-    fun resetState() {
+    fun clearMultiSelectedRules() {
         _multiSelectedRules.value = setOf()
+    }
+
+    fun resetState() {
+        clearMultiSelectedRules()
     }
 }

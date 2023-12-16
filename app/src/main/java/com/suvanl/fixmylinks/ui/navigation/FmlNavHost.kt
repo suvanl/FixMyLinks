@@ -2,8 +2,13 @@ package com.suvanl.fixmylinks.ui.navigation
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.SelectAll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -93,11 +98,39 @@ fun FmlNavHost(
             composable(route = FmlScreen.Rules.route) { navBackStackEntry ->
                 val viewModel = navBackStackEntry.sharedViewModel<RulesViewModel>(navController)
                 val uiState by viewModel.rulesScreenUiState.collectAsStateWithLifecycle()
+                val selectedRules by mainViewModel.multiSelectedRules.collectAsStateWithLifecycle()
 
                 val coroutineScope = rememberCoroutineScope()
 
                 LaunchedEffect(key1 = Unit) {
                     mainViewModel.resetState()
+                }
+
+                ProvideAppBarActions {
+                    IconButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                selectedRules.forEach { viewModel.deleteSingleRule(it.baseRuleId) }
+
+                                // Clear selection
+                                mainViewModel.updateMultiSelectedRules(setOf())
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = "Delete selected"
+                        )
+                    }
+
+                    IconButton(
+                        onClick = { /*TODO*/ }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.SelectAll,
+                            contentDescription = "Select all"
+                        )
+                    }
                 }
 
                 RulesScreen(
@@ -115,6 +148,7 @@ fun FmlNavHost(
                             )
                         }
                     },
+                    selectedItems = selectedRules,
                     onUpdateSelectedItems = {
                         mainViewModel.updateMultiSelectedRules(it)
                     },

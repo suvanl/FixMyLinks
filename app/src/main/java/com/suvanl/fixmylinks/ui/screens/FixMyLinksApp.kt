@@ -1,5 +1,6 @@
 package com.suvanl.fixmylinks.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -38,6 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.ui.components.appbar.FmlTopAppBar
+import com.suvanl.fixmylinks.ui.components.appbar.RuleSelectionTopAppBar
 import com.suvanl.fixmylinks.ui.components.appbar.TopAppBarSize
 import com.suvanl.fixmylinks.ui.components.button.AddNewRuleFab
 import com.suvanl.fixmylinks.ui.components.button.EditFab
@@ -125,7 +127,16 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         modifier = Modifier.fillMaxWidth()
                     )
                 } else if (shouldShowRulesMultiSelectTopAppBar) {
-                    TODO("Show selection appbar")
+                    RuleSelectionTopAppBar(
+                        selectedItemsSize = multiSelectedRules.size,
+                        currentBackStackEntryFlow = navController.currentBackStackEntryFlow,
+                        onDismiss = mainViewModel::clearMultiSelectedRules,
+                    )
+
+                    // Clear selection on system back gesture/press
+                    BackHandler(enabled = multiSelectedRules.isNotEmpty()) {
+                        mainViewModel.clearMultiSelectedRules()
+                    }
                 }
             },
             bottomBar = {
