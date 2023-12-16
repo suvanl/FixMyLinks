@@ -124,7 +124,10 @@ fun FmlNavHost(
                     }
 
                     IconButton(
-                        onClick = { /*TODO*/ }
+                        onClick = {
+                            // Add all rules to selected set
+                            mainViewModel.updateMultiSelectedRules(uiState.rules.toSet())
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.SelectAll,
