@@ -46,7 +46,7 @@ class RulesScreenTest {
 
         fakeRules.forEach { rule ->
             composeTestRule
-                .onNodeWithTag("Rules List Item ${rule.baseRuleId}")
+                .onNodeWithTag("Rules List Item ${rule.baseRuleId}", useUnmergedTree = true)
                 .assertExists()
                 .assertIsDisplayed()
 
