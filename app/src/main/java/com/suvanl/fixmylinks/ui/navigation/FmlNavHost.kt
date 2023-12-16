@@ -41,6 +41,7 @@ import com.suvanl.fixmylinks.ui.navigation.transition.NavigationEnterTransitionM
 import com.suvanl.fixmylinks.ui.navigation.transition.NavigationExitTransitionMode
 import com.suvanl.fixmylinks.ui.navigation.transition.enterNavigationTransition
 import com.suvanl.fixmylinks.ui.navigation.transition.exitNavigationTransition
+import com.suvanl.fixmylinks.ui.screens.DeleteSelectionConfirmationDialog
 import com.suvanl.fixmylinks.ui.screens.HomeScreen
 import com.suvanl.fixmylinks.ui.screens.RulesScreen
 import com.suvanl.fixmylinks.ui.screens.SavedScreen
@@ -99,6 +100,7 @@ fun FmlNavHost(
                 val viewModel = navBackStackEntry.sharedViewModel<RulesViewModel>(navController)
                 val uiState by viewModel.rulesScreenUiState.collectAsStateWithLifecycle()
                 val selectedRules by mainViewModel.multiSelectedRules.collectAsStateWithLifecycle()
+                var showDeleteSelectionConfirmationDialog by remember { mutableStateOf(false) }
 
                 val coroutineScope = rememberCoroutineScope()
 
@@ -109,19 +111,7 @@ fun FmlNavHost(
                 ProvideAppBarActions {
                     IconButton(
                         onClick = {
-                            coroutineScope.launch {
-                                val allRulesSelected = selectedRules == uiState.rules.toSet()
-                                if (!allRulesSelected) {
-                                    selectedRules.forEach {
-                                        viewModel.deleteSingleRule(it.baseRuleId)
-                                    }
-                                } else {
-                                    viewModel.deleteAllRules()
-                                }
-
-                                // Clear selection
-                                mainViewModel.updateMultiSelectedRules(setOf())
-                            }
+                            showDeleteSelectionConfirmationDialog = true
                         }
                     ) {
                         Icon(
@@ -141,6 +131,29 @@ fun FmlNavHost(
                             contentDescription = stringResource(R.string.select_all)
                         )
                     }
+                }
+
+                if (showDeleteSelectionConfirmationDialog) {
+                    DeleteSelectionConfirmationDialog(
+                        onDismissRequest = { showDeleteSelectionConfirmationDialog = false },
+                        onConfirmDelete = {
+                            showDeleteSelectionConfirmationDialog = false
+
+                            coroutineScope.launch {
+                                val allRulesSelected = selectedRules == uiState.rules.toSet()
+                                if (!allRulesSelected) {
+                                    selectedRules.forEach {
+                                        viewModel.deleteSingleRule(it.baseRuleId)
+                                    }
+                                } else {
+                                    viewModel.deleteAllRules()
+                                }
+
+                                // Clear selection
+                                mainViewModel.updateMultiSelectedRules(setOf())
+                            }
+                        },
+                    )
                 }
 
                 RulesScreen(
