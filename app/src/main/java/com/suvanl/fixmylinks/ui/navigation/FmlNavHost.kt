@@ -110,7 +110,14 @@ fun FmlNavHost(
                     IconButton(
                         onClick = {
                             coroutineScope.launch {
-                                selectedRules.forEach { viewModel.deleteSingleRule(it.baseRuleId) }
+                                val allRulesSelected = selectedRules == uiState.rules.toSet()
+                                if (!allRulesSelected) {
+                                    selectedRules.forEach {
+                                        viewModel.deleteSingleRule(it.baseRuleId)
+                                    }
+                                } else {
+                                    viewModel.deleteAllRules()
+                                }
 
                                 // Clear selection
                                 mainViewModel.updateMultiSelectedRules(setOf())
