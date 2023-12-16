@@ -119,7 +119,7 @@ fun FmlNavHost(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Delete,
-                            contentDescription = "Delete selected"
+                            contentDescription = stringResource(R.string.delete_selected)
                         )
                     }
 
@@ -131,7 +131,7 @@ fun FmlNavHost(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.SelectAll,
-                            contentDescription = "Select all"
+                            contentDescription = stringResource(R.string.select_all)
                         )
                     }
                 }
