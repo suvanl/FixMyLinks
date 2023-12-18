@@ -122,7 +122,7 @@ fun RuleDetailsScreen(
                     .size(50.dp)
                     .background(
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        shape = getShapeForRule(rule.mutationType)
+                        shape = getShapeForRule(rule.mutationType).shape
                     )
             )
 

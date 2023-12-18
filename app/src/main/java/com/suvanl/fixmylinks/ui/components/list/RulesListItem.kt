@@ -67,10 +67,11 @@ fun RulesListItem(
                 )
             },
             leadingContent = {
+                val (shape, shapeSemantics) = getShapeForRule(rule.mutationType)
                 Box(
                     modifier = Modifier
                         .background(
-                            shape = getShapeForRule(rule.mutationType),
+                            shape = shape,
                             color = if (!isSelected) {
                                 MaterialTheme.colorScheme.secondary
                             } else {
@@ -78,7 +79,10 @@ fun RulesListItem(
                             }
                         )
                         .size(40.dp)
-                        .semantics { testTag = "Shape for ${rule.mutationType.name}" }
+                        .semantics {
+                            shapeSemantics()
+                            testTag = "Shape for ${rule.mutationType.name}"
+                        }
                 )
             },
             colors = ListItemDefaults.colors(

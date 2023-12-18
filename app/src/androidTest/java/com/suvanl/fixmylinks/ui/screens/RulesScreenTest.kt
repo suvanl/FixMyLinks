@@ -7,10 +7,12 @@ import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelectable
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
@@ -121,6 +123,58 @@ class RulesScreenTest {
                 .onNodeWithTag(testTag, useUnmergedTree = true)
                 .assertExists()
                 .assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun rulesScreen_correctShapeForEachRuleType_isDisplayed() {
+        composeTestRule.setContent {
+            RulesScreen(
+                uiState = RulesScreenUiState(rules = fakeRules),
+                onClickRuleItem = {},
+                selectedItems = setOf(),
+                onUpdateSelectedItems = {},
+            )
+        }
+
+        fakeRules.forEach { rule ->
+            when (rule.mutationType) {
+                MutationType.DOMAIN_NAME -> {
+                    composeTestRule.onNodeWithContentDescription("Square")
+                        .assertExists()
+                        .assertIsDisplayed()
+                }
+
+                MutationType.URL_PARAMS_ALL -> {
+                    composeTestRule.onNodeWithContentDescription("Scallop")
+                        .assertExists()
+                        .assertIsDisplayed()
+                }
+
+                MutationType.URL_PARAMS_SPECIFIC -> {
+                    composeTestRule.onNodeWithContentDescription("Delta")
+                        .assertExists()
+                        .assertIsDisplayed()
+                }
+
+                MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
+                    composeTestRule.onNodeWithContentDescription("Clover")
+                        .assertExists()
+                        .assertIsDisplayed()
+                }
+
+                MutationType.DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC -> {
+                    composeTestRule.onNodeWithContentDescription("Eight-point star")
+                        .assertExists()
+                        .assertIsDisplayed()
+                }
+
+                MutationType.FALLBACK -> {
+                    composeTestRule.onNodeWithContentDescription("Circle")
+                        .assertExists()
+                        .assertIsDisplayed()
+                }
+            }
         }
     }
 
