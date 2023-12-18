@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
@@ -42,7 +43,10 @@ fun RulesListItem(
             }
         ),
         shape = RoundedCornerShape(20.dp),
-        modifier = modifier
+        modifier = modifier.semantics {
+            selected = isSelected
+            testTag = "Rules List Item ${rule.baseRuleId}"
+        }
     ) {
         ListItem(
             headlineContent = {
@@ -74,16 +78,13 @@ fun RulesListItem(
                             }
                         )
                         .size(40.dp)
+                        .semantics { testTag = "Shape for ${rule.mutationType.name}" }
                 )
             },
             colors = ListItemDefaults.colors(
                 containerColor = Color.Transparent
             ),
-            modifier = Modifier
-                .padding(4.dp)
-                .semantics {
-                    testTag = "Rules List Item ${rule.baseRuleId}"
-                }
+            modifier = Modifier.padding(4.dp)
         )
     }
 }
