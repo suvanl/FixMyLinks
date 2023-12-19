@@ -3,13 +3,20 @@ package com.suvanl.fixmylinks.ui.screens
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotSelected
+import androidx.compose.ui.test.assertIsSelectable
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.domain.mutation.MutationType
+import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationInfo
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationInfo
 import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationModel
 import org.junit.Before
@@ -40,13 +47,22 @@ class RulesScreenTest {
 
     @Test
     fun rulesScreen_withTwoSavedRules_displaysRulesListItem_forEachOne() {
-        composeTestRule.setContent { RulesScreenWithTwoRules() }
+        val rules = fakeRules.take(2)
+
+        composeTestRule.setContent {
+            RulesScreen(
+                uiState = RulesScreenUiState(rules = rules),
+                onClickRuleItem = {},
+                selectedItems = setOf(),
+                onUpdateSelectedItems = {},
+            )
+        }
 
         composeTestRule.onNodeWithTag("Empty Rules Body").assertDoesNotExist()
 
-        fakeRules.forEach { rule ->
+        rules.forEach { rule ->
             composeTestRule
-                .onNodeWithTag("Rules List Item ${rule.baseRuleId}")
+                .onNodeWithTag("Rules List Item ${rule.baseRuleId}", useUnmergedTree = true)
                 .assertExists()
                 .assertIsDisplayed()
 
@@ -57,20 +73,119 @@ class RulesScreenTest {
         }
     }
 
+    @Test
+    fun rulesScreen_itemsAreSelectable_and_singleSelectedRule_isSelected() {
+        val selectedRule = fakeRules[2]
+
+        composeTestRule.setContent {
+            RulesScreen(
+                uiState = RulesScreenUiState(rules = fakeRules),
+                onClickRuleItem = {},
+                selectedItems = setOf(selectedRule),
+                onUpdateSelectedItems = {},
+            )
+        }
+
+        // Unselected items
+        fakeRules.minus(selectedRule).forEach { rule ->
+            composeTestRule
+                .onNodeWithTag("Rules List Item ${rule.baseRuleId}")
+                .assertExists()
+                .assertIsDisplayed()
+                .assertIsSelectable()
+                .assertIsNotSelected()
+        }
+
+        // Selected item
+        composeTestRule
+            .onNodeWithTag("Rules List Item ${selectedRule.baseRuleId}")
+            .assertExists()
+            .assertIsDisplayed()
+            .assertIsSelectable()
+            .assertIsSelected()
+    }
+
+    @Test
+    fun rulesScreen_shapeRepresentingRuleType_isDisplayed() {
+        composeTestRule.setContent {
+            RulesScreen(
+                uiState = RulesScreenUiState(rules = fakeRules),
+                onClickRuleItem = {},
+                selectedItems = setOf(),
+                onUpdateSelectedItems = {},
+            )
+        }
+
+        fakeRules.forEach { rule ->
+            val testTag = "Shape for ${rule.mutationType}"
+
+            composeTestRule
+                .onNodeWithTag(testTag, useUnmergedTree = true)
+                .assertExists()
+                .assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun rulesScreen_correctShapeForEachRuleType_isDisplayed() {
+        composeTestRule.setContent {
+            RulesScreen(
+                uiState = RulesScreenUiState(rules = fakeRules),
+                onClickRuleItem = {},
+                selectedItems = setOf(),
+                onUpdateSelectedItems = {},
+            )
+        }
+
+        fakeRules.forEach { rule ->
+            when (rule.mutationType) {
+                MutationType.DOMAIN_NAME -> {
+                    composeTestRule.onNodeWithContentDescription("Square")
+                        .assertExists()
+                        .assertIsDisplayed()
+                }
+
+                MutationType.URL_PARAMS_ALL -> {
+                    composeTestRule.onNodeWithContentDescription("Scallop")
+                        .assertExists()
+                        .assertIsDisplayed()
+                }
+
+                MutationType.URL_PARAMS_SPECIFIC -> {
+                    composeTestRule.onNodeWithContentDescription("Delta")
+                        .assertExists()
+                        .assertIsDisplayed()
+                }
+
+                MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
+                    composeTestRule.onNodeWithContentDescription("Clover")
+                        .assertExists()
+                        .assertIsDisplayed()
+                }
+
+                MutationType.DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC -> {
+                    composeTestRule.onNodeWithContentDescription("Eight-point star")
+                        .assertExists()
+                        .assertIsDisplayed()
+                }
+
+                MutationType.FALLBACK -> {
+                    composeTestRule.onNodeWithContentDescription("Circle")
+                        .assertExists()
+                        .assertIsDisplayed()
+                }
+            }
+        }
+    }
+
     companion object {
         @Composable
         private fun EmptyRulesScreen() {
             RulesScreen(
                 uiState = RulesScreenUiState(),
                 onClickRuleItem = {},
-            )
-        }
-
-        @Composable
-        private fun RulesScreenWithTwoRules() {
-            RulesScreen(
-                uiState = RulesScreenUiState(rules = fakeRules),
-                onClickRuleItem = {},
+                selectedItems = setOf(),
+                onUpdateSelectedItems = {},
             )
         }
 
@@ -84,7 +199,7 @@ class RulesScreenTest {
                     initialDomain = "google.com",
                     targetDomain = "google.co.uk"
                 ),
-                baseRuleId = 1
+                baseRuleId = 1,
             ),
             SpecificUrlParamsMutationModel(
                 name = "YouTube - remove playlist association and timestamp, but nothing else",
@@ -94,7 +209,25 @@ class RulesScreenTest {
                 mutationInfo = SpecificUrlParamsMutationInfo(
                     removableParams = listOf("list", "t")
                 ),
-                baseRuleId = 2
+                baseRuleId = 2,
+            ),
+            DomainNameMutationModel(
+                name = "Google rule 2",
+                triggerDomain = "google.com",
+                isLocalOnly = true,
+                dateModifiedTimestamp = 1700174823,
+                mutationInfo = DomainNameMutationInfo(
+                    initialDomain = "google.fr",
+                    targetDomain = "google.ca"
+                ),
+                baseRuleId = 3,
+            ),
+            AllUrlParamsMutationModel(
+                name = "remove all params from reddit links",
+                triggerDomain = "reddit.com",
+                isLocalOnly = true,
+                dateModifiedTimestamp = 1702899122,
+                baseRuleId = 4,
             ),
         )
     }

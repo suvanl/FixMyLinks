@@ -8,11 +8,13 @@ import androidx.compose.animation.core.spring
 import androidx.navigation.NavBackStackEntry
 import com.suvanl.fixmylinks.ui.navigation.addNewRuleFlowScreens
 import com.suvanl.fixmylinks.ui.navigation.getBaseRoute
+import com.suvanl.fixmylinks.ui.navigation.ruleDetailsFlowScreens
 import com.suvanl.fixmylinks.ui.util.topLevelScreensWithFab
 
 enum class NavigationEnterTransitionMode { ENTER, POP_ENTER }
 enum class NavigationExitTransitionMode { EXIT, POP_EXIT }
 
+private val userFlowScreens = listOf(addNewRuleFlowScreens, ruleDetailsFlowScreens).flatten()
 
 /**
  * Returns the appropriate navigation [ExitTransition] based on the given [transitionMode] and the
@@ -28,13 +30,13 @@ fun exitNavigationTransition(
     // Whether we're navigating from a screen within the "add new rule" flow to a top-level screen
     // that has a FAB
     val isNavigatingFromFlowToTopLevelScreen =
-        addNewRuleFlowScreens.any { it.route == initialDestinationRoute }
+        userFlowScreens.any { it.route == initialDestinationRoute }
                 && topLevelScreensWithFab.any { it.route == targetDestinationRoute }
 
     // If the target destination is part of the "add new rule" flow, or if we're navigating back to
     // a screen that this flow could've been started from
     return if (
-        addNewRuleFlowScreens.any { it.route == targetDestinationRoute }
+        userFlowScreens.any { it.route == targetDestinationRoute }
         || isNavigatingFromFlowToTopLevelScreen
     ) {
         // Perform slide out animation when navigating from an initial state of a screen that is
@@ -84,11 +86,11 @@ fun enterNavigationTransition(
     // flow, or if we're performing intra-flow navigation, use the slide animation
     val isNavigatingFromTopLevelDestinationToFlow =
         topLevelScreensWithFab.any { it.route == initialDestinationRoute }
-                && addNewRuleFlowScreens.any { it.route == targetDestinationRoute }
+                && userFlowScreens.any { it.route == targetDestinationRoute }
 
     // Inverse of isNavigatingFromTopLevelDestinationToFlow
     val isNavigatingFromFlowToTopLevelDestination =
-        addNewRuleFlowScreens.any { it.route == initialDestinationRoute }
+        userFlowScreens.any { it.route == initialDestinationRoute }
                 && topLevelScreensWithFab.any { it.route == targetDestinationRoute }
 
     return if (

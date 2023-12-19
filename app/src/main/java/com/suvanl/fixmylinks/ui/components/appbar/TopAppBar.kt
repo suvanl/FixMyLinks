@@ -48,7 +48,7 @@ fun FmlTopAppBar(
         TopAppBarSize.SMALL -> {
             TopAppBar(
                 title = { TopAppBarTitle(text = title) },
-                navigationIcon = { TopAppBarNavigationIcon(onNavigateUp = { onNavigateUp() }) },
+                navigationIcon = { TopAppBarNavigationIcon(onNavigateUp = onNavigateUp) },
                 actions = { AppBarActionRow(navBackStackEntry = currentContentBackStackEntry) },
                 scrollBehavior = scrollBehavior,
                 modifier = modifier
@@ -58,7 +58,7 @@ fun FmlTopAppBar(
         TopAppBarSize.MEDIUM -> {
             MediumTopAppBar(
                 title = { TopAppBarTitle(text = title) },
-                navigationIcon = { TopAppBarNavigationIcon(onNavigateUp = { onNavigateUp() }) },
+                navigationIcon = { TopAppBarNavigationIcon(onNavigateUp = onNavigateUp) },
                 actions = { AppBarActionRow(navBackStackEntry = currentContentBackStackEntry) },
                 scrollBehavior = scrollBehavior,
                 modifier = modifier
@@ -68,7 +68,7 @@ fun FmlTopAppBar(
         TopAppBarSize.LARGE -> {
             LargeTopAppBar(
                 title = { TopAppBarTitle(text = title) },
-                navigationIcon = { TopAppBarNavigationIcon(onNavigateUp = { onNavigateUp() }) },
+                navigationIcon = { TopAppBarNavigationIcon(onNavigateUp = onNavigateUp) },
                 actions = { AppBarActionRow(navBackStackEntry = currentContentBackStackEntry) },
                 scrollBehavior = scrollBehavior,
                 modifier = modifier

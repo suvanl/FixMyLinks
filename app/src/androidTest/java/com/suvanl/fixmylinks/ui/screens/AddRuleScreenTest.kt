@@ -1,17 +1,12 @@
 package com.suvanl.fixmylinks.ui.screens
 
 import androidx.activity.ComponentActivity
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Backup
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleForm
 import com.suvanl.fixmylinks.ui.components.form.AllUrlParamsRuleFormState
@@ -19,7 +14,6 @@ import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleForm
 import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleFormState
 import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleForm
 import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleFormState
-import com.suvanl.fixmylinks.ui.components.list.SwitchListItemState
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreenBody
 import org.junit.Rule
 import org.junit.Test
@@ -36,27 +30,9 @@ class AddRuleScreenTest {
         mutationType: MutationType,
         layoutClass: String = "Compact",
     ) {
-        val ruleOptions = listOf(
-            SwitchListItemState(
-                headlineText = stringResource(id = R.string.enable),
-                supportingText = stringResource(R.string.enable_rule_supporting_text),
-                leadingIcon = Icons.Outlined.CheckCircle,
-                isSwitchChecked = true,
-                onSwitchCheckedChange = {},
-            ),
-            SwitchListItemState(
-                headlineText = stringResource(R.string.backup_to_cloud),
-                supportingText = stringResource(R.string.backup_to_cloud_supporting_text),
-                leadingIcon = Icons.Outlined.Backup,
-                isSwitchChecked = false,
-                onSwitchCheckedChange = {},
-            )
-        )
-
         AddRuleScreenBody(
             mutationType = mutationType,
             showSaveButton = layoutClass.lowercase() == "compact",
-            ruleOptions = ruleOptions,
             onSaveClick = {}
         ) {
             when (mutationType) {

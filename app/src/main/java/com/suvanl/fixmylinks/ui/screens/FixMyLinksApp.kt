@@ -1,5 +1,6 @@
 package com.suvanl.fixmylinks.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -31,11 +32,14 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.ui.components.appbar.FmlTopAppBar
+import com.suvanl.fixmylinks.ui.components.appbar.RuleSelectionTopAppBar
 import com.suvanl.fixmylinks.ui.components.appbar.TopAppBarSize
 import com.suvanl.fixmylinks.ui.components.button.AddNewRuleFab
 import com.suvanl.fixmylinks.ui.components.button.EditFab
@@ -50,11 +54,16 @@ import com.suvanl.fixmylinks.ui.navigation.navigateSingleTop
 import com.suvanl.fixmylinks.ui.theme.FixMyLinksTheme
 import com.suvanl.fixmylinks.ui.util.topLevelScreens
 import com.suvanl.fixmylinks.ui.util.topLevelScreensWithFab
+import com.suvanl.fixmylinks.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun FixMyLinksApp(windowSize: WindowSizeClass) {
     val navController = rememberNavController()
+    val mainViewModel = hiltViewModel<MainViewModel>()
+
+    // Currently selected rule items on RulesScreen
+    val multiSelectedRules by mainViewModel.multiSelectedRules.collectAsStateWithLifecycle()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -88,13 +97,16 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
         else -> false
     } && showNavBarOn.any { it.route == currentBaseRoute }
 
-    val shouldShowSearchBar = showSearchBarOn.any { it.route == currentBaseRoute }
+    val shouldShowSearchBar = showSearchBarOn.any { it.route == currentBaseRoute } && multiSelectedRules.isEmpty()
     val shouldShowDockedSearchBar = shouldShowSearchBar
             && windowSize.widthSizeClass != WindowWidthSizeClass.Compact
 
     val shouldShowTopAppBar = showNavBarOn.none { it.route == currentBaseRoute }
     val shouldShowAddNewRuleFab = topLevelScreensWithFab.any { it.route == currentBaseRoute }
     val shouldShowEditRuleFab = currentBaseRoute.startsWith(FmlScreen.RuleDetails.route)
+
+    val shouldShowRulesMultiSelectTopAppBar =
+        currentBaseRoute == FmlScreen.Rules.route && multiSelectedRules.isNotEmpty()
 
     FixMyLinksTheme {
         Scaffold(
@@ -114,6 +126,17 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         horizontalPadding = 16.dp,
                         modifier = Modifier.fillMaxWidth()
                     )
+                } else if (shouldShowRulesMultiSelectTopAppBar) {
+                    RuleSelectionTopAppBar(
+                        selectedItemsSize = multiSelectedRules.size,
+                        currentBackStackEntryFlow = navController.currentBackStackEntryFlow,
+                        onDismiss = mainViewModel::clearMultiSelectedRules,
+                    )
+
+                    // Clear selection on system back gesture/press
+                    BackHandler(enabled = multiSelectedRules.isNotEmpty()) {
+                        mainViewModel.clearMultiSelectedRules()
+                    }
                 }
             },
             bottomBar = {
@@ -227,7 +250,8 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
 
                         FmlNavHost(
                             navController = navController,
-                            windowWidthSize = windowSize.widthSizeClass
+                            windowWidthSize = windowSize.widthSizeClass,
+                            mainViewModel = mainViewModel,
                         )
                     }
                 }

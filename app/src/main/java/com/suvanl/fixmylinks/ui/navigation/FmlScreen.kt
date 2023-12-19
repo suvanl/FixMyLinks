@@ -115,6 +115,14 @@ val addNewRuleFlowScreens = setOf(
 )
 
 /**
+ * Screens that are part of the "rule details" flow, excluding top-level destinations (i.e.,
+ * [FmlScreen.Rules]).
+ */
+val ruleDetailsFlowScreens = setOf(
+    FmlScreen.RuleDetails,
+)
+
+/**
  * Returns the base of a route (i.e., the route without any arguments)
  */
 fun getBaseRoute(route: String?): String {

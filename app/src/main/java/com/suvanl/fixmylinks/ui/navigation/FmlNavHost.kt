@@ -2,8 +2,13 @@ package com.suvanl.fixmylinks.ui.navigation
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.SelectAll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -36,15 +41,18 @@ import com.suvanl.fixmylinks.ui.navigation.transition.NavigationEnterTransitionM
 import com.suvanl.fixmylinks.ui.navigation.transition.NavigationExitTransitionMode
 import com.suvanl.fixmylinks.ui.navigation.transition.enterNavigationTransition
 import com.suvanl.fixmylinks.ui.navigation.transition.exitNavigationTransition
+import com.suvanl.fixmylinks.ui.screens.DeleteSelectionConfirmationDialog
 import com.suvanl.fixmylinks.ui.screens.HomeScreen
 import com.suvanl.fixmylinks.ui.screens.RulesScreen
 import com.suvanl.fixmylinks.ui.screens.SavedScreen
 import com.suvanl.fixmylinks.ui.screens.details.RuleDetailsScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreenUiState
+import com.suvanl.fixmylinks.ui.screens.newruleflow.RuleOptionsState
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
 import com.suvanl.fixmylinks.ui.theme.TextStyleDefaults
 import com.suvanl.fixmylinks.ui.util.getNewRuleFlowViewModel
+import com.suvanl.fixmylinks.viewmodel.AppLevelViewModel
 import com.suvanl.fixmylinks.viewmodel.RulesViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.AddRuleViewModel
 import com.suvanl.fixmylinks.viewmodel.newruleflow.SelectRuleTypeViewModel
@@ -56,7 +64,8 @@ import kotlinx.coroutines.launch
 fun FmlNavHost(
     navController: NavHostController,
     windowWidthSize: WindowWidthSizeClass,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    mainViewModel: AppLevelViewModel = hiltViewModel(),
 ) {
     NavHost(
         navController = navController,
@@ -90,8 +99,62 @@ fun FmlNavHost(
             composable(route = FmlScreen.Rules.route) { navBackStackEntry ->
                 val viewModel = navBackStackEntry.sharedViewModel<RulesViewModel>(navController)
                 val uiState by viewModel.rulesScreenUiState.collectAsStateWithLifecycle()
+                val selectedRules by mainViewModel.multiSelectedRules.collectAsStateWithLifecycle()
+                var showDeleteSelectionConfirmationDialog by remember { mutableStateOf(false) }
 
                 val coroutineScope = rememberCoroutineScope()
+
+                LaunchedEffect(key1 = Unit) {
+                    mainViewModel.resetState()
+                }
+
+                ProvideAppBarActions {
+                    IconButton(
+                        onClick = {
+                            showDeleteSelectionConfirmationDialog = true
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = stringResource(R.string.delete_selected)
+                        )
+                    }
+
+                    IconButton(
+                        onClick = {
+                            // Add all rules to selected set
+                            mainViewModel.updateMultiSelectedRules(uiState.rules.toSet())
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.SelectAll,
+                            contentDescription = stringResource(R.string.select_all)
+                        )
+                    }
+                }
+
+                if (showDeleteSelectionConfirmationDialog) {
+                    DeleteSelectionConfirmationDialog(
+                        onDismissRequest = { showDeleteSelectionConfirmationDialog = false },
+                        onConfirmDelete = {
+                            showDeleteSelectionConfirmationDialog = false
+
+                            coroutineScope.launch {
+                                val allRulesSelected = selectedRules == uiState.rules.toSet()
+                                if (!allRulesSelected) {
+                                    selectedRules.forEach {
+                                        viewModel.deleteSingleRule(it.baseRuleId)
+                                    }
+                                } else {
+                                    viewModel.deleteAllRules()
+                                }
+
+                                // Clear selection
+                                mainViewModel.updateMultiSelectedRules(setOf())
+                            }
+                        },
+                    )
+                }
 
                 RulesScreen(
                     uiState = uiState,
@@ -107,7 +170,11 @@ fun FmlNavHost(
                                 popUpToStartDestination = false
                             )
                         }
-                    }
+                    },
+                    selectedItems = selectedRules,
+                    onUpdateSelectedItems = {
+                        mainViewModel.updateMultiSelectedRules(it)
+                    },
                 )
             }
 
@@ -285,6 +352,7 @@ fun FmlNavHost(
                         mutationType = mutationType,
                         showFormFieldHints = userPreferences.showFormFieldHints,
                         showSaveButton = isCompactLayout,
+                        ruleOptions = RuleOptionsState(),
                     ),
                     viewModel = viewModel,
                     onSaveClick = { handleSaveRuleClick() },

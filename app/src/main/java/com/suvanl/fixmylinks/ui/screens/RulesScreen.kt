@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Link
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +29,7 @@ import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
 import com.suvanl.fixmylinks.ui.components.list.RulesList
 import com.suvanl.fixmylinks.ui.graphics.CustomShapes.ScallopPolygon
 import com.suvanl.fixmylinks.ui.layout.Polygon
+import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.ui.util.PreviewData
 
@@ -38,13 +41,15 @@ data class RulesScreenUiState(
 fun RulesScreen(
     uiState: RulesScreenUiState,
     onClickRuleItem: (BaseMutationModel) -> Unit,
+    selectedItems: Set<BaseMutationModel>,
+    onUpdateSelectedItems: (Set<BaseMutationModel>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     RulesScreenBody(
         uiState = uiState,
-        onClickItem = { rule ->
-            onClickRuleItem(rule)
-        },
+        onClickItem = onClickRuleItem,
+        selectedItems = selectedItems,
+        onUpdateSelectedItems = onUpdateSelectedItems,
         modifier = modifier
     )
 }
@@ -53,6 +58,8 @@ fun RulesScreen(
 private fun RulesScreenBody(
     uiState: RulesScreenUiState,
     onClickItem: (BaseMutationModel) -> Unit,
+    selectedItems: Set<BaseMutationModel>,
+    onUpdateSelectedItems: (Set<BaseMutationModel>) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val hasRules = uiState.rules.isNotEmpty()
@@ -74,7 +81,9 @@ private fun RulesScreenBody(
 
         RulesList(
             uiState = uiState,
-            onClickItem = onClickItem
+            onClickItem = onClickItem,
+            selectedItems = selectedItems,
+            onUpdateSelectedItems = onUpdateSelectedItems,
         )
     }
 }
@@ -111,6 +120,41 @@ private fun EmptyRulesBody(
     }
 }
 
+@Composable
+fun DeleteSelectionConfirmationDialog(
+    onDismissRequest: () -> Unit,
+    onConfirmDelete: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    AlertDialog(
+        title = {
+            Text(
+                text = stringResource(R.string.delete_selected_rules),
+                letterSpacing = LetterSpacingDefaults.Tighter,
+            )
+        },
+        text = {
+            Text(text = stringResource(R.string.delete_selected_rules_description))
+        },
+        dismissButton = {
+            TextButton(
+                onClick = { onDismissRequest() }
+            ) {
+                Text(text = stringResource(id = android.R.string.cancel))
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = { onConfirmDelete() }
+            ) {
+                Text(text = stringResource(id = R.string.delete))
+            }
+        },
+        onDismissRequest = onDismissRequest,
+        modifier = modifier.semantics { testTag = "Delete Selected Confirmation Dialog" }
+    )
+}
+
 @Preview(
     showBackground = true,
     widthDp = 380
@@ -126,7 +170,9 @@ private fun RulesScreenPreview() {
     PreviewContainer {
         RulesScreenBody(
             uiState = RulesScreenUiState(rules = PreviewData.previewRules),
-            onClickItem = { /* do nothing */ },
+            onClickItem = {},
+            selectedItems = setOf(),
+            onUpdateSelectedItems = {},
         )
     }
 }

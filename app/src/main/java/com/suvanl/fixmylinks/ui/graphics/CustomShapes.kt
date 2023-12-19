@@ -5,7 +5,6 @@ import androidx.graphics.shapes.RoundedPolygon
 /**
  * Custom Material 3-style shapes, such as 'scallop', 'clover', wavy circle' etc.
  */
-@Suppress("unused")
 object CustomShapes {
     val ScallopPolygon = genPolygon(PolygonParams.ScallopParams, ShapeParameters.ShapeId.Star)
     val ScallopShape = RoundedPolygonShape(ScallopPolygon)

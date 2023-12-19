@@ -17,15 +17,19 @@
 
     <!-- mt = mutation type -->
     <string name="mt_domain_name">Change domain name</string>
+    <string name="mt_domain_name_present_simple_tense">Changes the given domain name</string>
     <string name="mt_domain_name_desc">Modify the domain name and keep the rest of the link the same</string>
 
     <string name="mt_url_params_all">Remove all URL parameters</string>
+    <string name="mt_url_params_all_present_simple_tense">Removes all URL parameters</string>
     <string name="mt_url_params_all_desc">Strip every parameter out of the link</string>
 
     <string name="mt_url_params_specific">Remove specific URL parameters</string>
+    <string name="mt_url_params_specific_present_simple_tense">Removes specific URL parameters</string>
     <string name="mt_url_params_specific_desc">Only remove certain parameters from the link</string>
 
     <string name="mt_domain_name_and_url_params_all">Change domain name and remove all URL parameters</string>
+    <string name="mt_domain_name_and_url_params_all_present_simple_tense">Changes the given domain name and removes all URL parameters</string>
     <string name="mt_domain_name_and_url_params_all_desc">Modify the domain name and strip every parameter out of the link</string>
 
     <string name="empty" />
@@ -60,4 +64,20 @@
     <string name="search_rules">Search rules</string>
     <string name="account_and_settings">Account and settings</string>
     <string name="no_rules_added_yet">No rules added yet</string>
+    <string name="backed_up">Backed up</string>
+    <string name="not_backed_up">Not backed up</string>
+    <string name="collapse_details">Collapse details</string>
+    <string name="expand_details">Expand details</string>
+    <string name="content_desc_rule_name">Rule name</string>
+    <string name="content_desc_domain_name">Domain name</string>
+    <string name="content_desc_backup_off">Backup off</string>
+    <string name="content_desc_backup_on">Backup on</string>
+    <string name="content_desc_last_modified">Last modified</string>
+    <string name="keep_content">Keep content</string>
+    <string name="keep_content_supporting_text">Retain the original shared content</string>
+    <string name="delete_all_rules">Delete all rules</string>
+    <string name="delete_selected">Delete selected</string>
+    <string name="select_all">Select all</string>
+    <string name="delete_selected_rules">Delete selected rules</string>
+    <string name="delete_selected_rules_description">Are you sure you want to delete the selected rules? This action can\'t be undone.</string>
 </resources>

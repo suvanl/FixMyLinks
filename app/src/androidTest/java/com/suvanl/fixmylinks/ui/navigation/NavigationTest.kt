@@ -5,9 +5,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.suvanl.fixmylinks.viewmodel.FakeAppLevelViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -31,7 +33,8 @@ class NavigationTest {
 
             FmlNavHost(
                 navController = navController,
-                windowWidthSize = WindowWidthSizeClass.Compact
+                windowWidthSize = WindowWidthSizeClass.Compact,
+                mainViewModel = viewModel<FakeAppLevelViewModel>()
             )
         }
     }

@@ -64,7 +64,7 @@ android {
 
 dependencies {
     val lifecycleVersion = "2.6.2"
-    val navVersion = "2.7.5"
+    val navVersion = "2.7.6"
     val roomVersion = "2.6.1"
     val daggerHiltVersion = "2.48.1"
     val androidxHiltVersion = "1.1.0"
@@ -75,7 +75,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
     implementation("androidx.navigation:navigation-compose:$navVersion")
-    implementation("androidx.activity:activity-compose:1.8.1")
+    implementation("androidx.activity:activity-compose:1.8.2")
     implementation("androidx.graphics:graphics-shapes:1.0.0-alpha03")
 
     implementation("androidx.room:room-runtime:$roomVersion")
@@ -92,7 +92,7 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class")
     implementation("androidx.compose.material:material-icons-extended")
 
-    implementation("com.google.android.material:material:1.10.0")
+    implementation("com.google.android.material:material:1.11.0")
 
     implementation("com.google.dagger:dagger:$daggerHiltVersion")
     ksp("com.google.dagger:dagger-compiler:$daggerHiltVersion")
