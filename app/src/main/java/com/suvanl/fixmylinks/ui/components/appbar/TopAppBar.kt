@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.navigation.FloatingWindow
 import androidx.navigation.NavBackStackEntry
 import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.ui.components.appbar.menu.OverflowMenu
 import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import kotlinx.coroutines.flow.Flow
@@ -160,5 +162,31 @@ private fun FmlTopAppBarPreview() {
             scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
             onNavigateUp = {},
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(widthDp = 320)
+@Preview(
+    name = "Dark",
+    widthDp = 320,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun FmlTopAppBarWithOverflowMenuPreview() {
+    PreviewContainer {
+        TopAppBarBody(
+            title = "Home",
+            size = TopAppBarSize.SMALL,
+            scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+            onNavigateUp = {},
+        ) {
+            OverflowMenu {
+                DropdownMenuItem(
+                    text = { Text(text = "Test option") },
+                    onClick = {}
+                )
+            }
+        }
     }
 }
