@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasParent
+import androidx.compose.ui.test.isNotSelected
 import androidx.compose.ui.test.isSelected
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -82,6 +83,17 @@ class SelectRuleTypeScreenTest {
         val stateRestorationTester = StateRestorationTester(composeTestRule)
         stateRestorationTester.setContent { DefaultCompactLayout() }
 
+        // Assert that the DOMAIN_NAME option is initially selected (default state)
+        composeTestRule
+            .onNode(
+                matcher = isSelected() and hasParent(
+                    hasContentDescription("DOMAIN_NAME option")
+                ),
+                useUnmergedTree = true
+            )
+            .assertExists()
+            .assertIsDisplayed()
+
         // Modify the default state by selecting the "Specific URL parameters" option by clicking it
         composeTestRule
             .onNodeWithContentDescription("URL_PARAMS_SPECIFIC option")
@@ -95,6 +107,17 @@ class SelectRuleTypeScreenTest {
 
         // Trigger recreation and state restoration
         stateRestorationTester.emulateSavedInstanceStateRestore()
+
+        // Assert that the selected option state doesn't reset to the default value of DOMAIN_NAME
+        composeTestRule
+            .onNode(
+                matcher = isNotSelected() and hasParent(
+                    hasContentDescription("DOMAIN_NAME option")
+                ),
+                useUnmergedTree = true
+            )
+            .assertExists()
+            .assertIsDisplayed()
 
         // Assert that the "Specific URL parameters" option remains selected
         composeTestRule
