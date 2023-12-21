@@ -1,4 +1,4 @@
-package com.suvanl.fixmylinks.ui.screens
+package com.suvanl.fixmylinks.ui.screens.newruleflow
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
@@ -14,7 +14,6 @@ import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleForm
 import com.suvanl.fixmylinks.ui.components.form.DomainNameRuleFormState
 import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleForm
 import com.suvanl.fixmylinks.ui.components.form.SpecificUrlParamsRuleFormState
-import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreenBody
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
