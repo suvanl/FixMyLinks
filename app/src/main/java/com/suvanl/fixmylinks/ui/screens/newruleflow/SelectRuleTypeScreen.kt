@@ -29,7 +29,25 @@ import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.ui.components.radio.RadioGroup
 import com.suvanl.fixmylinks.ui.components.radio.RadioOptionData
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
-import com.suvanl.fixmylinks.ui.util.StringResourceUtil
+import com.suvanl.fixmylinks.util.UiText
+
+private val humanizedMutationTypeNames = mapOf(
+    MutationType.DOMAIN_NAME to UiText.StringResource(R.string.mt_domain_name),
+    MutationType.URL_PARAMS_ALL to UiText.StringResource(R.string.mt_url_params_all),
+    MutationType.URL_PARAMS_SPECIFIC to UiText.StringResource(R.string.mt_url_params_specific),
+    MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL to UiText.StringResource(
+        R.string.mt_domain_name_and_url_params_all
+    )
+)
+
+private val humanizedMutationTypeDescriptions = mapOf(
+    MutationType.DOMAIN_NAME to UiText.StringResource(R.string.mt_domain_name_desc),
+    MutationType.URL_PARAMS_ALL to UiText.StringResource(R.string.mt_url_params_all_desc),
+    MutationType.URL_PARAMS_SPECIFIC to UiText.StringResource(R.string.mt_url_params_specific_desc),
+    MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL to UiText.StringResource(
+        R.string.mt_domain_name_and_url_params_all_desc
+    )
+)
 
 @Composable
 fun SelectRuleTypeScreen(
@@ -49,15 +67,15 @@ fun SelectRuleTypeScreen(
         RadioOptionData(
             id = it.name,
             title = stringResource(
-                id = StringResourceUtil.humanizedMutationTypeNames.getOrDefault(
+                id = humanizedMutationTypeNames.getOrDefault(
                     key = it,
-                    defaultValue = StringResourceUtil.StringResource(R.string.empty)
+                    defaultValue = UiText.StringResource(R.string.empty)
                 ).id
             ),
             description = stringResource(
-                id = StringResourceUtil.humanizedMutationTypeDescriptions.getOrDefault(
+                id = humanizedMutationTypeDescriptions.getOrDefault(
                     key = it,
-                    defaultValue = StringResourceUtil.StringResource(R.string.empty)
+                    defaultValue = UiText.StringResource(R.string.empty)
                 ).id
             )
         )
