@@ -104,3 +104,15 @@ private fun ItemPreview() {
         )
     }
 }
+
+@Preview(widthDp = 380, showBackground = true)
+@Composable
+private fun ItemSelectedPreview() {
+    PreviewContainer {
+        RulesListItem(
+            rule = PreviewData.previewRules[1],
+            isSelected = true,
+            modifier = Modifier.padding(8.dp)
+        )
+    }
+}
