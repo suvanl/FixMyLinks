@@ -76,7 +76,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
     implementation("androidx.navigation:navigation-compose:$navVersion")
     implementation("androidx.activity:activity-compose:1.8.2")
-    implementation("androidx.graphics:graphics-shapes:1.0.0-alpha03")
+    implementation("androidx.graphics:graphics-shapes:1.0.0-alpha04")
 
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")

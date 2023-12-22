@@ -4,9 +4,11 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.asComposePath
+import androidx.compose.ui.graphics.toAndroidRectF
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.graphics.shapes.RoundedPolygon
+import androidx.graphics.shapes.toPath
 
 /**
  * Represents a [RoundedPolygon] as a compose-friendly [Shape] object that has an [Outline]
@@ -20,8 +22,7 @@ class RoundedPolygonShape(private val polygon: RoundedPolygon) : Shape {
         layoutDirection: LayoutDirection,
         density: Density
     ): Outline {
-        val matrix = calculateMatrix(polygon.bounds, size.width, size.height)
-        polygon.transform(matrix)
-        return Outline.Generic(polygon.toPath().asComposePath())
+        val matrix = calculateMatrix(polygon.getBounds().toAndroidRectF(), size.width, size.height)
+        return Outline.Generic(polygon.transformedWithMatrix(matrix).toPath().asComposePath())
     }
 }

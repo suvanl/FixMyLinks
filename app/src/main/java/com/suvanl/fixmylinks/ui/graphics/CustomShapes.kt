@@ -45,8 +45,5 @@ private fun genPolygon(
     shapeId: ShapeParameters.ShapeId
 ): RoundedPolygon {
     val shapeItem = shapeParams.getShapeItemById(shapeId)
-    return shapeParams.genShape(shapeItem).also { polygon ->
-        val matrix = calculateMatrix(polygon.bounds, 1F, 1F)
-        polygon.transform(matrix)
-    }
+    return shapeParams.genShape(shapeItem).normalized()
 }

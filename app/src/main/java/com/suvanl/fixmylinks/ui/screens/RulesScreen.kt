@@ -98,7 +98,7 @@ private fun EmptyRulesBody(
         modifier = modifier.semantics { testTag = "Empty Rules Body" }
     ) {
         Polygon(
-            shape = ScallopPolygon,
+            polygon = ScallopPolygon,
             color = MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier
                 .size(208.dp)
