@@ -31,7 +31,7 @@ fun Polygon(
     polygon: RoundedPolygon,
     modifier: Modifier = Modifier,
     color: Color = Color.Transparent,
-    content: @Composable() (BoxScope.() -> Unit)? = null,
+    content: @Composable (BoxScope.() -> Unit)? = null,
 ) {
     val sizedShape = remember(polygon) { mutableMapOf<Size, List<Cubic>>() }
 

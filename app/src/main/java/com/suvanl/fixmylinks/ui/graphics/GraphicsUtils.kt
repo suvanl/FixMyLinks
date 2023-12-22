@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.core.graphics.plus
 import androidx.core.graphics.times
 import androidx.graphics.shapes.Cubic
+import androidx.graphics.shapes.Morph
 import androidx.graphics.shapes.RoundedPolygon
 import androidx.graphics.shapes.TransformResult
 import kotlin.math.PI
@@ -93,4 +94,28 @@ fun RoundedPolygon.transformedWithMatrix(matrix: Matrix): RoundedPolygon {
         val transformedPoint = matrix.map(Offset(x, y))
         TransformResult(transformedPoint.x, transformedPoint.y)
     }
+}
+
+/**
+ * Transforms the Morph at a given progress into a Compose-compatible [Path].
+ * Can optionally be scaled using the origin (0,0) as the pivot point.
+ */
+fun Morph.toComposePath(progress: Float, scale: Float = 1F, path: Path = Path()): Path {
+    var first = true
+
+    path.rewind()
+    forEachCubic(progress) { bezier ->
+        if (first) {
+            path.moveTo(x = bezier.anchor0X * scale, y = bezier.anchor0Y * scale)
+            first = false
+        }
+
+        path.cubicTo(
+            x1 = bezier.control0X * scale, y1 = bezier.control0Y * scale,
+            x2 = bezier.control1X * scale, y2 = bezier.control1Y * scale,
+            x3 = bezier.anchor1X * scale,  y3 = bezier.anchor1Y * scale,
+        )
+    }
+    path.close()
+    return path
 }
