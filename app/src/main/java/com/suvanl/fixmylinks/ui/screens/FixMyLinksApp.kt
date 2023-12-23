@@ -82,15 +82,9 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
     // The screens on which the search bar (or docked search bar) should be shown
     val showSearchBarOn = listOf(FmlScreen.Home, FmlScreen.Rules, FmlScreen.Saved)
 
-    val topAppBarSize = when (windowSize.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> TopAppBarSize.LARGE
-        else -> TopAppBarSize.SMALL
-    }
-
-    val topAppBarScrollBehavior = when (topAppBarSize) {
-        TopAppBarSize.SMALL -> TopAppBarDefaults.pinnedScrollBehavior()
-        else -> TopAppBarDefaults.enterAlwaysScrollBehavior()
-    }
+    val topAppBarSize = TopAppBarSize.SMALL
+    // Note: for non-small TopAppBars, use enterAlwaysScrollBehavior()
+    val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     val shouldShowNavRail = when (windowSize.widthSizeClass) {
         WindowWidthSizeClass.Medium -> true
