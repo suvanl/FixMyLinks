@@ -144,16 +144,6 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                     }
                 }
 
-                if (shouldShowTopAppBar) {
-                    FmlTopAppBar(
-                        title = stringResource(id = currentScreen?.label ?: R.string.app_name),
-                        onNavigateUp = { navController.navigateUp() },
-                        size = topAppBarSize,
-                        scrollBehavior = topAppBarScrollBehavior,
-                        currentBackStackEntryFlow = navController.currentBackStackEntryFlow
-                    )
-                }
-
                 AnimatedVisibility(
                     visible = shouldShowSearchBar && !shouldShowDockedSearchBar,
                     enter = fadeIn(
@@ -177,6 +167,16 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                         docked = false,
                         horizontalPadding = 16.dp,
                         modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                if (shouldShowTopAppBar) {
+                    FmlTopAppBar(
+                        title = stringResource(id = currentScreen?.label ?: R.string.app_name),
+                        onNavigateUp = { navController.navigateUp() },
+                        size = topAppBarSize,
+                        scrollBehavior = topAppBarScrollBehavior,
+                        currentBackStackEntryFlow = navController.currentBackStackEntryFlow
                     )
                 }
             },
