@@ -138,24 +138,7 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                     }
                 }
 
-                AnimatedVisibility(
-                    visible = shouldShowSearchBar && !shouldShowDockedSearchBar,
-                    enter = fadeIn(
-                        animationSpec = tween(
-                            durationMillis = 400,
-                            easing = EaseInOut
-                        )
-                    ) + scaleIn(
-                        animationSpec = spring(
-                            stiffness = Spring.StiffnessHigh
-                        )
-                    ),
-                    exit = fadeOut(
-                        animationSpec = spring(
-                            stiffness = Spring.StiffnessHigh
-                        )
-                    ),
-                ) {
+                if (shouldShowSearchBar && !shouldShowDockedSearchBar) {
                     // Standard (non-docked) search bar
                     RulesSearchBar(
                         docked = false,
