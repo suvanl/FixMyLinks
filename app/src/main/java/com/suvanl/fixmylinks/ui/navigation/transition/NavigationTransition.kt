@@ -3,8 +3,12 @@ package com.suvanl.fixmylinks.ui.navigation.transition
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.EaseOutQuint
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.navigation.NavBackStackEntry
 import com.suvanl.fixmylinks.ui.navigation.addNewRuleFlowScreens
 import com.suvanl.fixmylinks.ui.navigation.getBaseRoute
@@ -54,8 +58,12 @@ fun exitNavigationTransition(
                 }
             },
             animationSpec = spring(
-                dampingRatio = Spring.DampingRatioNoBouncy,
-                stiffness = Spring.StiffnessMediumLow
+                stiffness = Spring.StiffnessMedium
+            )
+        ) + fadeOut(
+            animationSpec = tween(
+                durationMillis = 100,
+                easing = EaseOutQuint
             )
         )
     } else {
@@ -106,9 +114,14 @@ fun enterNavigationTransition(
                     AnimatedContentTransitionScope.SlideDirection.Right
                 }
             },
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioNoBouncy,
-                stiffness = Spring.StiffnessMediumLow
+            animationSpec = tween(
+                durationMillis = 500,
+                easing = EaseOutQuint
+            )
+        ) + fadeIn(
+            animationSpec = tween(
+                durationMillis = 500,
+                easing = EaseOutQuint
             )
         )
     } else {
