@@ -45,23 +45,6 @@ fun RulesScreen(
     onUpdateSelectedItems: (Set<BaseMutationModel>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    RulesScreenBody(
-        uiState = uiState,
-        onClickItem = onClickRuleItem,
-        selectedItems = selectedItems,
-        onUpdateSelectedItems = onUpdateSelectedItems,
-        modifier = modifier
-    )
-}
-
-@Composable
-private fun RulesScreenBody(
-    uiState: RulesScreenUiState,
-    onClickItem: (BaseMutationModel) -> Unit,
-    selectedItems: Set<BaseMutationModel>,
-    onUpdateSelectedItems: (Set<BaseMutationModel>) -> Unit,
-    modifier: Modifier = Modifier
-) {
     val hasRules = uiState.rules.isNotEmpty()
 
     Column(
@@ -81,7 +64,7 @@ private fun RulesScreenBody(
 
         RulesList(
             uiState = uiState,
-            onClickItem = onClickItem,
+            onClickItem = onClickRuleItem,
             selectedItems = selectedItems,
             onUpdateSelectedItems = onUpdateSelectedItems,
         )
@@ -98,7 +81,7 @@ private fun EmptyRulesBody(
         modifier = modifier.semantics { testTag = "Empty Rules Body" }
     ) {
         Polygon(
-            shape = ScallopPolygon,
+            polygon = ScallopPolygon,
             color = MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier
                 .size(208.dp)
@@ -168,9 +151,9 @@ fun DeleteSelectionConfirmationDialog(
 @Composable
 private fun RulesScreenPreview() {
     PreviewContainer {
-        RulesScreenBody(
+        RulesScreen(
             uiState = RulesScreenUiState(rules = PreviewData.previewRules),
-            onClickItem = {},
+            onClickRuleItem = {},
             selectedItems = setOf(),
             onUpdateSelectedItems = {},
         )

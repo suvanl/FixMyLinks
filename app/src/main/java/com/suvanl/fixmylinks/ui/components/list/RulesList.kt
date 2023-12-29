@@ -1,6 +1,7 @@
 package com.suvanl.fixmylinks.ui.components.list
 
 import android.content.res.Configuration
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +11,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.semantics.selectableGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,16 +47,25 @@ fun RulesList(
         modifier = modifier.semantics { selectableGroup() }
     ) {
         items(items = items) { rule ->
+            val view = LocalView.current
+            val haptics = LocalHapticFeedback.current
+            val isInSelectionMode = selectedItems.isNotEmpty()
+
             RulesListItem(
                 rule = rule,
                 isSelected = selectedItems.contains(rule),
                 modifier = Modifier
                     .combinedClickable(
                         onClick = {
-                            val isInSelectionMode = selectedItems.isNotEmpty()
                             if (isInSelectionMode) toggleItemSelection(rule) else onClickItem(rule)
+                            // Play click sound
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
                         },
-                        onLongClick = { toggleItemSelection(rule) }
+                        onLongClick = {
+                            toggleItemSelection(rule)
+                            // Perform long-press haptic feedback
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        }
                     )
             )
         }

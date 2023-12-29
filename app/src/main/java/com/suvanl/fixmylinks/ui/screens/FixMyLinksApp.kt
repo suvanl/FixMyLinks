@@ -2,8 +2,14 @@ package com.suvanl.fixmylinks.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -76,15 +82,9 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
     // The screens on which the search bar (or docked search bar) should be shown
     val showSearchBarOn = listOf(FmlScreen.Home, FmlScreen.Rules, FmlScreen.Saved)
 
-    val topAppBarSize = when (windowSize.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> TopAppBarSize.LARGE
-        else -> TopAppBarSize.SMALL
-    }
-
-    val topAppBarScrollBehavior = when (topAppBarSize) {
-        TopAppBarSize.SMALL -> TopAppBarDefaults.pinnedScrollBehavior()
-        else -> TopAppBarDefaults.enterAlwaysScrollBehavior()
-    }
+    val topAppBarSize = TopAppBarSize.SMALL
+    // Note: for non-small TopAppBars, use enterAlwaysScrollBehavior()
+    val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     val shouldShowNavRail = when (windowSize.widthSizeClass) {
         WindowWidthSizeClass.Medium -> true
@@ -97,7 +97,8 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
         else -> false
     } && showNavBarOn.any { it.route == currentBaseRoute }
 
-    val shouldShowSearchBar = showSearchBarOn.any { it.route == currentBaseRoute } && multiSelectedRules.isEmpty()
+    val shouldShowSearchBar =
+        showSearchBarOn.any { it.route == currentBaseRoute } && multiSelectedRules.isEmpty()
     val shouldShowDockedSearchBar = shouldShowSearchBar
             && windowSize.widthSizeClass != WindowWidthSizeClass.Compact
 
@@ -111,22 +112,20 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
     FixMyLinksTheme {
         Scaffold(
             topBar = {
-                if (shouldShowTopAppBar) {
-                    FmlTopAppBar(
-                        title = stringResource(id = currentScreen?.label ?: R.string.app_name),
-                        onNavigateUp = { navController.navigateUp() },
-                        size = topAppBarSize,
-                        scrollBehavior = topAppBarScrollBehavior,
-                        currentBackStackEntryFlow = navController.currentBackStackEntryFlow
-                    )
-                } else if (shouldShowSearchBar && !shouldShowDockedSearchBar) {
-                    // Show the standard (non-docked) search bar
-                    RulesSearchBar(
-                        docked = false,
-                        horizontalPadding = 16.dp,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                } else if (shouldShowRulesMultiSelectTopAppBar) {
+                AnimatedVisibility(
+                    visible = shouldShowRulesMultiSelectTopAppBar,
+                    enter = fadeIn(
+                        animationSpec = tween(
+                            durationMillis = 400,
+                            easing = EaseInOut
+                        )
+                    ) + scaleIn(
+                        animationSpec = spring(
+                            stiffness = Spring.StiffnessMedium
+                        )
+                    ),
+                    exit = fadeOut() + scaleOut(),
+                ) {
                     RuleSelectionTopAppBar(
                         selectedItemsSize = multiSelectedRules.size,
                         currentBackStackEntryFlow = navController.currentBackStackEntryFlow,
@@ -137,6 +136,25 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
                     BackHandler(enabled = multiSelectedRules.isNotEmpty()) {
                         mainViewModel.clearMultiSelectedRules()
                     }
+                }
+
+                if (shouldShowSearchBar && !shouldShowDockedSearchBar) {
+                    // Standard (non-docked) search bar
+                    RulesSearchBar(
+                        docked = false,
+                        horizontalPadding = 16.dp,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                if (shouldShowTopAppBar) {
+                    FmlTopAppBar(
+                        title = stringResource(id = currentScreen?.label ?: R.string.app_name),
+                        onNavigateUp = { navController.navigateUp() },
+                        size = topAppBarSize,
+                        scrollBehavior = topAppBarScrollBehavior,
+                        currentBackStackEntryFlow = navController.currentBackStackEntryFlow
+                    )
                 }
             },
             bottomBar = {

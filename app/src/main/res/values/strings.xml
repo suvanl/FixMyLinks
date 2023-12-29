@@ -76,7 +76,6 @@
     <string name="keep_content">Keep content</string>
     <string name="keep_content_supporting_text">Retain the original shared content</string>
     <string name="delete_all_rules">Delete all rules</string>
-    <string name="delete_selected">Delete selected</string>
     <string name="select_all">Select all</string>
     <string name="delete_selected_rules">Delete selected rules</string>
     <string name="delete_selected_rules_description">Are you sure you want to delete the selected rules? This action can\'t be undone.</string>

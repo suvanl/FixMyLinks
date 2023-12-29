@@ -60,7 +60,9 @@ private fun RuleSelectionTopAppBarBody(
 ) {
     TopAppBar(
         title = {
-            Text(text = selectedItemsSize.toString())
+            if (selectedItemsSize > 0) {
+                Text(text = selectedItemsSize.toString())
+            }
         },
         navigationIcon = {
             IconButton(onClick = onDismiss) {

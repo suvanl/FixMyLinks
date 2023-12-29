@@ -1,12 +1,12 @@
 package com.suvanl.fixmylinks.ui.graphics
 
-import android.graphics.Matrix
-import android.graphics.PointF
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.ui.graphics.Matrix
 import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.RoundedPolygon
 import androidx.graphics.shapes.star
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 /**
@@ -80,17 +80,25 @@ class ShapeParameters(
             usesSides = false,
             usesInnerParameters = false
         ) {
-            val points = listOf(
-                radialToCartesian(1F, 270F.toRadians()),
-                radialToCartesian(1F, 30F.toRadians()),
-                radialToCartesian(innerRadiusState.floatValue, 90F.toRadians()),
-                radialToCartesian(1F, 150F.toRadians()),
+            val points = floatArrayOf(
+                radialToCartesian(1F, 270F.toRadians()).x,
+                radialToCartesian(1F, 270F.toRadians()).y,
+
+                radialToCartesian(1F, 30F.toRadians()).x,
+                radialToCartesian(1F, 30F.toRadians()).y,
+
+                radialToCartesian(innerRadiusState.floatValue, 90F.toRadians()).x,
+                radialToCartesian(innerRadiusState.floatValue, 90F.toRadians()).y,
+
+                radialToCartesian(1F, 150F.toRadians()).x,
+                radialToCartesian(1F, 150F.toRadians()).y,
             )
 
             RoundedPolygon(
                 vertices = points,
                 rounding = CornerRounding(roundnessState.floatValue, smoothState.floatValue),
-                center = PointZero
+                centerX = 0F,
+                centerY = 0F,
             )
         },
 
@@ -103,17 +111,18 @@ class ShapeParameters(
             val sx = innerRadiusState.floatValue.coerceAtLeast(0.55F)
             val sy = roundnessState.floatValue.coerceAtLeast(0.1F)
 
-            val vertices = listOf(
-                PointF(-sx, -sy),
-                PointF(sx, -sy),
-                PointF(sx, sy),
-                PointF(-sx, sy),
+            val vertices = floatArrayOf(
+//                -sx, -sy,
+                sx, -sy,
+                sx, sy,
+                -sx, sy,
             )
 
             RoundedPolygon(
                 vertices = vertices,
-                rounding = CornerRounding(roundnessState.floatValue, smoothState.floatValue),
-                center = PointZero
+                rounding = CornerRounding(min(sx, sy), smoothState.floatValue),
+                centerX = 0F,
+                centerY = 0F,
             )
         }
     )
@@ -122,23 +131,24 @@ class ShapeParameters(
         ?: throw IllegalArgumentException("A shape with the id $id does not exist")
 
     fun genShape(shapeItem: ShapeItem, autoSize: Boolean = true): RoundedPolygon {
-        return shapeItem.genShape().apply {
-            transform(Matrix().apply {
+        return shapeItem.genShape().let { polygon ->
+            polygon.transformedWithMatrix(Matrix().apply {
                 if (autoSize) {
+                    val bounds = polygon.getBounds()
+
                     // Move the center to the origin
-                    center
-                    postTranslate(
-                        -(bounds.left + bounds.right) / 2,
-                        -(bounds.top + bounds.bottom) / 2
+                    translate(
+                        x = -(bounds.left + bounds.right) / 2,
+                        y = -(bounds.top + bounds.bottom) / 2
                     )
 
                     // Scale to the [-1, 1] range
-                    val scale = 2F / max(bounds.width(), bounds.height())
-                    postScale(scale, scale)
+                    val scale = 2F / max(bounds.width, bounds.height)
+                    scale(x = scale, y = scale)
                 }
 
                 // Apply required rotation
-                postRotate(rotationState.floatValue)
+                rotateZ(rotationState.floatValue)
             })
         }
     }

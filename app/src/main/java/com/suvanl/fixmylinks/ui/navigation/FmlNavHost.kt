@@ -116,7 +116,7 @@ fun FmlNavHost(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Delete,
-                            contentDescription = stringResource(R.string.delete_selected)
+                            contentDescription = stringResource(R.string.delete_selected_rules)
                         )
                     }
 

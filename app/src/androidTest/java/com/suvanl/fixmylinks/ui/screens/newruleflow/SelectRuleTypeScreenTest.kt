@@ -1,15 +1,21 @@
-package com.suvanl.fixmylinks.ui.screens
+package com.suvanl.fixmylinks.ui.screens.newruleflow
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasParent
+import androidx.compose.ui.test.isNotSelected
+import androidx.compose.ui.test.isSelected
+import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.printToLog
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.suvanl.fixmylinks.R
-import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -70,6 +76,59 @@ class SelectRuleTypeScreenTest {
             changeDomainNameAndRemoveAllUrlParamsDescriptionString =
                 getString(R.string.mt_domain_name_and_url_params_all_desc)
         }
+    }
+
+    @Test
+    fun selectRuleTypeScreen_activityRecreation_restoresSelectedRuleTypeState() {
+        val stateRestorationTester = StateRestorationTester(composeTestRule)
+        stateRestorationTester.setContent { DefaultCompactLayout() }
+
+        // Assert that the DOMAIN_NAME option is initially selected (default state)
+        composeTestRule
+            .onNode(
+                matcher = isSelected() and hasParent(
+                    hasContentDescription("DOMAIN_NAME option")
+                ),
+                useUnmergedTree = true
+            )
+            .assertExists()
+            .assertIsDisplayed()
+
+        // Modify the default state by selecting the "Specific URL parameters" option by clicking it
+        composeTestRule
+            .onNodeWithContentDescription("URL_PARAMS_SPECIFIC option")
+            .assertExists()
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithContentDescription("URL_PARAMS_SPECIFIC option", useUnmergedTree = true)
+            .printToLog("SelectRuleTypeScreenTest")
+
+        // Trigger recreation and state restoration
+        stateRestorationTester.emulateSavedInstanceStateRestore()
+
+        // Assert that the selected option state doesn't reset to the default value of DOMAIN_NAME
+        composeTestRule
+            .onNode(
+                matcher = isNotSelected() and hasParent(
+                    hasContentDescription("DOMAIN_NAME option")
+                ),
+                useUnmergedTree = true
+            )
+            .assertExists()
+            .assertIsDisplayed()
+
+        // Assert that the "Specific URL parameters" option remains selected
+        composeTestRule
+            .onNode(
+                matcher = isSelected() and hasParent(
+                    hasContentDescription("URL_PARAMS_SPECIFIC option")
+                ),
+                useUnmergedTree = true
+            )
+            .assertExists()
+            .assertIsDisplayed()
     }
 
     @Test

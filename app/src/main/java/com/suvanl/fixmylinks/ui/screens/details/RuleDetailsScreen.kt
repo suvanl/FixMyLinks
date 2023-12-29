@@ -83,9 +83,7 @@ fun RuleDetailsScreen(
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (rule == null) {
-        return
-    }
+    if (rule == null) return
 
     Column(
         modifier = modifier

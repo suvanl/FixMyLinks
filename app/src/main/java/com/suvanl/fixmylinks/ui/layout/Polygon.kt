@@ -1,6 +1,5 @@
 package com.suvanl.fixmylinks.ui.layout
 
-import android.graphics.RectF
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.aspectRatio
@@ -13,13 +12,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.graphics.shapes.Cubic
 import androidx.graphics.shapes.RoundedPolygon
 import com.suvanl.fixmylinks.ui.graphics.CustomShapes.ScallopPolygon
-import com.suvanl.fixmylinks.ui.graphics.calculateMatrix
+import com.suvanl.fixmylinks.ui.graphics.scaled
+import com.suvanl.fixmylinks.ui.graphics.toPath
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
+import kotlin.math.min
 
 /**
  * [Box]-like layout composable composable that draws a [RoundedPolygon] with optional content
@@ -27,24 +28,22 @@ import com.suvanl.fixmylinks.ui.util.PreviewContainer
  */
 @Composable
 fun Polygon(
-    shape: RoundedPolygon,
+    polygon: RoundedPolygon,
     modifier: Modifier = Modifier,
     color: Color = Color.Transparent,
-    bounds: RectF = RectF(0F, 0F, 1F, 1F),
     content: @Composable (BoxScope.() -> Unit)? = null,
 ) {
-    val sizedPolygonCache = remember(shape) { mutableMapOf<Size, RoundedPolygon>() }
+    val sizedShape = remember(polygon) { mutableMapOf<Size, List<Cubic>>() }
 
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .drawWithContent {
-                val sizedPolygon = sizedPolygonCache.getOrPut(size) {
-                    val matrix = calculateMatrix(bounds, size.width, size.height)
-                    RoundedPolygon(shape).apply { transform(matrix) }
-                }
-                drawPath(sizedPolygon.toPath().asComposePath(), color)
-                // Draw content after drawing the polygon shape to ensure children (content)
+                val scale = min(size.width, size.height)
+                val shape = sizedShape.getOrPut(size) { polygon.cubics.scaled(scale) }
+                drawPath(shape.toPath(), color)
+
+                // Draw content after drawing the polygon shape to ensure children (`content`)
                 // appear on top of the shape
                 drawContent()
             }
@@ -63,9 +62,9 @@ fun Polygon(
 private fun PolygonPreview() {
     PreviewContainer {
         Polygon(
-            shape = ScallopPolygon,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.aspectRatio(1F)
+            polygon = ScallopPolygon,
+            modifier = Modifier.aspectRatio(1F),
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -78,9 +77,9 @@ private fun PolygonPreview() {
 private fun PolygonWithContentPreview() {
     PreviewContainer {
         Polygon(
-            shape = ScallopPolygon,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.aspectRatio(1F)
+            polygon = ScallopPolygon,
+            modifier = Modifier.aspectRatio(1F),
+            color = MaterialTheme.colorScheme.primary
         ) {
             Text(
                 text = "Hello",

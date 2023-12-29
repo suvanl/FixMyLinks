@@ -24,6 +24,12 @@ object CustomShapes {
 
     val TiltedPillPolygon = genPolygon(PolygonParams.TiltedPillParams, ShapeParameters.ShapeId.Blob)
     val TiltedPillShape = RoundedPolygonShape(TiltedPillPolygon)
+
+    val CirclePolygon = genPolygon(PolygonParams.CircleParams, ShapeParameters.ShapeId.Polygon)
+    val CircleShape = RoundedPolygonShape(CirclePolygon)
+
+    val SquarePolygon = genPolygon(PolygonParams.SquareParams, ShapeParameters.ShapeId.Polygon)
+    val SquareShape = RoundedPolygonShape(SquarePolygon)
 }
 
 private object PolygonParams {
@@ -38,6 +44,8 @@ private object PolygonParams {
     val EightPointStarParams = ShapeParameters(sides = 8, innerRadius = 0.784F, roundness = 0.16F)
     val WavyCircleParams = ShapeParameters(sides = 15, innerRadius = 0.892F, roundness = 1F)
     val TiltedPillParams = ShapeParameters(innerRadius = 0.19F, roundness = 0.86F, rotation = 45F)
+    val CircleParams = ShapeParameters(sides = 4, roundness = 1F)
+    val SquareParams = ShapeParameters(sides = 4, rotation = 45F, roundness = 0.4F)
 }
 
 private fun genPolygon(
@@ -45,8 +53,5 @@ private fun genPolygon(
     shapeId: ShapeParameters.ShapeId
 ): RoundedPolygon {
     val shapeItem = shapeParams.getShapeItemById(shapeId)
-    return shapeParams.genShape(shapeItem).also { polygon ->
-        val matrix = calculateMatrix(polygon.bounds, 1F, 1F)
-        polygon.transform(matrix)
-    }
+    return shapeParams.genShape(shapeItem).normalized()
 }

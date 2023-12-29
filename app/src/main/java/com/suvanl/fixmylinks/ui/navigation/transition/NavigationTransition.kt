@@ -3,8 +3,12 @@ package com.suvanl.fixmylinks.ui.navigation.transition
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.EaseOutQuint
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.navigation.NavBackStackEntry
 import com.suvanl.fixmylinks.ui.navigation.addNewRuleFlowScreens
 import com.suvanl.fixmylinks.ui.navigation.getBaseRoute
@@ -27,13 +31,13 @@ fun exitNavigationTransition(
     val initialDestinationRoute = getBaseRoute(transitionScope.initialState.destination.route)
     val targetDestinationRoute = getBaseRoute(transitionScope.targetState.destination.route)
 
-    // Whether we're navigating from a screen within the "add new rule" flow to a top-level screen
+    // Whether we're navigating from a screen within a user flow to a top-level screen
     // that has a FAB
     val isNavigatingFromFlowToTopLevelScreen =
         userFlowScreens.any { it.route == initialDestinationRoute }
                 && topLevelScreensWithFab.any { it.route == targetDestinationRoute }
 
-    // If the target destination is part of the "add new rule" flow, or if we're navigating back to
+    // If the target destination is part of a user flow, or if we're navigating back to
     // a screen that this flow could've been started from
     return if (
         userFlowScreens.any { it.route == targetDestinationRoute }
@@ -54,8 +58,12 @@ fun exitNavigationTransition(
                 }
             },
             animationSpec = spring(
-                dampingRatio = Spring.DampingRatioNoBouncy,
-                stiffness = Spring.StiffnessMediumLow
+                stiffness = Spring.StiffnessMedium
+            )
+        ) + fadeOut(
+            animationSpec = tween(
+                durationMillis = 100,
+                easing = EaseOutQuint
             )
         )
     } else {
@@ -82,8 +90,8 @@ fun enterNavigationTransition(
     val initialDestinationRoute = getBaseRoute(transitionScope.initialState.destination.route)
     val targetDestinationRoute = getBaseRoute(transitionScope.targetState.destination.route)
 
-    // If we're navigating from a destination with the FAB to a destination in the "add new rule"
-    // flow, or if we're performing intra-flow navigation, use the slide animation
+    // If we're navigating from a destination with the FAB to a destination in a user flow
+    // or if we're performing intra-flow navigation, use the slide animation
     val isNavigatingFromTopLevelDestinationToFlow =
         topLevelScreensWithFab.any { it.route == initialDestinationRoute }
                 && userFlowScreens.any { it.route == targetDestinationRoute }
@@ -106,9 +114,14 @@ fun enterNavigationTransition(
                     AnimatedContentTransitionScope.SlideDirection.Right
                 }
             },
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioNoBouncy,
-                stiffness = Spring.StiffnessMediumLow
+            animationSpec = tween(
+                durationMillis = 500,
+                easing = EaseOutQuint
+            )
+        ) + fadeIn(
+            animationSpec = tween(
+                durationMillis = 500,
+                easing = EaseOutQuint
             )
         )
     } else {

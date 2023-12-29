@@ -8,6 +8,8 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -56,6 +58,7 @@ fun RadioGroup(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = radioOptionHorizontalPadding)
+                .semantics { contentDescription = "${optionData.id} option" }
         )
     }
 }
