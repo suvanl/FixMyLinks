@@ -90,7 +90,7 @@ fun enterNavigationTransition(
     val initialDestinationRoute = getBaseRoute(transitionScope.initialState.destination.route)
     val targetDestinationRoute = getBaseRoute(transitionScope.targetState.destination.route)
 
-    // Inverse of isNavigatingFromTopLevelDestinationToFlow
+    // If we're navigating from a destination that's part of a user flow back to a top-level destination
     val isNavigatingFromFlowToTopLevelDestination =
         userFlowScreens.any { it.route == initialDestinationRoute }
                 && topLevelScreensWithFab.any { it.route == targetDestinationRoute }
