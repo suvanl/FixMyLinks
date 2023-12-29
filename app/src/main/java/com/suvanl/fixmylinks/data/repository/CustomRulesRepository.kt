@@ -96,7 +96,7 @@ class CustomRulesRepository @Inject constructor(
     override fun getRuleByBaseId(
         baseRuleId: Long,
         ruleType: MutationType
-    ): Flow<BaseMutationModel> {
+    ): Flow<BaseMutationModel?> {
         localDatabase.apply {
             return when (ruleType) {
                 MutationType.URL_PARAMS_ALL -> {
@@ -287,8 +287,10 @@ class CustomRulesRepository @Inject constructor(
      *  DAO query function.
      * @return A domain model ([BaseMutationModel]-derived objects).
      */
-    private fun <TValue> Flow<Map<BaseRule, TValue>>.toDomainModelFlow(): Flow<BaseMutationModel> {
+    private fun <TValue> Flow<Map<BaseRule, TValue>>.toDomainModelFlow(): Flow<BaseMutationModel?> {
         return this.map { multimap ->
+            if (multimap.isEmpty()) return@map null
+
             val (baseRule, genericRule) = multimap.entries.first().toPair()
             mapEntityToDomainModel(baseRule, genericRule)
         }

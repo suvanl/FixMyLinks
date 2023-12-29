@@ -13,7 +13,7 @@ interface RulesRepository {
 
     suspend fun deleteByBaseRuleId(baseRuleId: Long)
 
-    fun getRuleByBaseId(baseRuleId: Long, ruleType: MutationType): Flow<BaseMutationModel>
+    fun getRuleByBaseId(baseRuleId: Long, ruleType: MutationType): Flow<BaseMutationModel?>
 
     fun getAllRules(): Flow<List<BaseMutationModel>>
 }
