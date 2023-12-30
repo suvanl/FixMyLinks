@@ -67,7 +67,7 @@ class RulesScreenTest {
                 .assertIsDisplayed()
 
             composeTestRule
-                .onNodeWithText(rule.name)
+                .onNodeWithText(rule.name, useUnmergedTree = true)
                 .assertExists()
                 .assertIsDisplayed()
         }
@@ -140,37 +140,37 @@ class RulesScreenTest {
         fakeRules.forEach { rule ->
             when (rule.mutationType) {
                 MutationType.DOMAIN_NAME -> {
-                    composeTestRule.onNodeWithContentDescription("Square")
+                    composeTestRule.onNodeWithContentDescription("Square", useUnmergedTree = true)
                         .assertExists()
                         .assertIsDisplayed()
                 }
 
                 MutationType.URL_PARAMS_ALL -> {
-                    composeTestRule.onNodeWithContentDescription("Scallop")
+                    composeTestRule.onNodeWithContentDescription("Scallop", useUnmergedTree = true)
                         .assertExists()
                         .assertIsDisplayed()
                 }
 
                 MutationType.URL_PARAMS_SPECIFIC -> {
-                    composeTestRule.onNodeWithContentDescription("Delta")
+                    composeTestRule.onNodeWithContentDescription("Delta", useUnmergedTree = true)
                         .assertExists()
                         .assertIsDisplayed()
                 }
 
                 MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
-                    composeTestRule.onNodeWithContentDescription("Clover")
+                    composeTestRule.onNodeWithContentDescription("Clover", useUnmergedTree = true)
                         .assertExists()
                         .assertIsDisplayed()
                 }
 
                 MutationType.DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC -> {
-                    composeTestRule.onNodeWithContentDescription("Eight-point star")
+                    composeTestRule.onNodeWithContentDescription("Eight-point star", useUnmergedTree = true)
                         .assertExists()
                         .assertIsDisplayed()
                 }
 
                 MutationType.FALLBACK -> {
-                    composeTestRule.onNodeWithContentDescription("Circle")
+                    composeTestRule.onNodeWithContentDescription("Circle", useUnmergedTree = true)
                         .assertExists()
                         .assertIsDisplayed()
                 }

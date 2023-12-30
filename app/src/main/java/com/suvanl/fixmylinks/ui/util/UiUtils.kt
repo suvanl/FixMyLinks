@@ -4,8 +4,10 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.compose.ui.semantics.contentDescription
 import androidx.graphics.shapes.RoundedPolygon
+import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.ui.graphics.CustomShapes
+import com.suvanl.fixmylinks.util.UiText
 
 /**
  * A [Shape] with optional semantics properties for accessibility/testing purposes.
@@ -78,5 +80,35 @@ fun getRoundedPolygonForRule(ruleType: MutationType): UiRoundedPolygon = when (r
 
     MutationType.FALLBACK -> {
         UiRoundedPolygon(CustomShapes.CirclePolygon) { contentDescription = "Circle" }
+    }
+}
+
+/**
+ * Returns [UiText] representing the humanized form of the given [MutationType] in
+ * present simple tense.
+ */
+fun getRuleTypeInPresentSimpleTense(ruleType: MutationType) = when (ruleType) {
+    MutationType.DOMAIN_NAME -> {
+        UiText.StringResource(R.string.mt_domain_name_present_simple_tense)
+    }
+
+    MutationType.URL_PARAMS_ALL -> {
+        UiText.StringResource(id = R.string.mt_url_params_all_present_simple_tense)
+    }
+
+    MutationType.URL_PARAMS_SPECIFIC -> {
+        UiText.StringResource(id = R.string.mt_url_params_specific_present_simple_tense)
+    }
+
+    MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
+        UiText.StringResource(id = R.string.mt_domain_name_and_url_params_all_present_simple_tense)
+    }
+
+    MutationType.DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC -> {
+        TODO("Not user-selectable yet")
+    }
+
+    MutationType.FALLBACK -> {
+        UiText.StringResource(id = R.string.empty)
     }
 }

@@ -56,13 +56,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.suvanl.fixmylinks.R
-import com.suvanl.fixmylinks.domain.mutation.MutationType
 import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
 import com.suvanl.fixmylinks.ui.components.list.RuleDetailsList
 import com.suvanl.fixmylinks.ui.components.list.RuleDetailsListItemState
 import com.suvanl.fixmylinks.ui.theme.LetterSpacingDefaults
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 import com.suvanl.fixmylinks.ui.util.PreviewData
+import com.suvanl.fixmylinks.ui.util.getRuleTypeInPresentSimpleTense
 import com.suvanl.fixmylinks.ui.util.getShapeForRule
 
 /**
@@ -127,7 +127,7 @@ fun RuleDetailsScreen(
             Column(
                 modifier = Modifier.weight(1F)
             ) {
-                val ruleTypeInfo = getRuleTypeInPresentSimpleTense(ruleType = rule.mutationType)
+                val ruleTypeInfo = getRuleTypeInPresentSimpleTense(rule.mutationType).asString()
                 var lineCount by remember { mutableIntStateOf(0) }
 
                 if (lineCount < 2) {
@@ -333,33 +333,6 @@ private fun DeleteConfirmationDialog(
         onDismissRequest = onDismissRequest,
         modifier = modifier.semantics { testTag = "Delete Confirmation Dialog" }
     )
-}
-
-@Composable
-private fun getRuleTypeInPresentSimpleTense(ruleType: MutationType) = when (ruleType) {
-    MutationType.DOMAIN_NAME -> {
-        stringResource(id = R.string.mt_domain_name_present_simple_tense)
-    }
-
-    MutationType.URL_PARAMS_ALL -> {
-        stringResource(id = R.string.mt_url_params_all_present_simple_tense)
-    }
-
-    MutationType.URL_PARAMS_SPECIFIC -> {
-        stringResource(id = R.string.mt_url_params_specific_present_simple_tense)
-    }
-
-    MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL -> {
-        stringResource(id = R.string.mt_domain_name_and_url_params_all_present_simple_tense)
-    }
-
-    MutationType.DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC -> {
-        TODO("Not user-selectable yet")
-    }
-
-    MutationType.FALLBACK -> {
-        throw IllegalArgumentException("MutationType.FALLBACK should not be user-selectable")
-    }
 }
 
 @Preview(
