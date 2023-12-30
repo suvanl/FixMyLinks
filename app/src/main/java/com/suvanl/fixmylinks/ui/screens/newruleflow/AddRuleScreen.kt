@@ -198,7 +198,7 @@ fun AddRuleScreenBody(
             comingSoon = true,
         ),
         SwitchListItemState(
-            headlineText = "Keep content",
+            headlineText = stringResource(id = R.string.backup_to_cloud),
             supportingText = stringResource(R.string.backup_to_cloud_supporting_text),
             leadingIcon = Icons.Outlined.Backup,
             isSwitchChecked = ruleOptions.backupEnabled,
