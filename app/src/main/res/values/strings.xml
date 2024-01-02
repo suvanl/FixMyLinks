@@ -79,4 +79,7 @@
     <string name="select_all">Select all</string>
     <string name="delete_selected_rules">Delete selected rules</string>
     <string name="delete_selected_rules_description">Are you sure you want to delete the selected rules? This action can\'t be undone.</string>
+
+    <!-- format: "{rule type} on {trigger domain}. {present simple tense rule desc}." -->
+    <string name="cd_rules_list_item">%1$s on %2$s. %3$s.</string>
 </resources>

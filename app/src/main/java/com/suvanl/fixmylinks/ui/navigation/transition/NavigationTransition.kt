@@ -33,7 +33,7 @@ fun exitNavigationTransition(
 
     // Whether we're navigating from a screen within a user flow to a top-level screen
     // that has a FAB
-    val isNavigatingFromFlowToTopLevelScreen =
+    val isNavigatingFromFlowToTopLevelDestination =
         userFlowScreens.any { it.route == initialDestinationRoute }
                 && topLevelScreensWithFab.any { it.route == targetDestinationRoute }
 
@@ -41,7 +41,7 @@ fun exitNavigationTransition(
     // a screen that this flow could've been started from
     return if (
         userFlowScreens.any { it.route == targetDestinationRoute }
-        || isNavigatingFromFlowToTopLevelScreen
+        || isNavigatingFromFlowToTopLevelDestination
     ) {
         // Perform slide out animation when navigating from an initial state of a screen that is
         // part of the "add new rule" flow, and the target destination is a screen that this flow
@@ -90,19 +90,16 @@ fun enterNavigationTransition(
     val initialDestinationRoute = getBaseRoute(transitionScope.initialState.destination.route)
     val targetDestinationRoute = getBaseRoute(transitionScope.targetState.destination.route)
 
-    // If we're navigating from a destination with the FAB to a destination in a user flow
-    // or if we're performing intra-flow navigation, use the slide animation
-    val isNavigatingFromTopLevelDestinationToFlow =
-        topLevelScreensWithFab.any { it.route == initialDestinationRoute }
-                && userFlowScreens.any { it.route == targetDestinationRoute }
-
-    // Inverse of isNavigatingFromTopLevelDestinationToFlow
+    // If we're navigating from a destination that's part of a user flow back to a top-level destination
     val isNavigatingFromFlowToTopLevelDestination =
         userFlowScreens.any { it.route == initialDestinationRoute }
                 && topLevelScreensWithFab.any { it.route == targetDestinationRoute }
 
+    // If the target destination is part of a user flow, or if we're navigating out of a flow
+    // (back to a top-level destination)
     return if (
-        isNavigatingFromTopLevelDestinationToFlow || isNavigatingFromFlowToTopLevelDestination
+        userFlowScreens.any { it.route == targetDestinationRoute }
+        || isNavigatingFromFlowToTopLevelDestination
     ) {
         transitionScope.slideIntoContainer(
             towards = when (transitionMode) {
