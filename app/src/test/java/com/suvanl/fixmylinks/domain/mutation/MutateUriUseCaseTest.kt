@@ -42,7 +42,7 @@ class MutateUriUseCaseTest {
         ),
         SpecificUrlParamsMutationModel(
             name = "YouTube remove 'list' param",
-            triggerDomain = "youtube.com",
+            triggerDomain = "*.youtube.com",
             isLocalOnly = true,
             mutationInfo = SpecificUrlParamsMutationInfo(
                 removableParams = listOf("list")
@@ -114,6 +114,23 @@ class MutateUriUseCaseTest {
         )
         val expected = URI("https://www.youtube.com/watch?v=B91ztNPq_cs")
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `apply URL_PARAMS_SPECIFIC custom rule, test wildcard functionality`() {
+        val actual1 = mutateUriUseCase(
+            URI("https://m.youtube.com/watch?v=B91ztNPq_cs&list=PLWz5rJ2EKKc8L8WlmqPD6zPEyVSKrL5PJ"),
+            mockCustomRules
+        )
+        val expected1 = URI("https://m.youtube.com/watch?v=B91ztNPq_cs")
+        assertEquals(expected1, actual1)
+
+        val actual2 = mutateUriUseCase(
+            URI("https://not-a-real-subdomain.youtube.com/watch?v=B91ztNPq_cs&list=PLWz5rJ2EKKc8L8WlmqPD6zPEyVSKrL5PJ"),
+            mockCustomRules
+        )
+        val expected2 = URI("https://not-a-real-subdomain.youtube.com/watch?v=B91ztNPq_cs")
+        assertEquals(expected2, actual2)
     }
 
     @Test
