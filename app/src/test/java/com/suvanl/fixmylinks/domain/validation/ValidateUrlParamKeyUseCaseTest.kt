@@ -1,6 +1,5 @@
-package com.suvanl.fixmylinks.validation
+package com.suvanl.fixmylinks.domain.validation
 
-import com.suvanl.fixmylinks.domain.validation.ValidateUrlParamKeyUseCase
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
