@@ -51,7 +51,7 @@
     <string name="content_description_more_options">More options</string>
     <string name="show_hints">Show hints</string>
     <string name="domain_name">Domain name</string>
-    <string name="domain_name_supporting_text">The domain name that links of should be affected by this rule.</string>
+    <string name="domain_name_supporting_text">The domain name that this rule applies to.</string>
     <string name="delete">Delete</string>
     <string name="url_parameter_name">URL parameter name</string>
     <string name="domain_name_blank_error">Domain name can\'t be blank</string>
