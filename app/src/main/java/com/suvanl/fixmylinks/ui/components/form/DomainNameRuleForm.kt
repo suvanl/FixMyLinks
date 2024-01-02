@@ -1,6 +1,7 @@
 package com.suvanl.fixmylinks.ui.components.form
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -72,8 +73,14 @@ fun DomainNameRuleForm(
             supportingText = {
                 Column {
                     // Error message
-                    if (formState.initialDomainNameError != null) {
-                        FormFieldErrorMessage(text = formState.initialDomainNameError.asString())
+                    AnimatedContent(
+                        targetState = formState.initialDomainNameError,
+                        transitionSpec = { TransitionDefaults.errorMessageTransition },
+                        label = "form field error message"
+                    ) { errorMessage ->
+                        if (errorMessage != null) {
+                            FormFieldErrorMessage(text = errorMessage.asString())
+                        }
                     }
 
                     // Hint text
@@ -111,8 +118,14 @@ fun DomainNameRuleForm(
             },
             supportingText = {
                 Column {
-                    if (formState.targetDomainNameError != null) {
-                        FormFieldErrorMessage(text = formState.targetDomainNameError.asString())
+                    AnimatedContent(
+                        targetState = formState.targetDomainNameError,
+                        transitionSpec = { TransitionDefaults.errorMessageTransition },
+                        label = "form field error message"
+                    ) { errorMessage ->
+                        if (errorMessage != null) {
+                            FormFieldErrorMessage(text = errorMessage.asString())
+                        }
                     }
 
                     AnimatedVisibility(

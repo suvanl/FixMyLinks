@@ -1,5 +1,7 @@
 package com.suvanl.fixmylinks.ui.components.form.common
 
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,8 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.animation.TransitionDefaults
+import com.suvanl.fixmylinks.ui.util.PreviewContainer
 
 @Composable
 fun DomainNameField(
@@ -35,8 +39,14 @@ fun DomainNameField(
         isError = errorMessage != null,
         supportingText = {
             Column {
-                if (errorMessage != null) {
-                    FormFieldErrorMessage(text = errorMessage)
+                AnimatedContent(
+                    targetState = errorMessage,
+                    transitionSpec = { TransitionDefaults.errorMessageTransition },
+                    label = "form field error message"
+                ) { errorMessage ->
+                    if (errorMessage != null) {
+                        FormFieldErrorMessage(text = errorMessage)
+                    }
                 }
 
                 AnimatedVisibility(
@@ -59,4 +69,40 @@ fun DomainNameField(
         ),
         modifier = modifier
     )
+}
+
+@Preview
+@Preview(
+    name = "Dark",
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun DomainNameFieldPreview() {
+    PreviewContainer {
+        DomainNameField(
+            value = "",
+            errorMessage = null,
+            showHints = true,
+            isLastFieldInForm = false,
+            onValueChange = {},
+        )
+    }
+}
+
+@Preview
+@Preview(
+    name = "Dark",
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun DomainNameFieldWithErrorPreview() {
+    PreviewContainer {
+        DomainNameField(
+            value = "Some invalid input",
+            errorMessage = "Error: error message",
+            showHints = true,
+            isLastFieldInForm = false,
+            onValueChange = {},
+        )
+    }
 }
