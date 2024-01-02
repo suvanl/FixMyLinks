@@ -8,7 +8,7 @@ class RemoveSpecificUrlParamsUseCase {
         paramsToRemove: List<String>,
         useWwwSubdomain: Boolean,
     ): URI {
-        if (uri.rawQuery == null || paramsToRemove.isEmpty()) return uri
+        if (uri.rawQuery.isNullOrBlank() || paramsToRemove.isEmpty()) return uri
         val queryString = uri.rawQuery
 
         val removeAllUrlParamsUseCase = RemoveAllUrlParamsUseCase()
