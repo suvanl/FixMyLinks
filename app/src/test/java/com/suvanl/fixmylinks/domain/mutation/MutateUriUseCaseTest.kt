@@ -58,13 +58,14 @@ class MutateUriUseCaseTest {
             )
         ),
         DomainNameAndSpecificUrlParamsMutationModel(
-            name = "YouTube mobile remove 'list' param",
-            triggerDomain = "m.youtube.com",
+            name = "Wikipedia convert mobile link to desktop and remove 's' parameter (attached " +
+                    "by Twitter to outbound links)",
+            triggerDomain = "en.m.wikipedia.org",
             isLocalOnly = true,
             mutationInfo = DomainNameAndSpecificUrlParamsMutationInfo(
-                initialDomainName = "m.youtube.com",
-                targetDomainName = "www.youtube.com",
-                removableParams = listOf("list")
+                initialDomainName = "en.m.wikipedia.org",
+                targetDomainName = "en.wikipedia.org",
+                removableParams = listOf("s")
             )
         )
     )
@@ -128,10 +129,10 @@ class MutateUriUseCaseTest {
     @Test(expected = NotImplementedError::class)
     fun `apply DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC custom rule`() {
         val actual = mutateUriUseCase(
-            URI("https://m.youtube.com/watch?v=B91ztNPq_cs&list=PLWz5rJ2EKKc8L8WlmqPD6zPEyVSKrL5PJ"),
+            URI("https://en.m.wikipedia.org/wiki/Android_(operating_system)?s=09"),
             mockCustomRules
         )
-        val expected = URI("https://www.youtube.com/watch?v=B91ztNPq_cs")
+        val expected = URI("https://en.wikipedia.org/wiki/Android_(operating_system)")
         assertEquals(expected, actual)
     }
 
