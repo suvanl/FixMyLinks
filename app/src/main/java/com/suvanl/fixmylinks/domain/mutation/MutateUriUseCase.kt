@@ -73,6 +73,12 @@ class MutateUriUseCase @Inject constructor() {
      */
     private fun findRule(uri: URI, customRules: List<BaseMutationModel>): BaseMutationModel? {
         val allRules = BuiltInRules.all + customRules
-        return allRules.find { it.triggerDomain == uri.host }
+        return allRules.find { rule ->
+            if (rule.triggerDomain.startsWith("*.")) {
+                rule.triggerDomain.removePrefix("*.") == uri.removeSubdomain("*").host
+            } else {
+                rule.triggerDomain == uri.host
+            }
+        }
     }
 }
