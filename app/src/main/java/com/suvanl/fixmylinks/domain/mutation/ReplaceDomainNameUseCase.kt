@@ -28,7 +28,7 @@ class ReplaceDomainNameUseCase {
                 mutationInfo.targetDomain
             }
 
-            return MutatedUri(
+            return UriBuilder(
                 scheme = scheme,
                 host = domain,
                 path = path,

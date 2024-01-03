@@ -1,6 +1,6 @@
 package com.suvanl.fixmylinks.domain.util
 
-import com.suvanl.fixmylinks.domain.mutation.MutatedUri
+import com.suvanl.fixmylinks.domain.mutation.UriBuilder
 import java.net.URI
 
 object UriUtils {
@@ -20,7 +20,7 @@ object UriUtils {
         val hostWithoutSubdomain = host.removePrefix("${removableSubdomain}.")
         val hasUrlParams = !rawQuery.isNullOrEmpty()
 
-        return MutatedUri(
+        return UriBuilder(
             scheme = scheme,
             host = hostWithoutSubdomain,
             path = path,

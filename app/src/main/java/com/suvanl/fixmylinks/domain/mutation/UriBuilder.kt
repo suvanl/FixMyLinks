@@ -2,8 +2,7 @@ package com.suvanl.fixmylinks.domain.mutation
 
 import java.net.URI
 
-// TODO: refactor with better, more scalable API design?
-data class MutatedUri(
+data class UriBuilder(
     val scheme: String,
     val host: String,
     val path: String? = null,
@@ -11,7 +10,7 @@ data class MutatedUri(
     val fragment: String? = null,
 ) {
     /**
-     * Builds a [java.net.URI] with the data provided in the [MutatedUri] primary constructor
+     * Builds a [java.net.URI] with the data provided in the [UriBuilder] primary constructor
      */
     fun build(): URI {
         if (scheme.isEmpty()) throw IllegalArgumentException("URI scheme must be provided")
