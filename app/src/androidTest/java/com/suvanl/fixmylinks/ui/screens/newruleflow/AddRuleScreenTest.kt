@@ -43,6 +43,7 @@ class AddRuleScreenTest {
                         onDomainNameChange = {},
                         onClickAddParam = {},
                         onClickDismissParam = {},
+                        onClickAddWildcard = {},
                     )
                 }
 
@@ -54,6 +55,8 @@ class AddRuleScreenTest {
                         onRuleNameChange = {},
                         onInitialDomainNameChange = {},
                         onTargetDomainNameChange = {},
+                        onClickAddInitialWildcard = {},
+                        onClickAddTargetWildcard = {},
                     )
                 }
                 MutationType.URL_PARAMS_ALL -> {
@@ -61,7 +64,8 @@ class AddRuleScreenTest {
                         showHints = true,
                         formState = AllUrlParamsRuleFormState(),
                         onRuleNameChange = {},
-                        onDomainNameChange = {}
+                        onDomainNameChange = {},
+                        onClickAddWildcard = {},
                     )
                 }
                 else -> {
