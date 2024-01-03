@@ -35,7 +35,7 @@ object UriUtils {
      * Looks for a subdomain in the `URI.host` and if one or more exists, returns the first one.
      * Returns `null` if the `URI.host` doesn't appear to contain a subdomain.
      */
-    private fun URI.findSubdomain(): String? {
+    fun URI.findSubdomain(): String? {
         if (host.isNullOrBlank()) return null
 
         val parts = host.split(".")
