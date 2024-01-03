@@ -82,4 +82,6 @@
 
     <!-- format: "{rule type} on {trigger domain}. {present simple tense rule desc}." -->
     <string name="cd_rules_list_item">%1$s on %2$s. %3$s.</string>
+
+    <string name="cd_add_wildcard_operator">Add wildcard operator</string>
 </resources>

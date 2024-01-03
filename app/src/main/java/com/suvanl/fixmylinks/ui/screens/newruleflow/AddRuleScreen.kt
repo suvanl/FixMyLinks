@@ -116,6 +116,8 @@ fun AddRuleScreen(
                     onRuleNameChange = viewModel::setRuleName,
                     onInitialDomainNameChange = viewModel::setInitialDomainName,
                     onTargetDomainNameChange = viewModel::setTargetDomainName,
+                    onClickAddInitialWildcard = { viewModel.setInitialDomainName(formUiState.initialDomainName + "*.") },
+                    onClickAddTargetWildcard = { viewModel.setTargetDomainName(formUiState.targetDomainName + "*.") }
                 )
             }
 
@@ -127,6 +129,7 @@ fun AddRuleScreen(
                     showHints = uiState.showFormFieldHints,
                     onRuleNameChange = viewModel::setRuleName,
                     onDomainNameChange = viewModel::setDomainName,
+                    onClickAddWildcard = { viewModel.setDomainName(formUiState.domainName + "*.") }
                 )
             }
 
@@ -141,6 +144,7 @@ fun AddRuleScreen(
                     onDomainNameChange = viewModel::setDomainName,
                     onClickAddParam = { openParamNameDialog = true },
                     onClickDismissParam = viewModel::removeParam,
+                    onClickAddWildcard = { viewModel.setDomainName(formUiState.domainName + "*.") }
                 )
 
                 if (openParamNameDialog) {
@@ -326,6 +330,7 @@ fun AddRuleScreenPreview() {
                 onDomainNameChange = {},
                 onClickAddParam = {},
                 onClickDismissParam = {},
+                onClickAddWildcard = {},
             )
         }
     }

@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.animation.TransitionDefaults
+import com.suvanl.fixmylinks.ui.components.button.AnimatedAddWildcardButton
 import com.suvanl.fixmylinks.ui.components.form.common.FormFieldErrorMessage
 import com.suvanl.fixmylinks.ui.components.form.common.RuleNameField
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
@@ -46,6 +47,8 @@ fun DomainNameRuleForm(
     onRuleNameChange: (String) -> Unit,
     onInitialDomainNameChange: (String) -> Unit,
     onTargetDomainNameChange: (String) -> Unit,
+    onClickAddInitialWildcard: () -> Unit,
+    onClickAddTargetWildcard: () -> Unit,
     modifier: Modifier = Modifier,
     interFieldSpacing: Dp = FormDefaults.InterFieldSpacing,
 ) {
@@ -98,6 +101,12 @@ fun DomainNameRuleForm(
                     contentDescription = null
                 )
             },
+            trailingIcon = {
+                AnimatedAddWildcardButton(
+                    visible = formState.initialDomainName.isBlank(),
+                    onClick = onClickAddInitialWildcard
+                )
+            },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Uri,
                 imeAction = ImeAction.Next
@@ -142,6 +151,12 @@ fun DomainNameRuleForm(
                     contentDescription = null
                 )
             },
+            trailingIcon = {
+                AnimatedAddWildcardButton(
+                    visible = formState.targetDomainName.isBlank(),
+                    onClick = onClickAddTargetWildcard
+                )
+            },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Uri,
                 imeAction = ImeAction.Done
@@ -166,6 +181,8 @@ private fun DomainNameRuleFormPreview() {
             onRuleNameChange = {},
             onInitialDomainNameChange = {},
             onTargetDomainNameChange = {},
+            onClickAddInitialWildcard = {},
+            onClickAddTargetWildcard = {},
         )
     }
 }

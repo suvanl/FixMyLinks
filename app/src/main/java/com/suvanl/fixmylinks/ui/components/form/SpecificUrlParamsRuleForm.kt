@@ -57,6 +57,7 @@ fun SpecificUrlParamsRuleForm(
     formState: SpecificUrlParamsRuleFormState,
     onRuleNameChange: (String) -> Unit,
     onDomainNameChange: (String) -> Unit,
+    onClickAddWildcard: () -> Unit,
     onClickAddParam: () -> Unit,
     onClickDismissParam: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -81,6 +82,7 @@ fun SpecificUrlParamsRuleForm(
             errorMessage = formState.domainNameError?.asString(),
             showHints = showHints,
             onValueChange = onDomainNameChange,
+            onClickAddWildcard = onClickAddWildcard,
             isLastFieldInForm = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -178,6 +180,7 @@ private fun SpecificUrlParamsRuleFormPreview() {
             onDomainNameChange = {},
             onClickAddParam = {},
             onClickDismissParam = {},
+            onClickAddWildcard = {},
         )
     }
 }

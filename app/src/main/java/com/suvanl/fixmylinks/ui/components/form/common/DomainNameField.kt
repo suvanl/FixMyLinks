@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.animation.TransitionDefaults
+import com.suvanl.fixmylinks.ui.components.button.AnimatedAddWildcardButton
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
 
 @Composable
@@ -27,11 +28,12 @@ fun DomainNameField(
     showHints: Boolean,
     isLastFieldInForm: Boolean,
     onValueChange: (String) -> Unit,
+    onClickAddWildcard: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
         value = value,
-        onValueChange = onValueChange,
+        onValueChange = { onValueChange(it.trim()) },
         singleLine = true,
         label = {
             Text(text = stringResource(id = R.string.domain_name))
@@ -63,6 +65,12 @@ fun DomainNameField(
                 contentDescription = null
             )
         },
+        trailingIcon = {
+            AnimatedAddWildcardButton(
+                visible = value.isBlank(),
+                onClick = onClickAddWildcard
+            )
+        },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Uri,
             imeAction = if (!isLastFieldInForm) ImeAction.Next else ImeAction.Done
@@ -85,6 +93,7 @@ private fun DomainNameFieldPreview() {
             showHints = true,
             isLastFieldInForm = false,
             onValueChange = {},
+            onClickAddWildcard = {},
         )
     }
 }
@@ -103,6 +112,7 @@ private fun DomainNameFieldWithErrorPreview() {
             showHints = true,
             isLastFieldInForm = false,
             onValueChange = {},
+            onClickAddWildcard = {},
         )
     }
 }
