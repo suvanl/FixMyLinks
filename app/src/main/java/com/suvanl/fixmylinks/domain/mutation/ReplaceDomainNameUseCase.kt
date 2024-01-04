@@ -13,6 +13,11 @@ class ReplaceDomainNameUseCase {
         uri.apply {
             val hasWildcardSubdomain = mutationInfo.initialDomain.startsWith("*.")
 
+            // in future: use form validation to prevent this situation from occurring (by only
+            // allowing targetDomain to contain wildcard if initialDomain contains it too)?
+            val onlyTargetHasWildcardSubdomain =
+                mutationInfo.targetDomain.startsWith("*.") && !hasWildcardSubdomain
+
             val domain = if (hasWildcardSubdomain) {
                 val subdomain = findSubdomain()
                 if (!subdomain.isNullOrBlank() && mutationInfo.targetDomain.startsWith("*.")) {
@@ -21,6 +26,12 @@ class ReplaceDomainNameUseCase {
                     "${subdomain}.${mutationInfo.targetDomain.removePrefix("*.")}"
                 } else {
                     mutationInfo.targetDomain
+                }
+            } else if (onlyTargetHasWildcardSubdomain) {
+                if (useWwwSubdomain) {
+                    "www.${mutationInfo.targetDomain.removePrefix("*.")}"
+                } else {
+                    mutationInfo.targetDomain.removePrefix("*.")
                 }
             } else if (useWwwSubdomain) {
                 "www.${mutationInfo.targetDomain}"
