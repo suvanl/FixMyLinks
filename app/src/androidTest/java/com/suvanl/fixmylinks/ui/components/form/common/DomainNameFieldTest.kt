@@ -3,8 +3,14 @@ package com.suvanl.fixmylinks.ui.components.form.common
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsFocused
+import androidx.compose.ui.test.hasImeAction
+import androidx.compose.ui.test.hasParent
+import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.text.input.ImeAction
 import com.suvanl.fixmylinks.R
 import org.junit.Before
 import org.junit.Rule
@@ -65,5 +71,19 @@ class DomainNameFieldTest {
         composeTestRule
             .onNodeWithContentDescription(addWildcardButtonContentDescription)
             .assertDoesNotExist()
+    }
+
+    @Test
+    fun domainNameField_clickAddWildcardButton_focusesTextField() {
+        setDomainNameField()
+
+        composeTestRule
+            .onNodeWithContentDescription(addWildcardButtonContentDescription)
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNode(hasImeAction(ImeAction.Next) and hasParent(isRoot()))
+            .assertIsFocused()
     }
 }

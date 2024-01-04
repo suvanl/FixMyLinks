@@ -14,7 +14,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -52,6 +55,9 @@ fun DomainNameRuleForm(
     modifier: Modifier = Modifier,
     interFieldSpacing: Dp = FormDefaults.InterFieldSpacing,
 ) {
+    val initialDomainFocusRequester = remember { FocusRequester() }
+    val targetDomainFocusRequester = remember { FocusRequester() }
+
     Column(
         modifier = modifier
             .semantics { testTag = "DomainNameRuleForm" }
@@ -104,7 +110,10 @@ fun DomainNameRuleForm(
             trailingIcon = {
                 AnimatedAddWildcardButton(
                     visible = formState.initialDomainName.isBlank(),
-                    onClick = onClickAddInitialWildcard
+                    onClick = {
+                        initialDomainFocusRequester.requestFocus()
+                        onClickAddInitialWildcard()
+                    }
                 )
             },
             keyboardOptions = KeyboardOptions(
@@ -112,7 +121,9 @@ fun DomainNameRuleForm(
                 imeAction = ImeAction.Next
             ),
             isError = formState.initialDomainNameError != null,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(initialDomainFocusRequester)
         )
 
         Spacer(modifier = Modifier.height(interFieldSpacing))
@@ -154,7 +165,10 @@ fun DomainNameRuleForm(
             trailingIcon = {
                 AnimatedAddWildcardButton(
                     visible = formState.targetDomainName.isBlank(),
-                    onClick = onClickAddTargetWildcard
+                    onClick = {
+                        targetDomainFocusRequester.requestFocus()
+                        onClickAddTargetWildcard()
+                    }
                 )
             },
             keyboardOptions = KeyboardOptions(
@@ -162,7 +176,9 @@ fun DomainNameRuleForm(
                 imeAction = ImeAction.Done
             ),
             isError = formState.targetDomainNameError != null,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(targetDomainFocusRequester)
         )
     }
 }
