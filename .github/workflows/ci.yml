@@ -89,7 +89,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [29, 34]
+        api-level: [33, 34]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
