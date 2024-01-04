@@ -39,6 +39,7 @@ class AddAllUrlParamsRuleViewModel @Inject constructor(
                 ruleName = rule.name,
                 domainName = rule.triggerDomain,
             )
+            updateRuleOptionsState(ruleOptions.value.copy(ruleEnabled = rule.isEnabled))
         }
     }
 
@@ -51,6 +52,7 @@ class AddAllUrlParamsRuleViewModel @Inject constructor(
                 mutationType = MutationType.URL_PARAMS_ALL,
                 triggerDomain = _formUiState.value.domainName,
                 isLocalOnly = true,
+                isEnabled = ruleOptions.value.ruleEnabled,
             )
         )
     }
@@ -62,6 +64,7 @@ class AddAllUrlParamsRuleViewModel @Inject constructor(
             name = _formUiState.value.ruleName,
             triggerDomain = _formUiState.value.domainName,
             isLocalOnly = true,
+            isEnabled = ruleOptions.value.ruleEnabled,
             baseRuleId = baseRuleId
         )
         rulesRepository.get().updateRule(baseRuleId, newData)

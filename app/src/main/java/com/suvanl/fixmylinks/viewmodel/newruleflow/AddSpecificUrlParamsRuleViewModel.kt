@@ -61,6 +61,7 @@ class AddSpecificUrlParamsRuleViewModel @Inject constructor(
                 domainName = rule.triggerDomain,
                 addedParamNames = rule.mutationInfo.removableParams,
             )
+            updateRuleOptionsState(ruleOptions.value.copy(ruleEnabled = rule.isEnabled))
         }
     }
 
@@ -72,6 +73,7 @@ class AddSpecificUrlParamsRuleViewModel @Inject constructor(
                 name = _formUiState.value.ruleName,
                 triggerDomain = _formUiState.value.domainName,
                 isLocalOnly = true,
+                isEnabled = ruleOptions.value.ruleEnabled,
                 mutationInfo = SpecificUrlParamsMutationInfo(
                     removableParams = _formUiState.value.addedParamNames
                 )
@@ -86,6 +88,7 @@ class AddSpecificUrlParamsRuleViewModel @Inject constructor(
             name = _formUiState.value.ruleName,
             triggerDomain = _formUiState.value.domainName,
             isLocalOnly = true,
+            isEnabled = ruleOptions.value.ruleEnabled,
             baseRuleId = baseRuleId,
             mutationInfo = SpecificUrlParamsMutationInfo(
                 removableParams = _formUiState.value.addedParamNames

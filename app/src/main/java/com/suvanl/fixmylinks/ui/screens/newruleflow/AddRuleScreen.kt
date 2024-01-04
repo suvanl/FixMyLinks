@@ -27,9 +27,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.listSaver
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -67,26 +64,14 @@ data class RuleOptionsState(
     val ruleEnabled: Boolean = true,
     val keepContent: Boolean = false,
     val backupEnabled: Boolean = false,
-) {
-    companion object {
-        val saver: Saver<RuleOptionsState, *> = listSaver(
-            save = { listOf(it.ruleEnabled, it.keepContent, it.backupEnabled) },
-            restore = {
-                RuleOptionsState(
-                    ruleEnabled = it[0],
-                    keepContent = it[1],
-                    backupEnabled = it[2],
-                )
-            }
-        )
-    }
-}
+)
 
 @Composable
 fun AddRuleScreen(
     uiState: AddRuleScreenUiState,
     viewModel: AddRuleViewModel,
     onSaveClick: () -> Unit,
+    onOptionsChanged: (options: RuleOptionsState) -> Unit,
     modifier: Modifier = Modifier,
     action: FmlScreen.AddRule.Action = FmlScreen.AddRule.Action.ADD,
     baseRuleId: Long = 0,
@@ -95,6 +80,8 @@ fun AddRuleScreen(
         mutationType = uiState.mutationType,
         showSaveButton = uiState.showSaveButton,
         onSaveClick = onSaveClick,
+        ruleOptions = uiState.ruleOptions,
+        onOptionsChanged = onOptionsChanged,
         modifier = modifier
     ) {
         LaunchedEffect(action, baseRuleId) {
@@ -178,27 +165,25 @@ fun AddRuleScreenBody(
     mutationType: MutationType,
     showSaveButton: Boolean,
     onSaveClick: () -> Unit,
+    ruleOptions: RuleOptionsState,
+    onOptionsChanged: (options: RuleOptionsState) -> Unit,
     modifier: Modifier = Modifier,
     form: @Composable () -> Unit,
 ) {
-    var ruleOptions by rememberSaveable(stateSaver = RuleOptionsState.saver) {
-        mutableStateOf(RuleOptionsState())
-    }
-
     val switchListItems = listOf(
         SwitchListItemState(
             headlineText = stringResource(id = R.string.enable),
             supportingText = stringResource(R.string.enable_rule_supporting_text),
             leadingIcon = Icons.Outlined.CheckCircle,
             isSwitchChecked = ruleOptions.ruleEnabled,
-            onSwitchCheckedChange = { ruleOptions = ruleOptions.copy(ruleEnabled = it) },
+            onSwitchCheckedChange = { onOptionsChanged(ruleOptions.copy(ruleEnabled = it)) },
         ),
         SwitchListItemState(
             headlineText = stringResource(R.string.keep_content),
             supportingText = stringResource(R.string.keep_content_supporting_text),
             leadingIcon = Icons.Outlined.Segment,
             isSwitchChecked = ruleOptions.keepContent,
-            onSwitchCheckedChange = { ruleOptions = ruleOptions.copy(keepContent = it) },
+            onSwitchCheckedChange = { onOptionsChanged(ruleOptions.copy(keepContent = it)) },
             comingSoon = true,
         ),
         SwitchListItemState(
@@ -206,7 +191,7 @@ fun AddRuleScreenBody(
             supportingText = stringResource(R.string.backup_to_cloud_supporting_text),
             leadingIcon = Icons.Outlined.Backup,
             isSwitchChecked = ruleOptions.backupEnabled,
-            onSwitchCheckedChange = { ruleOptions = ruleOptions.copy(backupEnabled = it) },
+            onSwitchCheckedChange = { onOptionsChanged(ruleOptions.copy(backupEnabled = it)) },
             comingSoon = true,
         ),
     )
@@ -321,7 +306,9 @@ fun AddRuleScreenPreview() {
         AddRuleScreenBody(
             mutationType = MutationType.URL_PARAMS_SPECIFIC,
             showSaveButton = true,
-            onSaveClick = {}
+            onSaveClick = {},
+            ruleOptions = RuleOptionsState(),
+            onOptionsChanged = {},
         ) {
             SpecificUrlParamsRuleForm(
                 showHints = true,

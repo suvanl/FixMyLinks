@@ -180,6 +180,7 @@ private fun ItemSelectedPreview() {
                 mutationType = MutationType.FALLBACK,
                 triggerDomain = "youtube.com",
                 isLocalOnly = true,
+                isEnabled = true,
                 dateModifiedTimestamp = 1701970463,
                 mutationInfo = SpecificUrlParamsMutationInfo(
                     removableParams = listOf("list", "t")

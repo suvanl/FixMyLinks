@@ -6,8 +6,11 @@ import com.suvanl.fixmylinks.data.repository.PreferencesRepository
 import com.suvanl.fixmylinks.data.repository.UserPreferences
 import com.suvanl.fixmylinks.data.repository.UserPreferencesRepository
 import com.suvanl.fixmylinks.domain.mutation.MutationType
+import com.suvanl.fixmylinks.ui.screens.newruleflow.RuleOptionsState
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 
 abstract class AddRuleViewModel(
@@ -22,6 +25,13 @@ abstract class AddRuleViewModel(
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = TIMEOUT_MILLIS),
             initialValue = UserPreferences()
         )
+
+    private val _ruleOptions = MutableStateFlow(RuleOptionsState())
+    val ruleOptions = _ruleOptions.asStateFlow()
+
+    fun updateRuleOptionsState(updatedState: RuleOptionsState) {
+        _ruleOptions.value = updatedState
+    }
 
     /**
      * Sets the initial form UI state with non-default values.

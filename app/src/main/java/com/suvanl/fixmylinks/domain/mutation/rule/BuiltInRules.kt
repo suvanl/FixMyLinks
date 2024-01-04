@@ -10,6 +10,7 @@ object BuiltInRules {
         name = "Spotify - tracking parameters",
         triggerDomain = "spotify.com",
         isLocalOnly = true,
+        isEnabled = true,
         mutationInfo = SpecificUrlParamsMutationInfo(
             removableParams = listOf(
                 "si",
@@ -24,6 +25,7 @@ object BuiltInRules {
         name = "Instagram - tracking parameters",
         triggerDomain = "instagram.com",
         isLocalOnly = true,
+        isEnabled = true,
         mutationInfo = SpecificUrlParamsMutationInfo(removableParams = listOf("igshid"))
     )
 
@@ -31,6 +33,7 @@ object BuiltInRules {
         name = "X.com to Twitter.com",
         triggerDomain = "x.com",
         isLocalOnly = true,
+        isEnabled = true,
         mutationInfo = DomainNameMutationInfo(initialDomain = "x.com", targetDomain = "twitter.com")
     )
 
