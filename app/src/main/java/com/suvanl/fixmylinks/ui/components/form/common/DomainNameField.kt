@@ -1,5 +1,7 @@
 package com.suvanl.fixmylinks.ui.components.form.common
 
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardOptions
@@ -9,12 +11,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.animation.TransitionDefaults
+import com.suvanl.fixmylinks.ui.components.button.AnimatedAddWildcardButton
+import com.suvanl.fixmylinks.ui.util.PreviewContainer
 
 @Composable
 fun DomainNameField(
@@ -23,11 +31,14 @@ fun DomainNameField(
     showHints: Boolean,
     isLastFieldInForm: Boolean,
     onValueChange: (String) -> Unit,
+    onClickAddWildcard: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val focusRequester = remember { FocusRequester() }
+
     OutlinedTextField(
         value = value,
-        onValueChange = onValueChange,
+        onValueChange = { onValueChange(it.trim()) },
         singleLine = true,
         label = {
             Text(text = stringResource(id = R.string.domain_name))
@@ -35,8 +46,14 @@ fun DomainNameField(
         isError = errorMessage != null,
         supportingText = {
             Column {
-                if (errorMessage != null) {
-                    FormFieldErrorMessage(text = errorMessage)
+                AnimatedContent(
+                    targetState = errorMessage,
+                    transitionSpec = { TransitionDefaults.errorMessageTransition },
+                    label = "form field error message"
+                ) { errorMessage ->
+                    if (errorMessage != null) {
+                        FormFieldErrorMessage(text = errorMessage)
+                    }
                 }
 
                 AnimatedVisibility(
@@ -53,10 +70,57 @@ fun DomainNameField(
                 contentDescription = null
             )
         },
+        trailingIcon = {
+            AnimatedAddWildcardButton(
+                visible = value.isBlank(),
+                onClick = {
+                    focusRequester.requestFocus()
+                    onClickAddWildcard()
+                }
+            )
+        },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Uri,
             imeAction = if (!isLastFieldInForm) ImeAction.Next else ImeAction.Done
         ),
-        modifier = modifier
+        modifier = modifier.focusRequester(focusRequester)
     )
+}
+
+@Preview
+@Preview(
+    name = "Dark",
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun DomainNameFieldPreview() {
+    PreviewContainer {
+        DomainNameField(
+            value = "",
+            errorMessage = null,
+            showHints = true,
+            isLastFieldInForm = false,
+            onValueChange = {},
+            onClickAddWildcard = {},
+        )
+    }
+}
+
+@Preview
+@Preview(
+    name = "Dark",
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun DomainNameFieldWithErrorPreview() {
+    PreviewContainer {
+        DomainNameField(
+            value = "Some invalid input",
+            errorMessage = "Error: error message",
+            showHints = true,
+            isLastFieldInForm = false,
+            onValueChange = {},
+            onClickAddWildcard = {},
+        )
+    }
 }

@@ -29,6 +29,7 @@ fun AllUrlParamsRuleForm(
     showHints: Boolean,
     onRuleNameChange: (String) -> Unit,
     onDomainNameChange: (String) -> Unit,
+    onClickAddWildcard: () -> Unit,
     modifier: Modifier = Modifier,
     interFieldSpacing: Dp = FormDefaults.InterFieldSpacing,
 ) {
@@ -51,6 +52,7 @@ fun AllUrlParamsRuleForm(
             errorMessage = formState.domainNameError?.asString(),
             showHints = showHints,
             onValueChange = onDomainNameChange,
+            onClickAddWildcard = onClickAddWildcard,
             isLastFieldInForm = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -66,11 +68,12 @@ fun AllUrlParamsRuleForm(
 private fun AllUrlParamsRuleFormPreview() {
     PreviewContainer {
         AllUrlParamsRuleForm(
+            formState = AllUrlParamsRuleFormState(),
             showHints = true,
             interFieldSpacing = 16.dp,
             onRuleNameChange = {},
             onDomainNameChange = {},
-            formState = AllUrlParamsRuleFormState(),
+            onClickAddWildcard = {},
         )
     }
 }

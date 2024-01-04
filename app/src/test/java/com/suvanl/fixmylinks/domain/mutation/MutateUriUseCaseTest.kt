@@ -42,7 +42,7 @@ class MutateUriUseCaseTest {
         ),
         SpecificUrlParamsMutationModel(
             name = "YouTube remove 'list' param",
-            triggerDomain = "youtube.com",
+            triggerDomain = "*.youtube.com",
             isLocalOnly = true,
             mutationInfo = SpecificUrlParamsMutationInfo(
                 removableParams = listOf("list")
@@ -58,13 +58,14 @@ class MutateUriUseCaseTest {
             )
         ),
         DomainNameAndSpecificUrlParamsMutationModel(
-            name = "YouTube mobile remove 'list' param",
-            triggerDomain = "m.youtube.com",
+            name = "Wikipedia convert mobile link to desktop and remove 's' parameter (attached " +
+                    "by Twitter to outbound links)",
+            triggerDomain = "en.m.wikipedia.org",
             isLocalOnly = true,
             mutationInfo = DomainNameAndSpecificUrlParamsMutationInfo(
-                initialDomainName = "m.youtube.com",
-                targetDomainName = "www.youtube.com",
-                removableParams = listOf("list")
+                initialDomainName = "en.m.wikipedia.org",
+                targetDomainName = "en.wikipedia.org",
+                removableParams = listOf("s")
             )
         )
     )
@@ -116,6 +117,23 @@ class MutateUriUseCaseTest {
     }
 
     @Test
+    fun `apply URL_PARAMS_SPECIFIC custom rule, test wildcard functionality`() {
+        val actual1 = mutateUriUseCase(
+            URI("https://m.youtube.com/watch?v=B91ztNPq_cs&list=PLWz5rJ2EKKc8L8WlmqPD6zPEyVSKrL5PJ"),
+            mockCustomRules
+        )
+        val expected1 = URI("https://m.youtube.com/watch?v=B91ztNPq_cs")
+        assertEquals(expected1, actual1)
+
+        val actual2 = mutateUriUseCase(
+            URI("https://not-a-real-subdomain.youtube.com/watch?v=B91ztNPq_cs&list=PLWz5rJ2EKKc8L8WlmqPD6zPEyVSKrL5PJ"),
+            mockCustomRules
+        )
+        val expected2 = URI("https://not-a-real-subdomain.youtube.com/watch?v=B91ztNPq_cs")
+        assertEquals(expected2, actual2)
+    }
+
+    @Test
     fun `apply DOMAIN_NAME custom rule`() {
         val actual = mutateUriUseCase(
             URI("https://www.google.com/search?q=hello+world"),
@@ -128,10 +146,10 @@ class MutateUriUseCaseTest {
     @Test(expected = NotImplementedError::class)
     fun `apply DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC custom rule`() {
         val actual = mutateUriUseCase(
-            URI("https://m.youtube.com/watch?v=B91ztNPq_cs&list=PLWz5rJ2EKKc8L8WlmqPD6zPEyVSKrL5PJ"),
+            URI("https://en.m.wikipedia.org/wiki/Android_(operating_system)?s=09"),
             mockCustomRules
         )
-        val expected = URI("https://www.youtube.com/watch?v=B91ztNPq_cs")
+        val expected = URI("https://en.wikipedia.org/wiki/Android_(operating_system)")
         assertEquals(expected, actual)
     }
 

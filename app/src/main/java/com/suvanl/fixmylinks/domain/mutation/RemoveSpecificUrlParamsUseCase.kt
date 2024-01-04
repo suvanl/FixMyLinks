@@ -8,7 +8,7 @@ class RemoveSpecificUrlParamsUseCase {
         paramsToRemove: List<String>,
         useWwwSubdomain: Boolean,
     ): URI {
-        if (uri.rawQuery == null || paramsToRemove.isEmpty()) return uri
+        if (uri.rawQuery.isNullOrBlank() || paramsToRemove.isEmpty()) return uri
         val queryString = uri.rawQuery
 
         val removeAllUrlParamsUseCase = RemoveAllUrlParamsUseCase()
@@ -20,7 +20,7 @@ class RemoveSpecificUrlParamsUseCase {
             val paramName = queryString.split("=", limit = 2)[0]
 
             if (!paramsToRemove.contains(paramName)) {
-                return MutatedUri(
+                return UriBuilder(
                     scheme = uri.scheme,
                     host = if (useWwwSubdomain) "www.${uri.host}" else uri.host,
                     path = uri.path,
@@ -32,7 +32,7 @@ class RemoveSpecificUrlParamsUseCase {
             // query string (since it only had one parameter, and a parameter with this name exists
             // within the `paramsToRemove` List, meaning it should be removed).
             return removeAllUrlParamsUseCase(
-                uri = MutatedUri(
+                uri = UriBuilder(
                     scheme = uri.scheme,
                     host = if (useWwwSubdomain) "www.${uri.host}" else uri.host,
                     path = uri.path,
@@ -72,7 +72,7 @@ class RemoveSpecificUrlParamsUseCase {
 
         uri.apply {
             // Rebuild the URI with the newly mutated query string
-            return MutatedUri(
+            return UriBuilder(
                 scheme = scheme,
                 host = if (useWwwSubdomain) "www.$host" else host,
                 path = path,

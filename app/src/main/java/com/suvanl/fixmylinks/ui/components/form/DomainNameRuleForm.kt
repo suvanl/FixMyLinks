@@ -1,6 +1,7 @@
 package com.suvanl.fixmylinks.ui.components.form
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +14,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -23,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.ui.animation.TransitionDefaults
+import com.suvanl.fixmylinks.ui.components.button.AnimatedAddWildcardButton
 import com.suvanl.fixmylinks.ui.components.form.common.FormFieldErrorMessage
 import com.suvanl.fixmylinks.ui.components.form.common.RuleNameField
 import com.suvanl.fixmylinks.ui.util.PreviewContainer
@@ -45,9 +50,14 @@ fun DomainNameRuleForm(
     onRuleNameChange: (String) -> Unit,
     onInitialDomainNameChange: (String) -> Unit,
     onTargetDomainNameChange: (String) -> Unit,
+    onClickAddInitialWildcard: () -> Unit,
+    onClickAddTargetWildcard: () -> Unit,
     modifier: Modifier = Modifier,
     interFieldSpacing: Dp = FormDefaults.InterFieldSpacing,
 ) {
+    val initialDomainFocusRequester = remember { FocusRequester() }
+    val targetDomainFocusRequester = remember { FocusRequester() }
+
     Column(
         modifier = modifier
             .semantics { testTag = "DomainNameRuleForm" }
@@ -72,8 +82,14 @@ fun DomainNameRuleForm(
             supportingText = {
                 Column {
                     // Error message
-                    if (formState.initialDomainNameError != null) {
-                        FormFieldErrorMessage(text = formState.initialDomainNameError.asString())
+                    AnimatedContent(
+                        targetState = formState.initialDomainNameError,
+                        transitionSpec = { TransitionDefaults.errorMessageTransition },
+                        label = "form field error message"
+                    ) { errorMessage ->
+                        if (errorMessage != null) {
+                            FormFieldErrorMessage(text = errorMessage.asString())
+                        }
                     }
 
                     // Hint text
@@ -91,12 +107,23 @@ fun DomainNameRuleForm(
                     contentDescription = null
                 )
             },
+            trailingIcon = {
+                AnimatedAddWildcardButton(
+                    visible = formState.initialDomainName.isBlank(),
+                    onClick = {
+                        initialDomainFocusRequester.requestFocus()
+                        onClickAddInitialWildcard()
+                    }
+                )
+            },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Uri,
                 imeAction = ImeAction.Next
             ),
             isError = formState.initialDomainNameError != null,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(initialDomainFocusRequester)
         )
 
         Spacer(modifier = Modifier.height(interFieldSpacing))
@@ -111,8 +138,14 @@ fun DomainNameRuleForm(
             },
             supportingText = {
                 Column {
-                    if (formState.targetDomainNameError != null) {
-                        FormFieldErrorMessage(text = formState.targetDomainNameError.asString())
+                    AnimatedContent(
+                        targetState = formState.targetDomainNameError,
+                        transitionSpec = { TransitionDefaults.errorMessageTransition },
+                        label = "form field error message"
+                    ) { errorMessage ->
+                        if (errorMessage != null) {
+                            FormFieldErrorMessage(text = errorMessage.asString())
+                        }
                     }
 
                     AnimatedVisibility(
@@ -129,12 +162,23 @@ fun DomainNameRuleForm(
                     contentDescription = null
                 )
             },
+            trailingIcon = {
+                AnimatedAddWildcardButton(
+                    visible = formState.targetDomainName.isBlank(),
+                    onClick = {
+                        targetDomainFocusRequester.requestFocus()
+                        onClickAddTargetWildcard()
+                    }
+                )
+            },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Uri,
                 imeAction = ImeAction.Done
             ),
             isError = formState.targetDomainNameError != null,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(targetDomainFocusRequester)
         )
     }
 }
@@ -153,6 +197,8 @@ private fun DomainNameRuleFormPreview() {
             onRuleNameChange = {},
             onInitialDomainNameChange = {},
             onTargetDomainNameChange = {},
+            onClickAddInitialWildcard = {},
+            onClickAddTargetWildcard = {},
         )
     }
 }

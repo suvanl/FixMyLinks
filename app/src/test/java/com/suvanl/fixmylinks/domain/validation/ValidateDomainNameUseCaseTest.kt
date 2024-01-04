@@ -1,7 +1,5 @@
-package com.suvanl.fixmylinks.validation
+package com.suvanl.fixmylinks.domain.validation
 
-import com.suvanl.fixmylinks.domain.validation.ValidateDomainNameUseCase
-import com.suvanl.fixmylinks.domain.validation.Validator
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before

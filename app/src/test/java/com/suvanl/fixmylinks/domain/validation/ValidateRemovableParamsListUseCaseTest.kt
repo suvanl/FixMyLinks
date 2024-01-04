@@ -1,6 +1,5 @@
-package com.suvanl.fixmylinks.validation
+package com.suvanl.fixmylinks.domain.validation
 
-import com.suvanl.fixmylinks.domain.validation.ValidateRemovableParamsListUseCase
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before

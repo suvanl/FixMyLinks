@@ -1,6 +1,7 @@
 package com.suvanl.fixmylinks.ui.components.form
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -34,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.suvanl.fixmylinks.R
+import com.suvanl.fixmylinks.ui.animation.TransitionDefaults
 import com.suvanl.fixmylinks.ui.components.form.common.DomainNameField
 import com.suvanl.fixmylinks.ui.components.form.common.FormFieldErrorMessage
 import com.suvanl.fixmylinks.ui.components.form.common.RuleNameField
@@ -55,6 +57,7 @@ fun SpecificUrlParamsRuleForm(
     formState: SpecificUrlParamsRuleFormState,
     onRuleNameChange: (String) -> Unit,
     onDomainNameChange: (String) -> Unit,
+    onClickAddWildcard: () -> Unit,
     onClickAddParam: () -> Unit,
     onClickDismissParam: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -79,6 +82,7 @@ fun SpecificUrlParamsRuleForm(
             errorMessage = formState.domainNameError?.asString(),
             showHints = showHints,
             onValueChange = onDomainNameChange,
+            onClickAddWildcard = onClickAddWildcard,
             isLastFieldInForm = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -106,10 +110,14 @@ fun SpecificUrlParamsRuleForm(
         }
 
         // Error message
-        if (formState.addedParamNamesError != null) {
-            FormFieldErrorMessage(
-                text = formState.addedParamNamesError.asString()
-            )
+        AnimatedContent(
+            targetState = formState.addedParamNamesError,
+            transitionSpec = { TransitionDefaults.errorMessageTransition },
+            label = "removable parameter list error message"
+        ) { errorMessage ->
+            if (errorMessage != null) {
+                FormFieldErrorMessage(text = errorMessage.asString())
+            }
         }
 
         ParamsChipGroup(
@@ -172,6 +180,7 @@ private fun SpecificUrlParamsRuleFormPreview() {
             onDomainNameChange = {},
             onClickAddParam = {},
             onClickDismissParam = {},
+            onClickAddWildcard = {},
         )
     }
 }
