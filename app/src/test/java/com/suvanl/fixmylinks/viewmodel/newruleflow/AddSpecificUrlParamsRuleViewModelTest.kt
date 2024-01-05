@@ -188,6 +188,7 @@ class AddSpecificUrlParamsRuleViewModelTest {
             name = formUiState.ruleName,
             triggerDomain = formUiState.domainName,
             isLocalOnly = true,
+            isEnabled = true,
             mutationInfo = SpecificUrlParamsMutationInfo(
                 removableParams = formUiState.addedParamNames
             )
@@ -212,6 +213,7 @@ class AddSpecificUrlParamsRuleViewModelTest {
             name = formUiState.ruleName,
             triggerDomain = formUiState.domainName,
             isLocalOnly = true,
+            isEnabled = true,
             mutationInfo = SpecificUrlParamsMutationInfo(
                 removableParams = formUiState.addedParamNames
             )

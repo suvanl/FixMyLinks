@@ -14,6 +14,7 @@ object PreviewData {
             name = "Google rule",
             triggerDomain = "google.com",
             isLocalOnly = true,
+            isEnabled = true,
             dateModifiedTimestamp = 1700174822,
             mutationInfo = DomainNameMutationInfo(
                 initialDomain = "google.com",
@@ -24,6 +25,7 @@ object PreviewData {
             name = "YouTube - remove playlist association and timestamp, but nothing else",
             triggerDomain = "youtube.com",
             isLocalOnly = true,
+            isEnabled = true,
             dateModifiedTimestamp = 1701970463,
             mutationInfo = SpecificUrlParamsMutationInfo(
                 removableParams = listOf("list", "t")

@@ -32,7 +32,9 @@ class AddRuleScreenTest {
         AddRuleScreenBody(
             mutationType = mutationType,
             showSaveButton = layoutClass.lowercase() == "compact",
-            onSaveClick = {}
+            onSaveClick = {},
+            ruleOptions = RuleOptionsState(),
+            onOptionsChanged = {},
         ) {
             when (mutationType) {
                 MutationType.URL_PARAMS_SPECIFIC -> {

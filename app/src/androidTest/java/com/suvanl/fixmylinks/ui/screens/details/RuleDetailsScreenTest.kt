@@ -62,6 +62,7 @@ class RuleDetailsScreenTest {
                     triggerDomain = "github.com",
                     dateModifiedTimestamp = 0,
                     isLocalOnly = true,
+                    isEnabled = true,
                     baseRuleId = 1
                 ),
                 showDeleteConfirmation = false,
@@ -84,6 +85,7 @@ class RuleDetailsScreenTest {
                     triggerDomain = "github.com",
                     dateModifiedTimestamp = 0,
                     isLocalOnly = true,
+                    isEnabled = true,
                     baseRuleId = 1
                 ),
                 showDeleteConfirmation = false,
@@ -112,6 +114,7 @@ class RuleDetailsScreenTest {
                     triggerDomain = "google.com",
                     dateModifiedTimestamp = 0,
                     isLocalOnly = true,
+                    isEnabled = true,
                     baseRuleId = 1,
                     mutationInfo = DomainNameMutationInfo(
                         initialDomain = "google.com",
@@ -144,6 +147,7 @@ class RuleDetailsScreenTest {
                     triggerDomain = "google.com",
                     dateModifiedTimestamp = 0,
                     isLocalOnly = true,
+                    isEnabled = true,
                     baseRuleId = 1,
                     mutationInfo = DomainNameMutationInfo(
                         initialDomain = "google.com",
@@ -176,6 +180,7 @@ class RuleDetailsScreenTest {
                     triggerDomain = "youtube.com",
                     dateModifiedTimestamp = 0,
                     isLocalOnly = true,
+                    isEnabled = true,
                     baseRuleId = 1,
                     mutationInfo = SpecificUrlParamsMutationInfo(
                         removableParams = listOf("list", "t")
@@ -207,6 +212,7 @@ class RuleDetailsScreenTest {
                     triggerDomain = "youtube.com",
                     dateModifiedTimestamp = 0,
                     isLocalOnly = true,
+                    isEnabled = true,
                     baseRuleId = 1,
                     mutationInfo = SpecificUrlParamsMutationInfo(
                         removableParams = listOf("list", "t")

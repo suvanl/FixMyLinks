@@ -26,4 +26,7 @@ data class BaseRule(
 
     @ColumnInfo(name = "local_only")
     val isLocalOnly: Boolean,
+
+    @ColumnInfo(name = "is_enabled")
+    val isEnabled: Boolean,
 )

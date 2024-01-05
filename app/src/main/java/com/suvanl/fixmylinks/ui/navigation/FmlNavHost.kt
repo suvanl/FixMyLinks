@@ -48,7 +48,6 @@ import com.suvanl.fixmylinks.ui.screens.SavedScreen
 import com.suvanl.fixmylinks.ui.screens.details.RuleDetailsScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreen
 import com.suvanl.fixmylinks.ui.screens.newruleflow.AddRuleScreenUiState
-import com.suvanl.fixmylinks.ui.screens.newruleflow.RuleOptionsState
 import com.suvanl.fixmylinks.ui.screens.newruleflow.SelectRuleTypeScreen
 import com.suvanl.fixmylinks.ui.theme.TextStyleDefaults
 import com.suvanl.fixmylinks.ui.util.getNewRuleFlowViewModel
@@ -302,6 +301,7 @@ fun FmlNavHost(
 
                 val viewModel: AddRuleViewModel = getNewRuleFlowViewModel(mutationType)
                 val userPreferences by viewModel.userPreferences.collectAsStateWithLifecycle()
+                val ruleOptions by viewModel.ruleOptions.collectAsStateWithLifecycle()
 
                 val isCompactLayout = windowWidthSize == WindowWidthSizeClass.Compact
                 var hintsOptionCheckedState by remember { mutableStateOf(true) }
@@ -352,10 +352,11 @@ fun FmlNavHost(
                         mutationType = mutationType,
                         showFormFieldHints = userPreferences.showFormFieldHints,
                         showSaveButton = isCompactLayout,
-                        ruleOptions = RuleOptionsState(),
+                        ruleOptions = ruleOptions,
                     ),
                     viewModel = viewModel,
                     onSaveClick = { handleSaveRuleClick() },
+                    onOptionsChanged = viewModel::updateRuleOptionsState,
                     action = action,
                     baseRuleId = baseRuleId,
                 )

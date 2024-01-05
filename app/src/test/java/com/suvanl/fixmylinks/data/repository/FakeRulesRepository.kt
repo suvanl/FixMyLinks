@@ -89,18 +89,21 @@ class FakeRulesRepository : RulesRepository {
                 name = "My rule",
                 triggerDomain = "instagram.com",
                 isLocalOnly = true,
+                isEnabled = true,
             ),
             AllUrlParamsMutationModel(
                 baseRuleId = 2,
                 name = "My second rule",
                 triggerDomain = "spotify.com",
                 isLocalOnly = true,
+                isEnabled = true,
             ),
             DomainNameMutationModel(
                 baseRuleId = 3,
                 name = "twitter to x",
                 triggerDomain = "x.com",
                 isLocalOnly = true,
+                isEnabled = true,
                 mutationInfo = DomainNameMutationInfo(
                     initialDomain = "twitter.com",
                     targetDomain = "x.com",
@@ -111,12 +114,14 @@ class FakeRulesRepository : RulesRepository {
                 name = "My second rule",
                 triggerDomain = "spotify.com",
                 isLocalOnly = true,
+                isEnabled = true,
             ),
             DomainNameAndAllUrlParamsMutationModel(
                 baseRuleId = 5,
                 name = "Android Dev",
                 triggerDomain = "developer.android.com",
                 isLocalOnly = true,
+                isEnabled = true,
                 mutationInfo = DomainNameMutationInfo(
                     initialDomain = "developer.android.com",
                     targetDomain = "d.android.com",
@@ -127,6 +132,7 @@ class FakeRulesRepository : RulesRepository {
                 name = "YouTube - remove playlist association",
                 triggerDomain = "youtube.com",
                 isLocalOnly = true,
+                isEnabled = true,
                 mutationInfo = SpecificUrlParamsMutationInfo(
                     removableParams = listOf("list"),
                 ),

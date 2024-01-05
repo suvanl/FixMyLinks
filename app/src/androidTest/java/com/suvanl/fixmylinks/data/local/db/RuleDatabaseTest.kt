@@ -415,7 +415,8 @@ class RuleDatabaseTest {
                 authorId = DEFAULT_AUTHOR_ID,
                 mutationType = MutationType.URL_PARAMS_ALL,
                 triggerDomain = "instagram.com",
-                isLocalOnly = true
+                isLocalOnly = true,
+                isEnabled = true,
             ),
             AllUrlParamsRule(id = 1, baseRuleId = 1)
         )
@@ -427,7 +428,8 @@ class RuleDatabaseTest {
                 authorId = DEFAULT_AUTHOR_ID,
                 mutationType = MutationType.URL_PARAMS_ALL,
                 triggerDomain = "spotify.com",
-                isLocalOnly = true
+                isLocalOnly = true,
+                isEnabled = true,
             ),
             AllUrlParamsRule(id = 2, baseRuleId = 2)
         )
@@ -439,6 +441,7 @@ class RuleDatabaseTest {
                 authorId = DEFAULT_AUTHOR_ID,
                 mutationType = MutationType.DOMAIN_NAME,
                 triggerDomain = "twitter.com",
+                isEnabled = true,
                 isLocalOnly = true
             ),
             DomainNameRule(
@@ -456,6 +459,7 @@ class RuleDatabaseTest {
                 authorId = DEFAULT_AUTHOR_ID,
                 mutationType = MutationType.URL_PARAMS_ALL,
                 triggerDomain = "medium.com",
+                isEnabled = true,
                 isLocalOnly = true
             ),
             AllUrlParamsRule(id = 3, baseRuleId = 4)
@@ -468,6 +472,7 @@ class RuleDatabaseTest {
                 authorId = DEFAULT_AUTHOR_ID,
                 mutationType = MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL,
                 triggerDomain = "d.android.com",
+                isEnabled = true,
                 isLocalOnly = true
             ),
             DomainNameAndAllUrlParamsRule(
@@ -485,6 +490,7 @@ class RuleDatabaseTest {
                 authorId = DEFAULT_AUTHOR_ID,
                 mutationType = MutationType.DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC,
                 triggerDomain = "google.com",
+                isEnabled = true,
                 isLocalOnly = true
             ),
             DomainNameAndSpecificUrlParamsRule(
@@ -503,6 +509,7 @@ class RuleDatabaseTest {
                 authorId = DEFAULT_AUTHOR_ID,
                 mutationType = MutationType.URL_PARAMS_SPECIFIC,
                 triggerDomain = "youtube.com",
+                isEnabled = true,
                 isLocalOnly = true
             ),
             SpecificUrlParamsRule(

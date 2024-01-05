@@ -36,6 +36,11 @@ interface BaseMutationModel {
     val isLocalOnly: Boolean
 
     /**
+     * Whether the rule should be applied when a link containing the rule's triggerDomain is shared
+     */
+    val isEnabled: Boolean
+
+    /**
      * The ID of the base rule related to this rule in the local database.
      */
     val baseRuleId: Long
@@ -48,5 +53,6 @@ fun BaseMutationModel.toDatabaseEntity() = BaseRule(
     triggerDomain = triggerDomain,
     dateModified = dateModifiedTimestamp ?: (System.currentTimeMillis() / 1000),
     isLocalOnly = isLocalOnly,
+    isEnabled = isEnabled,
     authorId = "local_user"
 )

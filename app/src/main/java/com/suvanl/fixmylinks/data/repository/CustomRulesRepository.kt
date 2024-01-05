@@ -308,6 +308,7 @@ class CustomRulesRepository @Inject constructor(
                     triggerDomain = baseRule.triggerDomain,
                     dateModifiedTimestamp = baseRule.dateModified,
                     isLocalOnly = baseRule.isLocalOnly,
+                    isEnabled = baseRule.isEnabled,
                 )
             }
 
@@ -318,6 +319,7 @@ class CustomRulesRepository @Inject constructor(
                     triggerDomain = baseRule.triggerDomain,
                     dateModifiedTimestamp = baseRule.dateModified,
                     isLocalOnly = baseRule.isLocalOnly,
+                    isEnabled = baseRule.isEnabled,
                     mutationInfo = DomainNameMutationInfo(
                         initialDomain = genericRule.initialDomainName,
                         targetDomain = genericRule.targetDomainName
@@ -332,6 +334,7 @@ class CustomRulesRepository @Inject constructor(
                     triggerDomain = baseRule.triggerDomain,
                     dateModifiedTimestamp = baseRule.dateModified,
                     isLocalOnly = baseRule.isLocalOnly,
+                    isEnabled = baseRule.isEnabled,
                     mutationInfo = DomainNameAndSpecificUrlParamsMutationInfo(
                         initialDomainName = genericRule.initialDomainName,
                         targetDomainName = genericRule.targetDomainName,
@@ -347,6 +350,7 @@ class CustomRulesRepository @Inject constructor(
                     triggerDomain = baseRule.triggerDomain,
                     dateModifiedTimestamp = baseRule.dateModified,
                     isLocalOnly = baseRule.isLocalOnly,
+                    isEnabled = baseRule.isEnabled,
                     mutationInfo = DomainNameMutationInfo(
                         initialDomain = genericRule.initialDomainName,
                         targetDomain = genericRule.targetDomainName
@@ -361,6 +365,7 @@ class CustomRulesRepository @Inject constructor(
                     triggerDomain = baseRule.triggerDomain,
                     dateModifiedTimestamp = baseRule.dateModified,
                     isLocalOnly = baseRule.isLocalOnly,
+                    isEnabled = baseRule.isEnabled,
                     mutationInfo = SpecificUrlParamsMutationInfo(
                         removableParams = genericRule.removableParams
                     )

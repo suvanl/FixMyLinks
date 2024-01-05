@@ -9,6 +9,7 @@ data class AllUrlParamsMutationModel(
     override val triggerDomain: String,
     override val dateModifiedTimestamp: Long? = null,
     override val isLocalOnly: Boolean,
+    override val isEnabled: Boolean,
     override val baseRuleId: Long = 0,
 ) : BaseMutationModel
 

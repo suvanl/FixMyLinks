@@ -54,12 +54,14 @@ class AddDomainNameRuleViewModel @Inject constructor(
                     initialDomainName = rule.mutationInfo.initialDomain,
                     targetDomainName = rule.mutationInfo.targetDomain,
                 )
+                updateRuleOptionsState(ruleOptions.value.copy(ruleEnabled = rule.isEnabled))
             } else if (rule is DomainNameAndAllUrlParamsMutationModel) {
                 _formUiState.value = DomainNameRuleFormState(
                     ruleName = rule.name,
                     initialDomainName = rule.mutationInfo.initialDomain,
                     targetDomainName = rule.mutationInfo.targetDomain,
                 )
+                updateRuleOptionsState(ruleOptions.value.copy(ruleEnabled = rule.isEnabled))
             }
         }
     }
@@ -75,6 +77,7 @@ class AddDomainNameRuleViewModel @Inject constructor(
                     name = _formUiState.value.ruleName,
                     triggerDomain = _formUiState.value.initialDomainName,
                     isLocalOnly = true,
+                    isEnabled = ruleOptions.value.ruleEnabled,
                     mutationInfo = DomainNameMutationInfo(
                         initialDomain = _formUiState.value.initialDomainName,
                         targetDomain = _formUiState.value.targetDomainName,
@@ -90,6 +93,7 @@ class AddDomainNameRuleViewModel @Inject constructor(
                 name = _formUiState.value.ruleName,
                 triggerDomain = _formUiState.value.initialDomainName,
                 isLocalOnly = true,
+                isEnabled = ruleOptions.value.ruleEnabled,
                 mutationInfo = DomainNameMutationInfo(
                     initialDomain = _formUiState.value.initialDomainName,
                     targetDomain = _formUiState.value.targetDomainName,
@@ -109,6 +113,7 @@ class AddDomainNameRuleViewModel @Inject constructor(
                 name = _formUiState.value.ruleName,
                 triggerDomain = _formUiState.value.initialDomainName,
                 isLocalOnly = true,
+                isEnabled = ruleOptions.value.ruleEnabled,
                 mutationInfo = DomainNameMutationInfo(
                     initialDomain = _formUiState.value.initialDomainName,
                     targetDomain = _formUiState.value.targetDomainName,
@@ -124,6 +129,7 @@ class AddDomainNameRuleViewModel @Inject constructor(
             name = _formUiState.value.ruleName,
             triggerDomain = _formUiState.value.initialDomainName,
             isLocalOnly = true,
+            isEnabled = ruleOptions.value.ruleEnabled,
             mutationInfo = DomainNameMutationInfo(
                 initialDomain = _formUiState.value.initialDomainName,
                 targetDomain = _formUiState.value.targetDomainName,

@@ -194,6 +194,7 @@ class RulesScreenTest {
                 name = "Google rule",
                 triggerDomain = "google.com",
                 isLocalOnly = true,
+                isEnabled = true,
                 dateModifiedTimestamp = 1700174822,
                 mutationInfo = DomainNameMutationInfo(
                     initialDomain = "google.com",
@@ -205,6 +206,7 @@ class RulesScreenTest {
                 name = "YouTube - remove playlist association and timestamp, but nothing else",
                 triggerDomain = "youtube.com",
                 isLocalOnly = true,
+                isEnabled = true,
                 dateModifiedTimestamp = 1701970463,
                 mutationInfo = SpecificUrlParamsMutationInfo(
                     removableParams = listOf("list", "t")
@@ -215,6 +217,7 @@ class RulesScreenTest {
                 name = "Google rule 2",
                 triggerDomain = "google.com",
                 isLocalOnly = true,
+                isEnabled = true,
                 dateModifiedTimestamp = 1700174823,
                 mutationInfo = DomainNameMutationInfo(
                     initialDomain = "google.fr",
@@ -226,6 +229,7 @@ class RulesScreenTest {
                 name = "remove all params from reddit links",
                 triggerDomain = "reddit.com",
                 isLocalOnly = true,
+                isEnabled = true,
                 dateModifiedTimestamp = 1702899122,
                 baseRuleId = 4,
             ),
