@@ -76,6 +76,7 @@ class AddDomainNameRuleViewModelTest {
             name = formUiState.ruleName,
             triggerDomain = formUiState.initialDomainName,
             isLocalOnly = true,
+            isEnabled = true,
             mutationInfo = DomainNameMutationInfo(
                 initialDomain = formUiState.initialDomainName,
                 targetDomain = formUiState.targetDomainName,
@@ -101,6 +102,7 @@ class AddDomainNameRuleViewModelTest {
             name = formUiState.ruleName,
             triggerDomain = formUiState.initialDomainName,
             isLocalOnly = true,
+            isEnabled = true,
             mutationInfo = DomainNameMutationInfo(
                 initialDomain = formUiState.initialDomainName,
                 targetDomain = formUiState.targetDomainName,

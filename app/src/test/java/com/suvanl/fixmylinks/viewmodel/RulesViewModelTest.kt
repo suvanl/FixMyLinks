@@ -117,6 +117,7 @@ class RulesViewModelTest {
                 name = "test rule 1",
                 triggerDomain = "google.com",
                 isLocalOnly = true,
+                isEnabled = true,
                 mutationInfo = DomainNameMutationInfo(
                     initialDomain = "google.com",
                     targetDomain = "google.co.uk",
@@ -127,18 +128,21 @@ class RulesViewModelTest {
                 name = "My rule",
                 triggerDomain = "instagram.com",
                 isLocalOnly = true,
+                isEnabled = true,
                 baseRuleId = 2,
             ),
             AllUrlParamsMutationModel(
                 name = "Spotify - remove all URL params",
                 triggerDomain = "spotify.com",
                 isLocalOnly = true,
+                isEnabled = true,
                 baseRuleId = 3,
             ),
             SpecificUrlParamsMutationModel(
                 name = "YouTube - remove playlist association",
                 triggerDomain = "youtube.com",
                 isLocalOnly = true,
+                isEnabled = true,
                 mutationInfo = SpecificUrlParamsMutationInfo(
                     removableParams = listOf("list")
                 ),
@@ -148,6 +152,7 @@ class RulesViewModelTest {
                 name = "x to twitter",
                 triggerDomain = "x.com",
                 isLocalOnly = true,
+                isEnabled = true,
                 mutationInfo = DomainNameAndSpecificUrlParamsMutationInfo(
                     initialDomainName = "x.com",
                     targetDomainName = "twitter.com",

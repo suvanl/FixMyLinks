@@ -24,17 +24,20 @@ class MutateUriUseCaseTest {
         AllUrlParamsMutationModel(
             name = "Reddit remove all params",
             triggerDomain = "reddit.com",
-            isLocalOnly = true
+            isLocalOnly = true,
+            isEnabled = true,
         ),
         AllUrlParamsMutationModel(
             name = "Google Blog",
             triggerDomain = "blog.google",
-            isLocalOnly = true
+            isLocalOnly = true,
+            isEnabled = true,
         ),
         DomainNameAndAllUrlParamsMutationModel(
             name = "Android Developers URL shortener and parameter remover",
             triggerDomain = "developer.android.com",
             isLocalOnly = true,
+            isEnabled = true,
             mutationInfo = DomainNameMutationInfo(
                 initialDomain = "developer.android.com",
                 targetDomain = "d.android.com"
@@ -44,6 +47,7 @@ class MutateUriUseCaseTest {
             name = "YouTube remove 'list' param",
             triggerDomain = "*.youtube.com",
             isLocalOnly = true,
+            isEnabled = true,
             mutationInfo = SpecificUrlParamsMutationInfo(
                 removableParams = listOf("list")
             )
@@ -52,6 +56,7 @@ class MutateUriUseCaseTest {
             name = "Google.com to Google.co.uk",
             triggerDomain = "google.com",
             isLocalOnly = true,
+            isEnabled = true,
             mutationInfo = DomainNameMutationInfo(
                 initialDomain = "google.com",
                 targetDomain = "google.co.uk"
@@ -62,6 +67,7 @@ class MutateUriUseCaseTest {
                     "by Twitter to outbound links)",
             triggerDomain = "en.m.wikipedia.org",
             isLocalOnly = true,
+            isEnabled = true,
             mutationInfo = DomainNameAndSpecificUrlParamsMutationInfo(
                 initialDomainName = "en.m.wikipedia.org",
                 targetDomainName = "en.wikipedia.org",

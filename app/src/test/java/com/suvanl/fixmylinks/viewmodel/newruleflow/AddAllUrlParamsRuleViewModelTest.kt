@@ -89,6 +89,7 @@ class AddAllUrlParamsRuleViewModelTest {
             name = formUiState.ruleName,
             triggerDomain = formUiState.domainName,
             isLocalOnly = true,
+            isEnabled = true,
         )
 
         runBlocking {
@@ -111,6 +112,7 @@ class AddAllUrlParamsRuleViewModelTest {
             name = formUiState.ruleName,
             triggerDomain = formUiState.domainName,
             isLocalOnly = true,
+            isEnabled = true,
         )
 
         // should throw an IAE if a rule with the given baseRuleId can't be found in the data source
