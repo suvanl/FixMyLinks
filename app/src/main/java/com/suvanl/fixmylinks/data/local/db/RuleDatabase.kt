@@ -27,7 +27,7 @@ import com.suvanl.fixmylinks.data.local.db.entity.SpecificUrlParamsRule
         DomainNameRule::class,
         SpecificUrlParamsRule::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
