@@ -73,6 +73,16 @@ class MutateUriUseCaseTest {
                 targetDomainName = "en.wikipedia.org",
                 removableParams = listOf("s")
             )
+        ),
+        DomainNameMutationModel(
+            name = "Amazon US to Amazon UK",
+            triggerDomain = "amazon.com",
+            isLocalOnly = true,
+            isEnabled = false,
+            mutationInfo = DomainNameMutationInfo(
+                initialDomain = "amazon.com",
+                targetDomain = "amazon.co.uk"
+            )
         )
     )
 
@@ -156,6 +166,14 @@ class MutateUriUseCaseTest {
             mockCustomRules
         )
         val expected = URI("https://en.wikipedia.org/wiki/Android_(operating_system)")
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `custom rule that is not enabled (isEnabled is false) does not get applied`() {
+        val actual = mutateUriUseCase(URI("https://www.amazon.com"), mockCustomRules)
+        // URL doesn't change
+        val expected = URI("https://www.amazon.com")
         assertEquals(expected, actual)
     }
 
