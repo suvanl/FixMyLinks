@@ -2,8 +2,7 @@ package com.suvanl.fixmylinks.ui.navigation.transition
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.EaseOut
-import androidx.compose.animation.core.EaseOutExpo
+import androidx.compose.animation.core.EaseOutQuint
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -18,16 +17,16 @@ fun scaleIntoContainer(
 ): EnterTransition {
     return scaleIn(
         animationSpec = tween(
-            durationMillis = 120,
+            durationMillis = 400,
             delayMillis = 90,
-            easing = EaseOut
+            easing = EaseOutQuint
         ),
         initialScale = initialScale,
     ) + fadeIn(
         animationSpec = tween(
-            durationMillis = 250,
+            durationMillis = 500,
             delayMillis = 90,
-            easing = EaseOut
+            easing = EaseOutQuint
         )
     )
 }
@@ -38,15 +37,15 @@ fun scaleOutOfContainer(
 ): ExitTransition {
     return scaleOut(
         animationSpec = tween(
-            durationMillis = 120,
-            delayMillis = 90
+            durationMillis = 400,
+            delayMillis = 0
         ),
         targetScale = targetScale
     ) + fadeOut(
         animationSpec = tween(
             durationMillis = 220,
             delayMillis = 0,
-            easing = EaseOutExpo
+            easing = EaseOutQuint
         )
     )
 }
