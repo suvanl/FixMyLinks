@@ -78,9 +78,9 @@ class MutateUriUseCase @Inject constructor() {
                 // Wildcard operator functionality: compare triggerDomain and URI.host without
                 // subdomain on both sides of the equality check.
                 // Note that URI.removeSubdomain("*") removes any subdomain that the URI.host may contain.
-                rule.triggerDomain.removePrefix("*.") == uri.removeSubdomain("*").host
+                rule.isEnabled && rule.triggerDomain.removePrefix("*.") == uri.removeSubdomain("*").host
             } else {
-                rule.triggerDomain == uri.host
+                rule.isEnabled && rule.triggerDomain == uri.host
             }
         }
     }
