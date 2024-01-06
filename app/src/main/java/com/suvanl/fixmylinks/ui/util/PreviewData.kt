@@ -31,5 +31,15 @@ object PreviewData {
                 removableParams = listOf("list", "t")
             )
         ),
+        SpecificUrlParamsMutationModel(
+            name = "YouTube - remove timestamp",
+            triggerDomain = "youtube.com",
+            isLocalOnly = true,
+            isEnabled = false,
+            dateModifiedTimestamp = 1701970464,
+            mutationInfo = SpecificUrlParamsMutationInfo(
+                removableParams = listOf("t")
+            )
+        ),
     )
 }
