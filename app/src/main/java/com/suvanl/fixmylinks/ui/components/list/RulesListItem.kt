@@ -1,5 +1,6 @@
 package com.suvanl.fixmylinks.ui.components.list
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
@@ -59,7 +60,12 @@ fun RulesListItem(
     val (polygon, polygonSemantics) = getRoundedPolygonForRule(rule.mutationType)
     val rulePst = getRuleTypeInPresentSimpleTense(ruleType = rule.mutationType)
     val parentContentDescription =
-        stringResource(R.string.cd_rules_list_item, rule.name, rule.triggerDomain, rulePst.asString())
+        stringResource(
+            R.string.cd_rules_list_item,
+            rule.name,
+            rule.triggerDomain,
+            rulePst.asString()
+        )
 
     val shapeMorphProgress = remember { Animatable(0f) }
     val morphed by remember {
@@ -158,7 +164,16 @@ private suspend fun doAnimation(
     )
 }
 
-@Preview(widthDp = 380, showBackground = true)
+@Preview(
+    widthDp = 380,
+    showBackground = true
+)
+@Preview(
+    name = "Dark",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    widthDp = 380,
+    showBackground = true
+)
 @Composable
 private fun ItemPreview() {
     PreviewContainer {
@@ -170,7 +185,16 @@ private fun ItemPreview() {
     }
 }
 
-@Preview(widthDp = 380, showBackground = true)
+@Preview(
+    widthDp = 380,
+    showBackground = true
+)
+@Preview(
+    name = "Dark",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    widthDp = 380,
+    showBackground = true
+)
 @Composable
 private fun ItemSelectedPreview() {
     PreviewContainer {
