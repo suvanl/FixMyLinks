@@ -146,7 +146,7 @@ private fun CategoryHeading(
         label = "row arrangement spacedBy value"
     )
 
-    val infiniteTransition = rememberInfiniteTransition(label = "repeating color animation")
+    val infiniteTransition = rememberInfiniteTransition(label = "CategoryHeading infiniteTransition")
     val activeCircleAlpha by infiniteTransition.animateFloat(
         initialValue = 1.0f,
         targetValue = 0.2f,
