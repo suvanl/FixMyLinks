@@ -105,7 +105,7 @@ fun RuleDetailsScreen(
 
         RuleTypeDescription(rule = rule)
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         RuleEnabledSwitch(
             checked = rule.isEnabled,
@@ -159,12 +159,7 @@ private fun RuleTypeDescription(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
             .fillMaxWidth()
-//            .background(
-//                color = MaterialTheme.colorScheme.secondaryContainer,
-//                shape = RoundedCornerShape(50.dp)
-//            )
             .padding(
-                horizontal = 20.dp,
                 vertical = 20.dp
             )
     ) {
@@ -187,8 +182,14 @@ private fun RuleTypeDescription(
                 Text(text = "This rule", style = MaterialTheme.typography.bodyMedium)
             }
 
+            val descriptionText = if (lineCount < 2) {
+                ruleTypeInfo.replaceFirstChar { it.lowercase() }
+            } else {
+                ruleTypeInfo
+            }
+
             Text(
-                text = ruleTypeInfo,
+                text = descriptionText,
                 maxLines = 2,
                 letterSpacing = when (ruleTypeInfo.length) {
                     in 20..29 -> LetterSpacingDefaults.Tight
