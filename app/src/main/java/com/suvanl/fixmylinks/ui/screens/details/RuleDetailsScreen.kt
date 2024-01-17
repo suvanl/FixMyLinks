@@ -134,6 +134,7 @@ private fun RuleEnabledSwitch(
                 shape = RoundedCornerShape(28.dp)
             )
             .padding(horizontal = 20.dp, vertical = 16.dp)
+            .semantics { testTag = "RuleEnabledSwitch" }
     ) {
         Text(
             text = stringResource(R.string.rule_enabled_switch_title),

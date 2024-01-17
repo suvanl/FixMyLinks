@@ -2,6 +2,11 @@ package com.suvanl.fixmylinks.ui.screens.details
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.hasParent
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -50,6 +55,56 @@ class RuleDetailsScreenTest {
 
             cancelString = activity.getString(android.R.string.cancel)
         }
+    }
+
+    @Test
+    fun ruleDetailsScreen_ruleEnabledSwitch_hasCorrectValue_whenRuleIsEnabled() {
+        composeTestRule.setContent {
+            RuleDetailsScreen(
+                rule = AllUrlParamsMutationModel(
+                    name = "My rule",
+                    triggerDomain = "github.com",
+                    dateModifiedTimestamp = 0,
+                    isLocalOnly = true,
+                    isEnabled = true,
+                    baseRuleId = 1
+                ),
+                showDeleteConfirmation = false,
+                onDismissDeleteConfirmation = {},
+                onDelete = {},
+                onEnabledStateChanged = {},
+            )
+        }
+
+        composeTestRule
+            .onNode(isToggleable() and hasParent(hasTestTag("RuleEnabledSwitch")))
+            .assertExists()
+            .assertIsOn()
+    }
+
+    @Test
+    fun ruleDetailsScreen_ruleEnabledSwitch_hasCorrectValue_whenRuleIsNotEnabled() {
+        composeTestRule.setContent {
+            RuleDetailsScreen(
+                rule = AllUrlParamsMutationModel(
+                    name = "My rule",
+                    triggerDomain = "github.com",
+                    dateModifiedTimestamp = 0,
+                    isLocalOnly = true,
+                    isEnabled = false,
+                    baseRuleId = 1
+                ),
+                showDeleteConfirmation = false,
+                onDismissDeleteConfirmation = {},
+                onDelete = {},
+                onEnabledStateChanged = {},
+            )
+        }
+
+        composeTestRule
+            .onNode(isToggleable() and hasParent(hasTestTag("RuleEnabledSwitch")))
+            .assertExists()
+            .assertIsOff()
     }
 
     @Test
