@@ -136,7 +136,7 @@ private fun RuleEnabledSwitch(
             .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
         Text(
-            text = "Apply this rule",
+            text = stringResource(R.string.rule_enabled_switch_title),
             style = MaterialTheme.typography.titleLarge,
             fontSize = 20.sp,
             fontWeight = FontWeight.Medium,
