@@ -3,7 +3,12 @@ package com.suvanl.fixmylinks.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.suvanl.fixmylinks.data.repository.RulesRepository
+import com.suvanl.fixmylinks.domain.mutation.model.AllUrlParamsMutationModel
 import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndAllUrlParamsMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameAndSpecificUrlParamsMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.DomainNameMutationModel
+import com.suvanl.fixmylinks.domain.mutation.model.SpecificUrlParamsMutationModel
 import com.suvanl.fixmylinks.ui.screens.RulesScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,6 +66,19 @@ class RulesViewModel @Inject constructor(
 
     suspend fun deleteAllRules() {
         rulesRepository.deleteAllRules()
+    }
+
+    suspend fun toggleRuleEnabled(rule: BaseMutationModel, isEnabled: Boolean) {
+        val updated = when (rule) {
+            is AllUrlParamsMutationModel -> rule.copy(isEnabled = isEnabled)
+            is DomainNameAndAllUrlParamsMutationModel -> rule.copy(isEnabled = isEnabled)
+            is DomainNameAndSpecificUrlParamsMutationModel -> rule.copy(isEnabled = isEnabled)
+            is DomainNameMutationModel -> rule.copy(isEnabled = isEnabled)
+            is SpecificUrlParamsMutationModel -> rule.copy(isEnabled = isEnabled)
+            else -> throw IllegalArgumentException("rule has unexpected type")
+        }
+
+        rulesRepository.updateRule(rule.baseRuleId, updated)
     }
 
     companion object {

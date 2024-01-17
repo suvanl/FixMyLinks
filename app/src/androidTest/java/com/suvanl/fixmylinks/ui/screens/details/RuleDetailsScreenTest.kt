@@ -68,6 +68,7 @@ class RuleDetailsScreenTest {
                 showDeleteConfirmation = false,
                 onDismissDeleteConfirmation = {},
                 onDelete = {},
+                onEnabledStateChanged = {},
             )
         }
 
@@ -91,6 +92,7 @@ class RuleDetailsScreenTest {
                 showDeleteConfirmation = false,
                 onDismissDeleteConfirmation = {},
                 onDelete = {},
+                onEnabledStateChanged = {},
             )
         }
 
@@ -124,6 +126,7 @@ class RuleDetailsScreenTest {
                 showDeleteConfirmation = false,
                 onDismissDeleteConfirmation = {},
                 onDelete = {},
+                onEnabledStateChanged = {},
             )
         }
 
@@ -157,6 +160,7 @@ class RuleDetailsScreenTest {
                 showDeleteConfirmation = false,
                 onDismissDeleteConfirmation = {},
                 onDelete = {},
+                onEnabledStateChanged = {},
             )
         }
 
@@ -189,6 +193,7 @@ class RuleDetailsScreenTest {
                 showDeleteConfirmation = false,
                 onDismissDeleteConfirmation = {},
                 onDelete = {},
+                onEnabledStateChanged = {},
             )
         }
 
@@ -221,6 +226,7 @@ class RuleDetailsScreenTest {
                 showDeleteConfirmation = true,
                 onDismissDeleteConfirmation = {},
                 onDelete = {},
+                onEnabledStateChanged = {},
             )
         }
 
