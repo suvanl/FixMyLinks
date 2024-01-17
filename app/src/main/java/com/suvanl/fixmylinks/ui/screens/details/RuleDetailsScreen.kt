@@ -142,6 +142,7 @@ private fun RuleEnabledSwitch(
             fontSize = 20.sp,
             fontWeight = FontWeight.Medium,
             letterSpacing = LetterSpacingDefaults.ExtraTight,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier.weight(1F)
         )
         Switch(checked, onCheckedChange)
