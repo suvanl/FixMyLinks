@@ -42,16 +42,16 @@ class RuleDetailsScreenTest {
         composeTestRule.apply {
             // Init string resources
             allUrlParamsPstString =
-                activity.getString(R.string.mt_url_params_all_present_simple_tense)
+                activity.getString(R.string.mt_url_params_all_present_simple_tense).replaceFirstChar { it.lowercase() }
 
             domainNameAndAllUrlParamsPstString =
                 activity.getString(R.string.mt_domain_name_and_url_params_all_present_simple_tense)
 
             domainNamePstString =
-                activity.getString(R.string.mt_domain_name_present_simple_tense)
+                activity.getString(R.string.mt_domain_name_present_simple_tense).replaceFirstChar { it.lowercase() }
 
             specificUrlParamsPstString =
-                activity.getString(R.string.mt_url_params_specific_present_simple_tense)
+                activity.getString(R.string.mt_url_params_specific_present_simple_tense).replaceFirstChar { it.lowercase() }
 
             cancelString = activity.getString(android.R.string.cancel)
         }
