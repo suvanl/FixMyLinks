@@ -66,3 +66,6 @@ val md_theme_dark_scrim = Color(0xFF000000)
 
 
 val seed = Color(0xFF255FA4)
+
+// Custom colors (not part of Material theme)
+val active_status = Color(0xFF3DDC84)

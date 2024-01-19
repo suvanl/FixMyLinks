@@ -2,8 +2,12 @@ package com.suvanl.fixmylinks.ui.screens.details
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.hasParent
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -38,23 +42,23 @@ class RuleDetailsScreenTest {
         composeTestRule.apply {
             // Init string resources
             allUrlParamsPstString =
-                activity.getString(R.string.mt_url_params_all_present_simple_tense)
+                activity.getString(R.string.mt_url_params_all_present_simple_tense).replaceFirstChar { it.lowercase() }
 
             domainNameAndAllUrlParamsPstString =
                 activity.getString(R.string.mt_domain_name_and_url_params_all_present_simple_tense)
 
             domainNamePstString =
-                activity.getString(R.string.mt_domain_name_present_simple_tense)
+                activity.getString(R.string.mt_domain_name_present_simple_tense).replaceFirstChar { it.lowercase() }
 
             specificUrlParamsPstString =
-                activity.getString(R.string.mt_url_params_specific_present_simple_tense)
+                activity.getString(R.string.mt_url_params_specific_present_simple_tense).replaceFirstChar { it.lowercase() }
 
             cancelString = activity.getString(android.R.string.cancel)
         }
     }
 
     @Test
-    fun ruleDetailsScreen_isDisplayed() {
+    fun ruleDetailsScreen_ruleEnabledSwitch_hasCorrectValue_whenRuleIsEnabled() {
         composeTestRule.setContent {
             RuleDetailsScreen(
                 rule = AllUrlParamsMutationModel(
@@ -68,12 +72,39 @@ class RuleDetailsScreenTest {
                 showDeleteConfirmation = false,
                 onDismissDeleteConfirmation = {},
                 onDelete = {},
+                onEnabledStateChanged = {},
             )
         }
 
-        composeTestRule.onNodeWithContentDescription("Rule Details Screen")
+        composeTestRule
+            .onNode(isToggleable() and hasParent(hasTestTag("RuleEnabledSwitch")))
             .assertExists()
-            .assertIsDisplayed()
+            .assertIsOn()
+    }
+
+    @Test
+    fun ruleDetailsScreen_ruleEnabledSwitch_hasCorrectValue_whenRuleIsNotEnabled() {
+        composeTestRule.setContent {
+            RuleDetailsScreen(
+                rule = AllUrlParamsMutationModel(
+                    name = "My rule",
+                    triggerDomain = "github.com",
+                    dateModifiedTimestamp = 0,
+                    isLocalOnly = true,
+                    isEnabled = false,
+                    baseRuleId = 1
+                ),
+                showDeleteConfirmation = false,
+                onDismissDeleteConfirmation = {},
+                onDelete = {},
+                onEnabledStateChanged = {},
+            )
+        }
+
+        composeTestRule
+            .onNode(isToggleable() and hasParent(hasTestTag("RuleEnabledSwitch")))
+            .assertExists()
+            .assertIsOff()
     }
 
     @Test
@@ -91,6 +122,7 @@ class RuleDetailsScreenTest {
                 showDeleteConfirmation = false,
                 onDismissDeleteConfirmation = {},
                 onDelete = {},
+                onEnabledStateChanged = {},
             )
         }
 
@@ -124,6 +156,7 @@ class RuleDetailsScreenTest {
                 showDeleteConfirmation = false,
                 onDismissDeleteConfirmation = {},
                 onDelete = {},
+                onEnabledStateChanged = {},
             )
         }
 
@@ -157,6 +190,7 @@ class RuleDetailsScreenTest {
                 showDeleteConfirmation = false,
                 onDismissDeleteConfirmation = {},
                 onDelete = {},
+                onEnabledStateChanged = {},
             )
         }
 
@@ -189,6 +223,7 @@ class RuleDetailsScreenTest {
                 showDeleteConfirmation = false,
                 onDismissDeleteConfirmation = {},
                 onDelete = {},
+                onEnabledStateChanged = {},
             )
         }
 
@@ -221,6 +256,7 @@ class RuleDetailsScreenTest {
                 showDeleteConfirmation = true,
                 onDismissDeleteConfirmation = {},
                 onDelete = {},
+                onEnabledStateChanged = {},
             )
         }
 

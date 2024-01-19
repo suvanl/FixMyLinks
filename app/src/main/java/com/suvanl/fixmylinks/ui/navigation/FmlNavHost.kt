@@ -223,6 +223,15 @@ fun FmlNavHost(
                                 inclusive = false
                             )
                         }
+                    },
+                    onEnabledStateChanged = { isEnabled ->
+                        if (selectedRule == null) {
+                            throw IllegalStateException("Shouldn't be able to change the isEnabled property of a null rule (BaseMutationModel)")
+                        }
+
+                        coroutineScope.launch {
+                            viewModel.toggleRuleEnabled(selectedRule!!, isEnabled)
+                        }
                     }
                 )
             }

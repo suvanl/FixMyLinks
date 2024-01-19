@@ -84,4 +84,7 @@
     <string name="cd_rules_list_item">%1$s on %2$s. %3$s.</string>
 
     <string name="cd_add_wildcard_operator">Add wildcard operator</string>
+    <string name="active_rules">Active rules</string>
+    <string name="inactive_rules">Inactive rules</string>
+    <string name="rule_enabled_switch_title">Apply this rule</string>
 </resources>

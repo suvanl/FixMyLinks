@@ -36,6 +36,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -73,6 +74,7 @@ import com.suvanl.fixmylinks.ui.util.getShapeForRule
  * @param showDeleteConfirmation Whether to display the "Delete rule" [AlertDialog].
  * @param onDismissDeleteConfirmation When the "Delete rule" [AlertDialog] is dismissed.
  * @param onDelete When the user clicks the `confirmButton` on the "Delete rule" dialog.
+ * @param onEnabledStateChanged Called when the [RuleEnabledSwitch]'s checked state is changed.
  * @param modifier The default modifier for this screen.
  */
 @Composable
@@ -81,6 +83,7 @@ fun RuleDetailsScreen(
     showDeleteConfirmation: Boolean,
     onDismissDeleteConfirmation: () -> Unit,
     onDelete: () -> Unit,
+    onEnabledStateChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (rule == null) return
@@ -100,58 +103,103 @@ fun RuleDetailsScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Rule type description
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    shape = RoundedCornerShape(50.dp)
-                )
-                .padding(
-                    horizontal = 20.dp,
-                    vertical = 20.dp
-                )
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        shape = getShapeForRule(rule.mutationType).shape
-                    )
-            )
+        RuleTypeDescription(rule = rule)
 
-            Column(
-                modifier = Modifier.weight(1F)
-            ) {
-                val ruleTypeInfo = getRuleTypeInPresentSimpleTense(rule.mutationType).asString()
-                var lineCount by remember { mutableIntStateOf(0) }
+        Spacer(modifier = Modifier.height(16.dp))
 
-                if (lineCount < 2) {
-                    Text(text = "This rule", style = MaterialTheme.typography.bodyMedium)
-                }
-
-                Text(
-                    text = ruleTypeInfo,
-                    maxLines = 2,
-                    letterSpacing = when (ruleTypeInfo.length) {
-                        in 20..29 -> LetterSpacingDefaults.Tight
-                        in 30..39 -> LetterSpacingDefaults.Tighter
-                        in 40..Int.MAX_VALUE -> LetterSpacingDefaults.ExtraTight
-                        else -> 0.sp
-                    },
-                    onTextLayout = { lineCount = it.lineCount }
-                )
-            }
-        }
+        RuleEnabledSwitch(
+            checked = rule.isEnabled,
+            onCheckedChange = onEnabledStateChanged,
+            modifier = Modifier.fillMaxWidth()
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 
         // General details
         RuleDetailsExpandingCard(rule = rule)
+    }
+}
+
+@Composable
+private fun RuleEnabledSwitch(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .background(
+                color = MaterialTheme.colorScheme.primaryContainer,
+                shape = RoundedCornerShape(28.dp)
+            )
+            .padding(horizontal = 20.dp, vertical = 16.dp)
+            .semantics { testTag = "RuleEnabledSwitch" }
+    ) {
+        Text(
+            text = stringResource(R.string.rule_enabled_switch_title),
+            style = MaterialTheme.typography.titleLarge,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium,
+            letterSpacing = LetterSpacingDefaults.ExtraTight,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.weight(1F)
+        )
+        Switch(checked, onCheckedChange)
+    }
+}
+
+@Composable
+private fun RuleTypeDescription(
+    rule: BaseMutationModel,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = 20.dp
+            )
+    ) {
+        Box(
+            modifier = Modifier
+                .size(50.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    shape = getShapeForRule(rule.mutationType).shape
+                )
+        )
+
+        Column(
+            modifier = Modifier.weight(1F)
+        ) {
+            val ruleTypeInfo = getRuleTypeInPresentSimpleTense(rule.mutationType).asString()
+            var lineCount by remember { mutableIntStateOf(0) }
+
+            if (lineCount < 2) {
+                Text(text = "This rule", style = MaterialTheme.typography.bodyMedium)
+            }
+
+            val descriptionText = if (lineCount < 2) {
+                ruleTypeInfo.replaceFirstChar { it.lowercase() }
+            } else {
+                ruleTypeInfo
+            }
+
+            Text(
+                text = descriptionText,
+                maxLines = 2,
+                letterSpacing = when (ruleTypeInfo.length) {
+                    in 20..29 -> LetterSpacingDefaults.Tight
+                    in 30..39 -> LetterSpacingDefaults.Tighter
+                    in 40..Int.MAX_VALUE -> LetterSpacingDefaults.ExtraTight
+                    else -> 0.sp
+                },
+                onTextLayout = { lineCount = it.lineCount }
+            )
+        }
     }
 }
 
@@ -353,6 +401,7 @@ private fun RuleDetailsScreenPreview() {
             showDeleteConfirmation = false,
             onDismissDeleteConfirmation = { },
             onDelete = { },
+            onEnabledStateChanged = {},
         )
     }
 }
