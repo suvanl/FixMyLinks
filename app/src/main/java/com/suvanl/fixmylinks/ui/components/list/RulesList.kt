@@ -45,6 +45,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.selectableGroup
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -132,8 +133,10 @@ fun RulesList(
     }
 }
 
+const val INDICATOR_DOT_DISPLAY_DURATION = 7000L
+
 @Composable
-private fun CategoryHeading(
+fun CategoryHeading(
     category: RulesListCategory,
     modifier: Modifier = Modifier
 ) {
@@ -146,7 +149,8 @@ private fun CategoryHeading(
         label = "row arrangement spacedBy value"
     )
 
-    val infiniteTransition = rememberInfiniteTransition(label = "CategoryHeading infiniteTransition")
+    val infiniteTransition =
+        rememberInfiniteTransition(label = "CategoryHeading infiniteTransition")
     val activeCircleAlpha by infiniteTransition.animateFloat(
         initialValue = 1.0f,
         targetValue = 0.2f,
@@ -164,7 +168,7 @@ private fun CategoryHeading(
     val inactiveCircleColor = MaterialTheme.colorScheme.outline
 
     LaunchedEffect(key1 = Unit) {
-        delay(7000)
+        delay(INDICATOR_DOT_DISPLAY_DURATION)
         showStatusCircle = false
     }
 
@@ -184,7 +188,11 @@ private fun CategoryHeading(
                     + slideOutHorizontally(targetOffsetX = { w -> -w * 2 })
                     + shrinkHorizontally(shrinkTowards = Alignment.Start, clip = false),
         ) {
-            Canvas(modifier = Modifier.size(8.dp)) {
+            Canvas(
+                modifier = Modifier
+                    .size(8.dp)
+                    .semantics { testTag = "indicator dot" }
+            ) {
                 drawCircle(color = if (isActive) activeCircleColor else inactiveCircleColor)
             }
         }
