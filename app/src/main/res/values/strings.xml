@@ -87,4 +87,6 @@
     <string name="active_rules">Active rules</string>
     <string name="inactive_rules">Inactive rules</string>
     <string name="rule_enabled_switch_title">Apply this rule</string>
+    <string name="custom">Custom</string>
+    <string name="built_in">Built-in</string>
 </resources>
