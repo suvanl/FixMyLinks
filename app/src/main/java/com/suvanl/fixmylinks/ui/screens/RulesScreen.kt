@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.suvanl.fixmylinks.R
 import com.suvanl.fixmylinks.domain.mutation.model.BaseMutationModel
+import com.suvanl.fixmylinks.domain.mutation.rule.BuiltInRules
 import com.suvanl.fixmylinks.ui.components.list.RulesList
 import com.suvanl.fixmylinks.ui.graphics.CustomShapes.ScallopPolygon
 import com.suvanl.fixmylinks.ui.layout.Polygon
@@ -117,10 +118,26 @@ fun RulesScreen(
                 }
 
                 1 -> {
-                    Text(text = "Built-in rules")
+                    BuiltInRulesBody()
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun BuiltInRulesBody(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+    ) {
+        RulesList(
+            uiState = RulesScreenUiState(rules = BuiltInRules.all),
+            onClickItem = {},
+            selectedItems = setOf(),
+            onUpdateSelectedItems = {}
+        )
     }
 }
 
