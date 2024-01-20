@@ -46,12 +46,13 @@ class RulesScreenTest {
     }
 
     @Test
-    fun rulesScreen_withTwoSavedRules_displaysRulesListItem_forEachOne() {
+    fun rulesScreen_customRules_withTwoSavedRules_displaysRulesListItem_forEachOne() {
         val rules = fakeRules.take(2)
 
         composeTestRule.setContent {
-            RulesScreen(
+            CustomRulesBody(
                 uiState = RulesScreenUiState(rules = rules),
+                hasRules = rules.isNotEmpty(),
                 onClickRuleItem = {},
                 selectedItems = setOf(),
                 onUpdateSelectedItems = {},
@@ -74,12 +75,13 @@ class RulesScreenTest {
     }
 
     @Test
-    fun rulesScreen_itemsAreSelectable_and_singleSelectedRule_isSelected() {
+    fun rulesScreen_customRules_itemsAreSelectable_and_singleSelectedRule_isSelected() {
         val selectedRule = fakeRules[2]
 
         composeTestRule.setContent {
-            RulesScreen(
+            CustomRulesBody(
                 uiState = RulesScreenUiState(rules = fakeRules),
+                hasRules = fakeRules.isNotEmpty(),
                 onClickRuleItem = {},
                 selectedItems = setOf(selectedRule),
                 onUpdateSelectedItems = {},
@@ -106,10 +108,11 @@ class RulesScreenTest {
     }
 
     @Test
-    fun rulesScreen_shapeRepresentingRuleType_isDisplayed() {
+    fun rulesScreen_customRules_shapeRepresentingRuleType_isDisplayed() {
         composeTestRule.setContent {
-            RulesScreen(
+            CustomRulesBody(
                 uiState = RulesScreenUiState(rules = fakeRules),
+                hasRules = fakeRules.isNotEmpty(),
                 onClickRuleItem = {},
                 selectedItems = setOf(),
                 onUpdateSelectedItems = {},
@@ -127,10 +130,11 @@ class RulesScreenTest {
     }
 
     @Test
-    fun rulesScreen_correctShapeForEachRuleType_isDisplayed() {
+    fun rulesScreen_customRules_correctShapeForEachRuleType_isDisplayed() {
         composeTestRule.setContent {
-            RulesScreen(
+            CustomRulesBody(
                 uiState = RulesScreenUiState(rules = fakeRules),
+                hasRules = fakeRules.isNotEmpty(),
                 onClickRuleItem = {},
                 selectedItems = setOf(),
                 onUpdateSelectedItems = {},
