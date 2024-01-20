@@ -35,7 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -142,7 +142,7 @@ fun CategoryHeading(
 ) {
     val isActive = category == RulesListCategory.ACTIVE
 
-    var showStatusCircle by remember { mutableStateOf(true) }
+    var showStatusCircle by rememberSaveable { mutableStateOf(true) }
     val rowSpacing by animateDpAsState(
         targetValue = if (showStatusCircle) 8.dp else 0.dp,
         animationSpec = tween(easing = EaseOutQuint),
