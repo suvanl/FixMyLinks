@@ -199,7 +199,7 @@ fun CategoryHeading(
 
         Text(
             text = stringResource(if (isActive) R.string.active_rules else R.string.inactive_rules),
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.secondary,
             fontWeight = FontWeight.SemiBold
         )
     }
