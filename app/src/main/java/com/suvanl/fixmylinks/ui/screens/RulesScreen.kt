@@ -118,7 +118,7 @@ fun RulesScreen(
                 }
 
                 1 -> {
-                    BuiltInRulesBody()
+                    BuiltInRulesBody(onClickRuleItem = onClickRuleItem)
                 }
             }
         }
@@ -126,7 +126,10 @@ fun RulesScreen(
 }
 
 @Composable
-private fun BuiltInRulesBody(modifier: Modifier = Modifier) {
+private fun BuiltInRulesBody(
+    onClickRuleItem: (BaseMutationModel) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -134,7 +137,7 @@ private fun BuiltInRulesBody(modifier: Modifier = Modifier) {
     ) {
         RulesList(
             uiState = RulesScreenUiState(rules = BuiltInRules.all),
-            onClickItem = {},
+            onClickItem = onClickRuleItem,
             selectedItems = setOf(),
             onUpdateSelectedItems = {}
         )

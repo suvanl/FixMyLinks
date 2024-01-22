@@ -31,6 +31,7 @@ import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -86,7 +87,26 @@ fun RuleDetailsScreen(
     onEnabledStateChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (rule == null) return
+    if (rule == null) {
+        return Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Warning,
+                    contentDescription = null,
+                    modifier = Modifier.size(64.dp)
+                )
+                Text(
+                    text = "No data found for this rule",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+        }
+    }
 
     Column(
         modifier = modifier
