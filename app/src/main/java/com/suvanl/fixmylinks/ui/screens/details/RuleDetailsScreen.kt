@@ -108,6 +108,8 @@ fun RuleDetailsScreen(
         }
     }
 
+    val isCustomRule = rule.baseRuleId > 0
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -127,13 +129,15 @@ fun RuleDetailsScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        RuleEnabledSwitch(
-            checked = rule.isEnabled,
-            onCheckedChange = onEnabledStateChanged,
-            modifier = Modifier.fillMaxWidth()
-        )
+        if (isCustomRule) {
+            RuleEnabledSwitch(
+                checked = rule.isEnabled,
+                onCheckedChange = onEnabledStateChanged,
+                modifier = Modifier.fillMaxWidth()
+            )
 
-        Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(32.dp))
+        }
 
         // General details
         RuleDetailsExpandingCard(rule = rule)
