@@ -104,7 +104,14 @@ fun FixMyLinksApp(windowSize: WindowSizeClass) {
 
     val shouldShowTopAppBar = showNavBarOn.none { it.route == currentBaseRoute }
     val shouldShowAddNewRuleFab = topLevelScreensWithFab.any { it.route == currentBaseRoute }
-    val shouldShowEditRuleFab = currentBaseRoute.startsWith(FmlScreen.RuleDetails.route)
+
+    val detailsBaseRuleIdArg =
+        navBackStackEntry?.arguments?.getLong(FmlScreen.RuleDetails.baseRuleIdArg)
+
+    // Built-in rules have negative `baseRuleId`s, so only show the "edit" FAB if the ID is not negative
+    // (or zero, since no rule should have a baseRuleId of 0).
+    val shouldShowEditRuleFab =
+        currentBaseRoute.startsWith(FmlScreen.RuleDetails.route) && (detailsBaseRuleIdArg != null && detailsBaseRuleIdArg > 0)
 
     val shouldShowRulesMultiSelectTopAppBar =
         currentBaseRoute == FmlScreen.Rules.route && multiSelectedRules.isNotEmpty()
