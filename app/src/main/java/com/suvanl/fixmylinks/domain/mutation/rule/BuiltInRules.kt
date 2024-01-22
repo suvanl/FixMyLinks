@@ -18,7 +18,8 @@ object BuiltInRules {
                 "_branch_match_id",
                 "_branch_referrer"
             )
-        )
+        ),
+        baseRuleId = -1,
     )
 
     private val InstagramTrackingParamsRule = SpecificUrlParamsMutationModel(
@@ -26,7 +27,8 @@ object BuiltInRules {
         triggerDomain = "instagram.com",
         isLocalOnly = true,
         isEnabled = true,
-        mutationInfo = SpecificUrlParamsMutationInfo(removableParams = listOf("igshid"))
+        mutationInfo = SpecificUrlParamsMutationInfo(removableParams = listOf("igshid")),
+        baseRuleId = -2,
     )
 
     private val XtoTwitterRule = DomainNameAndAllUrlParamsMutationModel(
@@ -34,7 +36,8 @@ object BuiltInRules {
         triggerDomain = "x.com",
         isLocalOnly = true,
         isEnabled = true,
-        mutationInfo = DomainNameMutationInfo(initialDomain = "x.com", targetDomain = "twitter.com")
+        mutationInfo = DomainNameMutationInfo(initialDomain = "x.com", targetDomain = "twitter.com"),
+        baseRuleId = -3,
     )
 
     val all = listOf(
