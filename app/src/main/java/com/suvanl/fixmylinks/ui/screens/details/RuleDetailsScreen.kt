@@ -108,8 +108,6 @@ fun RuleDetailsScreen(
         }
     }
 
-    val isCustomRule = rule.baseRuleId > 0
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -129,15 +127,15 @@ fun RuleDetailsScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (isCustomRule) {
-            RuleEnabledSwitch(
-                checked = rule.isEnabled,
-                onCheckedChange = onEnabledStateChanged,
-                modifier = Modifier.fillMaxWidth()
-            )
+        val isCustomRule = rule.baseRuleId > 0
+        RuleEnabledSwitch(
+            checked = rule.isEnabled,
+            onCheckedChange = onEnabledStateChanged,
+            isEnabled = isCustomRule,
+            modifier = Modifier.fillMaxWidth()
+        )
 
-            Spacer(modifier = Modifier.height(32.dp))
-        }
+        Spacer(modifier = Modifier.height(32.dp))
 
         // General details
         RuleDetailsExpandingCard(rule = rule)
@@ -148,7 +146,8 @@ fun RuleDetailsScreen(
 private fun RuleEnabledSwitch(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isEnabled: Boolean = true,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -169,7 +168,12 @@ private fun RuleEnabledSwitch(
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier.weight(1F)
         )
-        Switch(checked, onCheckedChange)
+
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            enabled = isEnabled
+        )
     }
 }
 
