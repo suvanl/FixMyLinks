@@ -73,9 +73,10 @@ fun RulesList(
     fun toggleItemSelection(rule: BaseMutationModel) {
         if (selectedItems.contains(rule)) {
             onUpdateSelectedItems(selectedItems - rule)
-        } else {
-            onUpdateSelectedItems(selectedItems + rule)
+            return
         }
+
+        onUpdateSelectedItems(selectedItems + rule)
     }
 
     LazyColumn(
