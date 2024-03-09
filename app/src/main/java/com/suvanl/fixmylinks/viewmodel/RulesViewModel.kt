@@ -50,6 +50,9 @@ class RulesViewModel @Inject constructor(
     suspend fun refreshSelectedRule() {
         if (_selectedRule.value == null) return
 
+        val isBuiltInRule = _selectedRule.value!!.baseRuleId < 0
+        if (isBuiltInRule) return
+
         rulesRepository.getRuleByBaseId(
             _selectedRule.value!!.baseRuleId,
             _selectedRule.value!!.mutationType

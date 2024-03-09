@@ -65,11 +65,11 @@ android {
 }
 
 dependencies {
-    val lifecycleVersion = "2.6.2"
-    val navVersion = "2.7.6"
+    val lifecycleVersion = "2.7.0"
+    val navVersion = "2.7.7"
     val roomVersion = "2.6.1"
     val daggerHiltVersion = "2.48.1"
-    val androidxHiltVersion = "1.1.0"
+    val androidxHiltVersion = "1.2.0"
     val preferencesDataStoreVersion = "1.0.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -86,7 +86,7 @@ dependencies {
 
     implementation("androidx.datastore:datastore-preferences:$preferencesDataStoreVersion")
 
-    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
+    implementation(platform("androidx.compose:compose-bom:2024.02.02"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -109,7 +109,7 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0") // v5 drops Java 8 support
     testImplementation("androidx.room:room-testing:$roomVersion")
 
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.02.02"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 
     androidTestImplementation("androidx.test:runner:1.5.2")

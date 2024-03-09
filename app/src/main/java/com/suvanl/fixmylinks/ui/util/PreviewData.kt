@@ -19,7 +19,8 @@ object PreviewData {
             mutationInfo = DomainNameMutationInfo(
                 initialDomain = "google.com",
                 targetDomain = "google.co.uk"
-            )
+            ),
+            baseRuleId = 1
         ),
         SpecificUrlParamsMutationModel(
             name = "YouTube - remove playlist association and timestamp, but nothing else",
@@ -29,7 +30,8 @@ object PreviewData {
             dateModifiedTimestamp = 1701970463,
             mutationInfo = SpecificUrlParamsMutationInfo(
                 removableParams = listOf("list", "t")
-            )
+            ),
+            baseRuleId = 2
         ),
         SpecificUrlParamsMutationModel(
             name = "YouTube - remove timestamp",
@@ -39,7 +41,8 @@ object PreviewData {
             dateModifiedTimestamp = 1701970464,
             mutationInfo = SpecificUrlParamsMutationInfo(
                 removableParams = listOf("t")
-            )
+            ),
+            baseRuleId = 3
         ),
     )
 }

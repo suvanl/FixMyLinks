@@ -18,6 +18,7 @@ class ReplaceDomainNameUseCase {
             val onlyTargetHasWildcardSubdomain =
                 mutationInfo.targetDomain.startsWith("*.") && !hasWildcardSubdomain
 
+            // TODO: clean up nested control flow; improve readability
             val domain = if (hasWildcardSubdomain) {
                 val subdomain = findSubdomain()
                 if (!subdomain.isNullOrBlank() && mutationInfo.targetDomain.startsWith("*.")) {
