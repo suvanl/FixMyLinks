@@ -1,6 +1,7 @@
 package com.suvanl.fixmylinks.domain.mutation.model
 
 import com.suvanl.fixmylinks.data.local.db.entity.BaseRule
+import com.suvanl.fixmylinks.data.local.db.entity.RuleAuthor
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 
 // TODO: maybe make mutationInfo a property of BaseMutation rather than having every data class
@@ -13,6 +14,12 @@ interface BaseMutationModel {
      * The user-defined name of the rule for easy identification
      */
     val name: String
+
+    /**
+     * The category of user or application that created this rule.
+     */
+    val authorType: RuleAuthor
+        get() = RuleAuthor.User
 
     /**
      * The type of mutation that should be performed on the URI
@@ -54,5 +61,6 @@ fun BaseMutationModel.toDatabaseEntity() = BaseRule(
     dateModified = dateModifiedTimestamp ?: (System.currentTimeMillis() / 1000),
     isLocalOnly = isLocalOnly,
     isEnabled = isEnabled,
-    authorId = "local_user"
+    authorId = "local_user",
+    authorType = authorType,
 )

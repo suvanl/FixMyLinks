@@ -27,8 +27,8 @@ import com.suvanl.fixmylinks.data.local.db.entity.SpecificUrlParamsRule
         DomainNameRule::class,
         SpecificUrlParamsRule::class,
     ],
-    version = 2,
-    exportSchema = false
+    version = 3,
+    exportSchema = true
 )
 @TypeConverters(Converters::class)
 abstract class RuleDatabase : RoomDatabase() {

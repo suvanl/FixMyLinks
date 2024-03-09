@@ -15,6 +15,9 @@ data class BaseRule(
     @ColumnInfo(name = "author_id")
     val authorId: String,
 
+    @ColumnInfo(name = "author_type")
+    val authorType: RuleAuthor,
+
     @ColumnInfo(name = "mutation_type")
     val mutationType: MutationType,
 
@@ -30,3 +33,8 @@ data class BaseRule(
     @ColumnInfo(name = "is_enabled")
     val isEnabled: Boolean,
 )
+
+/**
+ * The possible authors of a rule: a rule can be **built-in** or **user-defined** (custom).
+ */
+enum class RuleAuthor { BuiltIn, User }
