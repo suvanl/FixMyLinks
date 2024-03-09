@@ -14,9 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Segment
 import androidx.compose.material.icons.outlined.Backup
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Segment
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -181,7 +181,7 @@ fun AddRuleScreenBody(
         SwitchListItemState(
             headlineText = stringResource(R.string.keep_content),
             supportingText = stringResource(R.string.keep_content_supporting_text),
-            leadingIcon = Icons.Outlined.Segment,
+            leadingIcon = Icons.AutoMirrored.Outlined.Segment,
             isSwitchChecked = ruleOptions.keepContent,
             onSwitchCheckedChange = { onOptionsChanged(ruleOptions.copy(keepContent = it)) },
             comingSoon = true,

@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material.icons.outlined.Search
@@ -193,7 +193,7 @@ private fun LeadingIcon(
         exit = scaleOut(),
     ) {
         Icon(
-            imageVector = Icons.Outlined.ArrowBack,
+            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
             contentDescription = stringResource(id = R.string.navigate_up),
             modifier = modifier.clickable { onActiveChange(false) }
         )

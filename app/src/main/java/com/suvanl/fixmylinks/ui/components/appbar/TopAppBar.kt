@@ -3,7 +3,7 @@ package com.suvanl.fixmylinks.ui.components.appbar
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -140,7 +140,7 @@ private fun TopAppBarNavigationIcon(
         modifier = modifier
     ) {
         Icon(
-            imageVector = Icons.Default.ArrowBack,
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = stringResource(id = R.string.navigate_up)
         )
     }

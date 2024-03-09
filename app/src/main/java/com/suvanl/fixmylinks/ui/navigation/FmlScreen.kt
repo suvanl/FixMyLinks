@@ -2,14 +2,14 @@ package com.suvanl.fixmylinks.ui.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.LibraryBooks
+import androidx.compose.material.icons.automirrored.outlined.LibraryBooks
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LibraryBooks
 import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.LibraryBooks
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
@@ -45,8 +45,8 @@ sealed class FmlScreen(
     data object Rules : FmlScreen(
         route = "rules",
         label = R.string.rules,
-        selectedIcon = Icons.Filled.LibraryBooks,
-        unselectedIcon = Icons.Outlined.LibraryBooks
+        selectedIcon = Icons.AutoMirrored.Filled.LibraryBooks,
+        unselectedIcon = Icons.AutoMirrored.Outlined.LibraryBooks
     )
 
     data object Saved : FmlScreen(
