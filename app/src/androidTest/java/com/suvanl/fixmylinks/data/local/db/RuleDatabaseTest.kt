@@ -17,6 +17,7 @@ import com.suvanl.fixmylinks.data.local.db.entity.BaseRule
 import com.suvanl.fixmylinks.data.local.db.entity.DomainNameAndAllUrlParamsRule
 import com.suvanl.fixmylinks.data.local.db.entity.DomainNameAndSpecificUrlParamsRule
 import com.suvanl.fixmylinks.data.local.db.entity.DomainNameRule
+import com.suvanl.fixmylinks.data.local.db.entity.RuleAuthor
 import com.suvanl.fixmylinks.data.local.db.entity.SpecificUrlParamsRule
 import com.suvanl.fixmylinks.domain.mutation.MutationType
 import kotlinx.coroutines.flow.first
@@ -413,6 +414,7 @@ class RuleDatabaseTest {
                 id = 1,
                 title = "My rule",
                 authorId = DEFAULT_AUTHOR_ID,
+                authorType = RuleAuthor.User,
                 mutationType = MutationType.URL_PARAMS_ALL,
                 triggerDomain = "instagram.com",
                 isLocalOnly = true,
@@ -426,6 +428,7 @@ class RuleDatabaseTest {
                 id = 2,
                 title = "My second rule",
                 authorId = DEFAULT_AUTHOR_ID,
+                authorType = RuleAuthor.User,
                 mutationType = MutationType.URL_PARAMS_ALL,
                 triggerDomain = "spotify.com",
                 isLocalOnly = true,
@@ -439,6 +442,7 @@ class RuleDatabaseTest {
                 id = 3,
                 title = "twitter.com to x.com",  // said no one ever (other than Husk)
                 authorId = DEFAULT_AUTHOR_ID,
+                authorType = RuleAuthor.User,
                 mutationType = MutationType.DOMAIN_NAME,
                 triggerDomain = "twitter.com",
                 isEnabled = true,
@@ -457,6 +461,7 @@ class RuleDatabaseTest {
                 id = 4,
                 title = "Medium rule",
                 authorId = DEFAULT_AUTHOR_ID,
+                authorType = RuleAuthor.User,
                 mutationType = MutationType.URL_PARAMS_ALL,
                 triggerDomain = "medium.com",
                 isEnabled = true,
@@ -470,6 +475,7 @@ class RuleDatabaseTest {
                 id = 5,
                 title = "Android Developers",
                 authorId = DEFAULT_AUTHOR_ID,
+                authorType = RuleAuthor.User,
                 mutationType = MutationType.DOMAIN_NAME_AND_URL_PARAMS_ALL,
                 triggerDomain = "d.android.com",
                 isEnabled = true,
@@ -488,6 +494,7 @@ class RuleDatabaseTest {
                 id = 6,
                 title = "Google Search",
                 authorId = DEFAULT_AUTHOR_ID,
+                authorType = RuleAuthor.User,
                 mutationType = MutationType.DOMAIN_NAME_AND_URL_PARAMS_SPECIFIC,
                 triggerDomain = "google.com",
                 isEnabled = true,
@@ -507,6 +514,7 @@ class RuleDatabaseTest {
                 id = 7,
                 title = "YouTube",
                 authorId = DEFAULT_AUTHOR_ID,
+                authorType = RuleAuthor.User,
                 mutationType = MutationType.URL_PARAMS_SPECIFIC,
                 triggerDomain = "youtube.com",
                 isEnabled = true,

@@ -1,2 +1,5 @@
 /build
 /release
+
+# Prepackaged SQLite database
+/src/main/assets/database/rules.db

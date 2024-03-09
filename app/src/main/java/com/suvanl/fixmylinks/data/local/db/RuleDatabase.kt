@@ -47,6 +47,7 @@ abstract class RuleDatabase : RoomDatabase() {
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, RuleDatabase::class.java, "rule_database")
                     .fallbackToDestructiveMigration()
+                    .createFromAsset("database/rules.db")
                     .build()
                     .also {
                         Instance = it
