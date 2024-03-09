@@ -68,7 +68,7 @@ dependencies {
     val lifecycleVersion = "2.7.0"
     val navVersion = "2.7.7"
     val roomVersion = "2.6.1"
-    val daggerHiltVersion = "2.48.1"
+    val daggerHiltVersion = "2.49"
     val androidxHiltVersion = "1.2.0"
     val preferencesDataStoreVersion = "1.0.0"
 
