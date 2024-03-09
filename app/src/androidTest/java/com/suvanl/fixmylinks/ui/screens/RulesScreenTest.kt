@@ -6,6 +6,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelectable
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -200,6 +201,26 @@ class RulesScreenTest {
                 .assertExists()
                 .assertIsDisplayed()
         }
+    }
+
+    @Test
+    fun rulesScreen_selectedTabState_isPersistedAcrossActivityRecreation() {
+        val stateRestorationTester = StateRestorationTester(composeTestRule)
+        stateRestorationTester.setContent { EmptyRulesScreen() }
+
+        // Switch to "Built-in" tab
+        composeTestRule
+            .onNodeWithText(builtInTabLabel)
+            .performClick()
+            .assertIsSelected()
+
+        // Trigger recreation and state restoration
+        stateRestorationTester.emulateSavedInstanceStateRestore()
+
+        // Assert that the "Built-in" tab is still selected
+        composeTestRule
+            .onNodeWithText(builtInTabLabel)
+            .assertIsSelected()
     }
 
     companion object {
